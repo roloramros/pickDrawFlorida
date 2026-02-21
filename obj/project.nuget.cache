@@ -1,16 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "mv+29bh4r2I=",
+  "dgSpecHash": "GaXqd0ENWbg=",
   "success": true,
-  "projectFilePath": "E:\\loterry-main\\loterry-main\\FloridaLotteryApp.csproj",
+  "projectFilePath": "E:\\pickDrawFlorida\\FloridaLotteryApp.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\rramis\\.nuget\\packages\\microsoft.data.sqlite\\8.0.5\\microsoft.data.sqlite.8.0.5.nupkg.sha512",
-    "C:\\Users\\rramis\\.nuget\\packages\\microsoft.data.sqlite.core\\8.0.5\\microsoft.data.sqlite.core.8.0.5.nupkg.sha512",
-    "C:\\Users\\rramis\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.6\\sqlitepclraw.bundle_e_sqlite3.2.1.6.nupkg.sha512",
-    "C:\\Users\\rramis\\.nuget\\packages\\sqlitepclraw.core\\2.1.6\\sqlitepclraw.core.2.1.6.nupkg.sha512",
-    "C:\\Users\\rramis\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.6\\sqlitepclraw.lib.e_sqlite3.2.1.6.nupkg.sha512",
-    "C:\\Users\\rramis\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.6\\sqlitepclraw.provider.e_sqlite3.2.1.6.nupkg.sha512",
-    "C:\\Users\\rramis\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512"
+    "C:\\Users\\Laptop\\.nuget\\packages\\microsoft.data.sqlite\\8.0.5\\microsoft.data.sqlite.8.0.5.nupkg.sha512",
+    "C:\\Users\\Laptop\\.nuget\\packages\\microsoft.data.sqlite.core\\8.0.5\\microsoft.data.sqlite.core.8.0.5.nupkg.sha512",
+    "C:\\Users\\Laptop\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.6\\sqlitepclraw.bundle_e_sqlite3.2.1.6.nupkg.sha512",
+    "C:\\Users\\Laptop\\.nuget\\packages\\sqlitepclraw.core\\2.1.6\\sqlitepclraw.core.2.1.6.nupkg.sha512",
+    "C:\\Users\\Laptop\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.6\\sqlitepclraw.lib.e_sqlite3.2.1.6.nupkg.sha512",
+    "C:\\Users\\Laptop\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.6\\sqlitepclraw.provider.e_sqlite3.2.1.6.nupkg.sha512",
+    "C:\\Users\\Laptop\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512"
   ],
   "logs": []
 }

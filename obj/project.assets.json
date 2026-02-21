@@ -324,19 +324,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\rramis\\.nuget\\packages\\": {}
+    "C:\\Users\\Laptop\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\loterry-main\\loterry-main\\FloridaLotteryApp.csproj",
+      "projectUniqueName": "E:\\pickDrawFlorida\\FloridaLotteryApp.csproj",
       "projectName": "FloridaLotteryApp",
-      "projectPath": "E:\\loterry-main\\loterry-main\\FloridaLotteryApp.csproj",
-      "packagesPath": "C:\\Users\\rramis\\.nuget\\packages\\",
-      "outputPath": "E:\\loterry-main\\loterry-main\\obj\\",
+      "projectPath": "E:\\pickDrawFlorida\\FloridaLotteryApp.csproj",
+      "packagesPath": "C:\\Users\\Laptop\\.nuget\\packages\\",
+      "outputPath": "E:\\pickDrawFlorida\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\rramis\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Laptop\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0-windows"
@@ -389,7 +389,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.417/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.418/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
