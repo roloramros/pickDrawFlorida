@@ -626,6 +626,8 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="10"/>
                                 <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
                             <!-- Botón Filtro 1 (FILA SUPERIOR, IZQUIERDA) -->
@@ -716,6 +718,52 @@
                                 </Button.Style>
                             </Button>
 
+                            <!-- Botón Match Guía (FILA Superior, CENTRO) -->
+                            <Button x:Name="MatchGuiaButton"
+                                    Grid.Row="0"
+                                    Grid.Column="2"
+                                    Content="Match-Guia"
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Padding="15,8"
+                                    Background="#FF8E24AA"
+                                    Foreground="White"
+                                    BorderBrush="#FF6A1B9A"
+                                    BorderThickness="1"
+                                    Cursor="Hand"
+                                    Visibility="Visible"
+                                    Click="MatchGuiaButton_Click"
+                                    ToolTip="Filtrar resultados con el patrón del guía">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            CornerRadius="8">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                        VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#FF6A1B9A"/>
+                                            </Trigger>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="Background" Value="#FFCE93D8"/>
+                                                <Setter Property="Foreground" Value="#757575"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+
+
+
                             <!-- Botón Anterior (FILA INFERIOR, IZQUIERDA) -->
                             <Button x:Name="PreviousButton"
                                     Grid.Row="2"
@@ -803,6 +851,7 @@
                                     </Style>
                                 </Button.Style>
                             </Button>
+                        
                         </Grid>
 
                         <!-- Progreso de búsqueda -->

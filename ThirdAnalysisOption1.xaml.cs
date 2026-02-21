@@ -371,6 +371,209 @@ public partial class ThirdAnalysisOption1 : Window, INotifyPropertyChanged
         return result;
     }
 
+    private void MatchGuiaButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_currentCard == null)
+        {
+            MessageBox.Show("No hay patrón guía disponible para filtrar.", "Match Guía",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        var guideSourcesRow3ToRow4 = GetGuideSourcePositionsToFirstTwo(
+            DigitsToString(_currentCard.Row3Pick3Digits),
+            DigitsToString(_currentCard.Row4Pick4Digits));
+
+        var guideSourcesRow4ToRow3 = GetGuideSourcePositionsToFirstTwo(
+            DigitsToString(_currentCard.Row4Pick3Digits),
+            DigitsToString(_currentCard.Row3Pick4Digits));
+
+        var filteredCards = new ObservableCollection<ThirdAnalysisCardVM>();
+
+        foreach (var card in SearchCards)
+        {
+            bool matchesGuide = true;
+
+            var cardSourcesRow3ToRow4 = GetGuideSourcePositionsToFirstTwo(
+                DigitsToString(card.Row3Pick3Digits),
+                DigitsToString(card.Row4Pick4Digits));
+
+            var cardSourcesRow4ToRow3 = GetGuideSourcePositionsToFirstTwo(
+                DigitsToString(card.Row4Pick3Digits),
+                DigitsToString(card.Row3Pick4Digits));
+
+            bool guideHasRow3ToRow4 = guideSourcesRow3ToRow4.Count > 0;
+            bool guideHasRow4ToRow3 = guideSourcesRow4ToRow3.Count > 0;
+            bool cardHasRow3ToRow4FirstTwo = cardSourcesRow3ToRow4.Count > 0;
+            bool cardHasRow4ToRow3FirstTwo = cardSourcesRow4ToRow3.Count > 0;
+
+            bool cardHasAnyRow3ToRow4 = HasAnyConnectionPick3ToPick4(
+                DigitsToString(card.Row3Pick3Digits),
+                DigitsToString(card.Row4Pick4Digits));
+
+            bool cardHasAnyRow4ToRow3 = HasAnyConnectionPick3ToPick4(
+                DigitsToString(card.Row4Pick3Digits),
+                DigitsToString(card.Row3Pick4Digits));
+
+            // Debe salir de los mismos lados que en el patrón guía (arriba/abajo), sin mezclar.
+            // Si el guía no sale por un lado, el resultado no puede tener ninguna línea por ese lado.
+            if ((guideHasRow3ToRow4 && !cardHasRow3ToRow4FirstTwo) ||
+                (!guideHasRow3ToRow4 && cardHasAnyRow3ToRow4) ||
+                (guideHasRow4ToRow3 && !cardHasRow4ToRow3FirstTwo) ||
+                (!guideHasRow4ToRow3 && cardHasAnyRow4ToRow3))
+            {
+                matchesGuide = false;
+            }
+
+            if (matchesGuide && guideHasRow3ToRow4)
+            {
+                matchesGuide &= MatchesGuideSourceRule(
+                    DigitsToString(card.Row3Pick3Digits),
+                    DigitsToString(card.Row4Pick4Digits),
+                    guideSourcesRow3ToRow4);
+            }
+
+            if (matchesGuide && guideHasRow4ToRow3)
+            {
+                matchesGuide &= MatchesGuideSourceRule(
+                    DigitsToString(card.Row4Pick3Digits),
+                    DigitsToString(card.Row3Pick4Digits),
+                    guideSourcesRow4ToRow3);
+            }
+
+            if (matchesGuide)
+            {
+                filteredCards.Add(card);
+            }
+        }
+
+        SearchCards.Clear();
+        foreach (var card in filteredCards)
+        {
+            SearchCards.Add(card);
+        }
+
+        if (SearchCards.Count > 0)
+        {
+            _currentIndex = 0;
+            CurrentSearchCard = SearchCards[0];
+            UpdateResultsCounter();
+        }
+        else
+        {
+            ResultsCounter.Text = "Resultados: 0 encontrados (match guía aplicado)";
+            CurrentSearchCard = null;
+        }
+
+        UpdateNavigationButtons();
+    }
+
+    private static List<int> GetGuideSourcePositionsToFirstTwo(string pick3, string pick4)
+    {
+        var sourcePositions = new List<int>();
+
+        if (string.IsNullOrWhiteSpace(pick3) || pick3.Length != 3 ||
+            string.IsNullOrWhiteSpace(pick4) || pick4.Length < 2)
+        {
+            return sourcePositions;
+        }
+
+        for (int pick3Index = 0; pick3Index < 3; pick3Index++)
+        {
+            var sourceDigit = pick3[pick3Index];
+            if (!char.IsDigit(sourceDigit))
+            {
+                continue;
+            }
+
+            if (pick4[0] == sourceDigit || pick4[1] == sourceDigit)
+            {
+                sourcePositions.Add(pick3Index);
+            }
+        }
+
+        return sourcePositions;
+    }
+
+    private static bool MatchesGuideSourceRule(string pick3, string pick4, List<int> guideSourcePositions)
+    {
+        if (guideSourcePositions == null || guideSourcePositions.Count == 0)
+        {
+            return true;
+        }
+
+        var candidateSourcePositions = GetGuideSourcePositionsToFirstTwo(pick3, pick4);
+
+        // Regla adicional: no permitir líneas hacia posiciones 3 o 4 del Pick4.
+        if (HasAnyConnectionToLastTwo(pick3, pick4))
+        {
+            return false;
+        }
+
+        if (guideSourcePositions.Count == 1)
+        {
+            // Regla pedida: si el guía sale de un solo dígito,
+            // el resultado también debe salir únicamente de ese mismo dígito.
+            return candidateSourcePositions.Count == 1 &&
+                   candidateSourcePositions[0] == guideSourcePositions[0];
+        }
+
+        // Para guías con múltiples dígitos de salida, se exige el mismo conjunto de posiciones.
+        return candidateSourcePositions.Count == guideSourcePositions.Count &&
+               candidateSourcePositions.All(guideSourcePositions.Contains);
+    }
+
+    private static bool HasAnyConnectionToLastTwo(string pick3, string pick4)
+    {
+        if (string.IsNullOrWhiteSpace(pick3) || pick3.Length != 3 ||
+            string.IsNullOrWhiteSpace(pick4) || pick4.Length < 4)
+        {
+            return false;
+        }
+
+        for (int pick3Index = 0; pick3Index < 3; pick3Index++)
+        {
+            var sourceDigit = pick3[pick3Index];
+            if (!char.IsDigit(sourceDigit))
+            {
+                continue;
+            }
+
+            if (pick4[2] == sourceDigit || pick4[3] == sourceDigit)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    private static bool HasAnyConnectionPick3ToPick4(string pick3, string pick4)
+    {
+        if (string.IsNullOrWhiteSpace(pick3) || pick3.Length != 3 ||
+            string.IsNullOrWhiteSpace(pick4) || pick4.Length != 4)
+        {
+            return false;
+        }
+
+        for (int pick3Index = 0; pick3Index < 3; pick3Index++)
+        {
+            var sourceDigit = pick3[pick3Index];
+            if (!char.IsDigit(sourceDigit))
+            {
+                continue;
+            }
+
+            if (pick4.Contains(sourceDigit))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     public List<(string First, string Second, string Third, string Fourth)> FormCuartetosFromPairs(List<(string Original, string Compatible)> allPairs)
     {
