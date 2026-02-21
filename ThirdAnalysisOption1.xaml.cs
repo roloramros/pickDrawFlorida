@@ -71,6 +71,7 @@ public partial class ThirdAnalysisOption1 : Window, INotifyPropertyChanged
         Loaded += ThirdAnalysisOption1_Loaded;
 
         LoadCard(card);
+        Loaded += (_, _) => QueueDrawAnalysisCardConnectingLines();
        
     }
 
@@ -1019,9 +1020,97 @@ public partial class ThirdAnalysisOption1 : Window, INotifyPropertyChanged
     private void OnWindowLoaded(object sender, RoutedEventArgs e)
     {
         // Esperar un poco más para asegurar que todos los controles estén renderizados
-        Dispatcher.BeginInvoke(new Action(() => 
+        Dispatcher.BeginInvoke(new Action(() =>
         {
+            QueueDrawAnalysisCardConnectingLines();
         }), DispatcherPriority.ContextIdle);
+    }
+
+    private void QueueDrawAnalysisCardConnectingLines()
+    {
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            Dispatcher.BeginInvoke(new Action(CreateAnalysisCardConnectingLines), DispatcherPriority.Render);
+        }), DispatcherPriority.Loaded);
+    }
+
+    private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (AnalysisTab?.IsSelected == true)
+        {
+            QueueDrawAnalysisCardConnectingLines();
+        }
+    }
+
+    private void CreateAnalysisCardConnectingLines()
+    {
+        try
+        {
+            var analysisCard = AnalysisCardContainer;
+            if (analysisCard == null)
+            {
+                return;
+            }
+
+            var row1Pick3Items = FindVisualChild<ItemsControl>(analysisCard, "Row1Pick3Items");
+            var row1NextPick3Items = FindVisualChild<ItemsControl>(analysisCard, "Row1NextPick3Items");
+            var row1Pick4Items = FindVisualChild<ItemsControl>(analysisCard, "Row1Pick4Items");
+
+            var row2Pick3Items = FindVisualChild<ItemsControl>(analysisCard, "Row2Pick3Items");
+            var row2NextPick3Items = FindVisualChild<ItemsControl>(analysisCard, "Row2NextPick3Items");
+            var row2Pick4Items = FindVisualChild<ItemsControl>(analysisCard, "Row2Pick4Items");
+
+            var row3Pick3Items = FindVisualChild<ItemsControl>(analysisCard, "Row3Pick3Items");
+            var row3NextPick3Items = FindVisualChild<ItemsControl>(analysisCard, "Row3NextPick3Items");
+            var row3Pick4Items = FindVisualChild<ItemsControl>(analysisCard, "Row3Pick4Items");
+
+            var row4Pick3Items = FindVisualChild<ItemsControl>(analysisCard, "Row4Pick3Items");
+            var row4NextPick3Items = FindVisualChild<ItemsControl>(analysisCard, "Row4NextPick3Items");
+            var row4Pick4Items = FindVisualChild<ItemsControl>(analysisCard, "Row4Pick4Items");
+
+            var pick3LinksCanvas = FindVisualChild<Canvas>(analysisCard, "Pick3LinksCanvas");
+            var nextPick3LinksCanvas = FindVisualChild<Canvas>(analysisCard, "NextPick3LinksCanvas");
+            var pick3Row3ToPick4Row4LinksCanvas = FindVisualChild<Canvas>(analysisCard, "Pick3Row3ToPick4Row4LinksCanvas");
+            var pick3Row4ToPick4Row3LinksCanvas = FindVisualChild<Canvas>(analysisCard, "Pick3Row4ToPick4Row3LinksCanvas");
+            var pick3Row1ToPick4Row2LinksCanvas = FindVisualChild<Canvas>(analysisCard, "Pick3Row1ToPick4Row2LinksCanvas");
+            var pick3Row2ToPick4Row1LinksCanvas = FindVisualChild<Canvas>(analysisCard, "Pick3Row2ToPick4Row1LinksCanvas");
+
+            if (row1Pick3Items == null || row2Pick3Items == null ||
+                row1NextPick3Items == null || row2NextPick3Items == null ||
+                row3Pick3Items == null || row4Pick3Items == null ||
+                row3NextPick3Items == null || row4NextPick3Items == null ||
+                row3Pick4Items == null || row4Pick4Items == null ||
+                row1Pick4Items == null || row2Pick4Items == null ||
+                pick3LinksCanvas == null || nextPick3LinksCanvas == null ||
+                pick3Row3ToPick4Row4LinksCanvas == null || pick3Row4ToPick4Row3LinksCanvas == null ||
+                pick3Row1ToPick4Row2LinksCanvas == null || pick3Row2ToPick4Row1LinksCanvas == null)
+            {
+                return;
+            }
+
+            pick3LinksCanvas.Children.Clear();
+            nextPick3LinksCanvas.Children.Clear();
+            pick3Row3ToPick4Row4LinksCanvas.Children.Clear();
+            pick3Row4ToPick4Row3LinksCanvas.Children.Clear();
+            pick3Row1ToPick4Row2LinksCanvas.Children.Clear();
+            pick3Row2ToPick4Row1LinksCanvas.Children.Clear();
+
+            ConnectPick3Digits(row1Pick3Items, row2Pick3Items, pick3LinksCanvas);
+            ConnectPick3Digits(row1NextPick3Items, row2NextPick3Items, nextPick3LinksCanvas);
+            ConnectPick3Digits(row3Pick3Items, row4Pick3Items, pick3LinksCanvas);
+            ConnectPick3Digits(row3NextPick3Items, row4NextPick3Items, nextPick3LinksCanvas);
+
+            ConnectPick3ToPick4Digits(row3Pick3Items, row4Pick4Items, pick3Row3ToPick4Row4LinksCanvas);
+            ConnectPick3ToPick4Digits(row4Pick3Items, row3Pick4Items, pick3Row4ToPick4Row3LinksCanvas);
+
+            ConnectPick3ToPick4DigitsWithRedLine(row1Pick3Items, row2Pick4Items, pick3Row1ToPick4Row2LinksCanvas);
+            ConnectPick3ToPick4DigitsWithRedLine(row2Pick3Items, row1Pick4Items, pick3Row2ToPick4Row1LinksCanvas);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error creando líneas de patrón guía: {ex.Message}");
+            Console.WriteLine($"StackTrace: {ex.StackTrace}");
+        }
     }
 
     private void ForceItemsControlUpdate(ItemsControl itemsControl)

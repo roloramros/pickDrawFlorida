@@ -8,7 +8,7 @@
         ResizeMode="CanResize">
     
     <Grid Margin="16">
-        <TabControl>
+         <TabControl SelectionChanged="MainTabControl_SelectionChanged">
             <!-- Pestaña 1: Vacía -->
             <TabItem Header="Búsqueda" x:Name="SearchTab">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
