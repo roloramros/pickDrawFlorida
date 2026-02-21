@@ -1,0 +1,10 @@
+D:\bolita\FloridaLotteryApp\bin\Release\net8.0-windows\win-x64\publish\FloridaLotteryApp.exe
+D:\bolita\FloridaLotteryApp\bin\Release\net8.0-windows\win-x64\publish\FloridaLotteryApp.dll
+D:\bolita\FloridaLotteryApp\bin\Release\net8.0-windows\win-x64\publish\FloridaLotteryApp.deps.json
+D:\bolita\FloridaLotteryApp\bin\Release\net8.0-windows\win-x64\publish\FloridaLotteryApp.runtimeconfig.json
+D:\bolita\FloridaLotteryApp\bin\Release\net8.0-windows\win-x64\publish\FloridaLotteryApp.pdb
+D:\bolita\FloridaLotteryApp\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Data.Sqlite.dll
+D:\bolita\FloridaLotteryApp\bin\Release\net8.0-windows\win-x64\publish\SQLitePCLRaw.batteries_v2.dll
+D:\bolita\FloridaLotteryApp\bin\Release\net8.0-windows\win-x64\publish\SQLitePCLRaw.core.dll
+D:\bolita\FloridaLotteryApp\bin\Release\net8.0-windows\win-x64\publish\SQLitePCLRaw.provider.e_sqlite3.dll
+D:\bolita\FloridaLotteryApp\bin\Release\net8.0-windows\win-x64\publish\e_sqlite3.dll

@@ -1,0 +1,43 @@
+<Window x:Class="FloridaLotteryApp.AddPick3Window"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Añadir registro"
+        Height="320"
+        Width="320"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Fecha" FontWeight="Bold"/>
+            <DatePicker x:Name="DatePickerDate" Margin="0,4,0,10"/>
+
+            <TextBlock Text="Sorteo" FontWeight="Bold"/>
+            <ComboBox x:Name="ComboDrawTime" Margin="0,4,0,10">
+                <ComboBoxItem Content="Mediodía" Tag="M" IsSelected="True"/>
+                <ComboBoxItem Content="Noche" Tag="E" />
+            </ComboBox>
+
+            <TextBlock Text="Pick 3" FontWeight="Bold"/>
+            <TextBox x:Name="TxtPick3Number" Margin="0,4,0,6" MaxLength="3"/>
+
+            <TextBlock Text="Pick 4" FontWeight="Bold"/>
+            <TextBox x:Name="TxtPick4Number" Margin="0,4,0,6" MaxLength="4"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Cerrar"
+                    Padding="10,5"
+                    Margin="0,0,10,0"
+                    Click="Close_Click"/>
+            <Button Content="Guardar"
+                    Padding="10,5"
+                    Click="Save_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

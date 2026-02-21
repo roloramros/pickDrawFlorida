@@ -1,0 +1,34 @@
+<Window x:Class="FloridaLotteryApp.EditDrawWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Editar registro"
+        Height="460"
+        Width="340"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+
+    <Grid Margin="16">
+        <StackPanel>
+            <TextBlock Text="Fecha" FontWeight="Bold"/>
+            <TextBox x:Name="TxtDate" Margin="0,4,0,10" IsReadOnly="True"/>
+
+            <TextBlock Text="Sorteo" FontWeight="Bold"/>
+            <TextBox x:Name="TxtDrawTime" Margin="0,4,0,10" IsReadOnly="True"/>
+
+            <TextBlock Text="Pick 3" FontWeight="Bold"/>
+            <TextBox x:Name="TxtPick3Number" Margin="0,4,0,6" MaxLength="3"/>
+            <TextBlock Text="Fireball Pick 3 (opcional)" FontWeight="Bold"/>
+            <TextBox x:Name="TxtPick3Fireball" Margin="0,4,0,10" MaxLength="1"/>
+
+            <TextBlock Text="Pick 4" FontWeight="Bold"/>
+            <TextBox x:Name="TxtPick4Number" Margin="0,4,0,6" MaxLength="4"/>
+            <TextBlock Text="Fireball Pick 4 (opcional)" FontWeight="Bold"/>
+            <TextBox x:Name="TxtPick4Fireball" Margin="0,4,0,14" MaxLength="1"/>
+
+            <Button Content="Guardar cambios"
+                    Padding="10"
+                    HorizontalAlignment="Stretch"
+                    Click="Save_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

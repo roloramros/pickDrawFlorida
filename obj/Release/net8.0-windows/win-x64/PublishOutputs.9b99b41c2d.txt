@@ -1,0 +1,10 @@
+E:\loterry-main\loterry-main\bin\Release\net8.0-windows\win-x64\publish\FloridaLotteryApp.exe
+E:\loterry-main\loterry-main\bin\Release\net8.0-windows\win-x64\publish\FloridaLotteryApp.dll
+E:\loterry-main\loterry-main\bin\Release\net8.0-windows\win-x64\publish\FloridaLotteryApp.deps.json
+E:\loterry-main\loterry-main\bin\Release\net8.0-windows\win-x64\publish\FloridaLotteryApp.runtimeconfig.json
+E:\loterry-main\loterry-main\bin\Release\net8.0-windows\win-x64\publish\FloridaLotteryApp.pdb
+E:\loterry-main\loterry-main\bin\Release\net8.0-windows\win-x64\publish\Microsoft.Data.Sqlite.dll
+E:\loterry-main\loterry-main\bin\Release\net8.0-windows\win-x64\publish\SQLitePCLRaw.batteries_v2.dll
+E:\loterry-main\loterry-main\bin\Release\net8.0-windows\win-x64\publish\SQLitePCLRaw.core.dll
+E:\loterry-main\loterry-main\bin\Release\net8.0-windows\win-x64\publish\SQLitePCLRaw.provider.e_sqlite3.dll
+E:\loterry-main\loterry-main\bin\Release\net8.0-windows\win-x64\publish\e_sqlite3.dll

@@ -1,0 +1,40 @@
+﻿# --- .gitignore para .NET/Visual Studio/WPF ---
+
+# Build
+[Bb]in/
+[Oo]bj/
+publish/
+
+# Visual Studio / VS Code / JetBrains
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Paquetes / NuGet
+packages/
+*.nupkg
+# (si usas package restore, no subas /packages)
+
+# Tests y diagnósticos
+[Tt]est[Rr]esult*/
+*.trx
+*.VisualState.xml
+
+# Logs / caches
+*.log
+*.cache
+
+# Artefactos temporales
+*.tmp
+*.temp
+
+# Archivos generados por WPF en obj (quedan cubiertos por /obj)
+# .g.cs, .baml, etc.
+
+# Sistema
+Thumbs.db
+Desktop.ini
