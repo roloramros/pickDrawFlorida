@@ -388,6 +388,16 @@ public partial class ThirdAnalysisOption1 : Window, INotifyPropertyChanged
             DigitsToString(_currentCard.Row4Pick3Digits),
             DigitsToString(_currentCard.Row3Pick4Digits));
 
+        // Segunda fase: mismo patrón para filas 1 y 2,
+        // permitiendo conexiones desde Pick3 hacia cualquier dígito de Pick4.
+        var guideSourcesRow1ToRow2 = GetGuideSourcePositionsToAny(
+            DigitsToString(_currentCard.Row1Pick3Digits),
+            DigitsToString(_currentCard.Row2Pick4Digits));
+
+        var guideSourcesRow2ToRow1 = GetGuideSourcePositionsToAny(
+            DigitsToString(_currentCard.Row2Pick3Digits),
+            DigitsToString(_currentCard.Row1Pick4Digits));
+
         var filteredCards = new ObservableCollection<ThirdAnalysisCardVM>();
 
         foreach (var card in SearchCards)
@@ -431,6 +441,54 @@ public partial class ThirdAnalysisOption1 : Window, INotifyPropertyChanged
                     DigitsToString(card.Row3Pick3Digits),
                     DigitsToString(card.Row4Pick4Digits),
                     guideSourcesRow3ToRow4);
+            }
+
+            if (matchesGuide)
+            {
+                var cardSourcesRow1ToRow2 = GetGuideSourcePositionsToAny(
+                    DigitsToString(card.Row1Pick3Digits),
+                    DigitsToString(card.Row2Pick4Digits));
+
+                var cardSourcesRow2ToRow1 = GetGuideSourcePositionsToAny(
+                    DigitsToString(card.Row2Pick3Digits),
+                    DigitsToString(card.Row1Pick4Digits));
+
+                bool guideHasRow1ToRow2 = guideSourcesRow1ToRow2.Count > 0;
+                bool guideHasRow2ToRow1 = guideSourcesRow2ToRow1.Count > 0;
+                bool cardHasRow1ToRow2 = cardSourcesRow1ToRow2.Count > 0;
+                bool cardHasRow2ToRow1 = cardSourcesRow2ToRow1.Count > 0;
+
+                bool cardHasAnyRow1ToRow2 = HasAnyConnectionPick3ToPick4(
+                    DigitsToString(card.Row1Pick3Digits),
+                    DigitsToString(card.Row2Pick4Digits));
+
+                bool cardHasAnyRow2ToRow1 = HasAnyConnectionPick3ToPick4(
+                    DigitsToString(card.Row2Pick3Digits),
+                    DigitsToString(card.Row1Pick4Digits));
+
+                if ((guideHasRow1ToRow2 && !cardHasRow1ToRow2) ||
+                    (!guideHasRow1ToRow2 && cardHasAnyRow1ToRow2) ||
+                    (guideHasRow2ToRow1 && !cardHasRow2ToRow1) ||
+                    (!guideHasRow2ToRow1 && cardHasAnyRow2ToRow1))
+                {
+                    matchesGuide = false;
+                }
+
+                if (matchesGuide && guideHasRow1ToRow2)
+                {
+                    matchesGuide &= MatchesGuideSourceRuleAny(
+                        DigitsToString(card.Row1Pick3Digits),
+                        DigitsToString(card.Row2Pick4Digits),
+                        guideSourcesRow1ToRow2);
+                }
+
+                if (matchesGuide && guideHasRow2ToRow1)
+                {
+                    matchesGuide &= MatchesGuideSourceRuleAny(
+                        DigitsToString(card.Row2Pick3Digits),
+                        DigitsToString(card.Row1Pick4Digits),
+                        guideSourcesRow2ToRow1);
+                }
             }
 
             if (matchesGuide && guideHasRow4ToRow3)
@@ -548,6 +606,51 @@ public partial class ThirdAnalysisOption1 : Window, INotifyPropertyChanged
         return false;
     }
 
+    private static List<int> GetGuideSourcePositionsToAny(string pick3, string pick4)
+    {
+        var sourcePositions = new List<int>();
+
+        if (string.IsNullOrWhiteSpace(pick3) || pick3.Length != 3 ||
+            string.IsNullOrWhiteSpace(pick4) || pick4.Length != 4)
+        {
+            return sourcePositions;
+        }
+
+        for (int pick3Index = 0; pick3Index < 3; pick3Index++)
+        {
+            var sourceDigit = pick3[pick3Index];
+            if (!char.IsDigit(sourceDigit))
+            {
+                continue;
+            }
+
+            if (pick4.Contains(sourceDigit))
+            {
+                sourcePositions.Add(pick3Index);
+            }
+        }
+
+        return sourcePositions;
+    }
+
+    private static bool MatchesGuideSourceRuleAny(string pick3, string pick4, List<int> guideSourcePositions)
+    {
+        if (guideSourcePositions == null || guideSourcePositions.Count == 0)
+        {
+            return true;
+        }
+
+        var candidateSourcePositions = GetGuideSourcePositionsToAny(pick3, pick4);
+
+        if (guideSourcePositions.Count == 1)
+        {
+            return candidateSourcePositions.Count == 1 &&
+                   candidateSourcePositions[0] == guideSourcePositions[0];
+        }
+
+        return candidateSourcePositions.Count == guideSourcePositions.Count &&
+               candidateSourcePositions.All(guideSourcePositions.Contains);
+    }
 
     private static bool HasAnyConnectionPick3ToPick4(string pick3, string pick4)
     {
