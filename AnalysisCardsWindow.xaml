@@ -1,13 +1,33 @@
 <Window x:Class="FloridaLotteryApp.AnalysisCardsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="R1esultados del análisis"
+        Title="Resultados del análisis"
         Height="900" Width="900"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize">
 
     <Grid Margin="16">
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ======= MENÚ ESTILO VS CODE ======= -->
+         <Menu Grid.Row="0" 
+              Foreground="Black"
+              Height="30"
+              Margin="-16,0,-16,8"
+              Padding="8,0">
+            
+            <!-- Menú Archivo -->
+            <MenuItem Header="Filtrar" Click="MenuItem_Click">
+                
+            </MenuItem>
+        </Menu>
+
+
+        <!-- ======= CONTENIDO ORIGINAL ======= -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <ItemsControl ItemsSource="{Binding Cards}">
                     <ItemsControl.ItemTemplate>
@@ -20,13 +40,10 @@
                                     Background="#FFF7F7F7"
                                     Loaded="CardBorder_Loaded">
                                 
-
                                 <Grid>
                                     <Canvas x:Name="Pick3LinksCanvas"
                                             IsHitTestVisible="False"
                                             Panel.ZIndex="1"/>
-                                    <!-- Botón de tercer análisis (parte superior derecha) -->
-                                    
                                     
                                     <!-- Panel de botones (esquina superior derecha) -->
                                     <StackPanel Orientation="Horizontal"
@@ -151,245 +168,237 @@
                                     </StackPanel>
 
                                     <StackPanel>
+                                        <!-- ======= FILA GUÍA ======= -->
+                                        <Border Background="White" CornerRadius="10" Padding="10">
+                                            <StackPanel>
+                                                <!-- fecha/tirada -->
+                                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                                    <TextBlock Text="Fecha:" FontSize="16" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding GuideDateText}" FontSize="16" Margin="6,0,18,0"/>
+                                                    <TextBlock Text="Tirada:" FontSize="16" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding GuideDrawIcon}" FontSize="18" Margin="6,0,0,0"/>
+                                                </StackPanel>
 
-                                <!-- ======= FILA GUÍA (SIEMPRE IGUAL) ======= -->
-                                <Border Background="White" CornerRadius="10" Padding="10">
-                                    <StackPanel>
+                                                <!-- línea de dígitos -->
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="26"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="26"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="26"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
 
-                                        <!-- fecha/tirada -->
-                                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                                            <TextBlock Text="Fecha:" FontSize="16" FontWeight="Bold"/>
-                                            <TextBlock Text="{Binding GuideDateText}" FontSize="16" Margin="6,0,18,0"/>
-                                            <TextBlock Text="Tirada:" FontSize="16" FontWeight="Bold"/>
-                                            <TextBlock Text="{Binding GuideDrawIcon}" FontSize="18" Margin="6,0,0,0"/>
-                                        </StackPanel>
+                                                    <!-- Pick3 (3) -->
+                                                    <ItemsControl x:Name="GuidePick3Items"
+                                                                  Grid.Column="0"
+                                                                  ItemsSource="{Binding GuidePick3Digits}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <UniformGrid Rows="1" Columns="3"/>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border Width="34" Height="34" CornerRadius="17"
+                                                                        BorderThickness="2" BorderBrush="White"
+                                                                        Background="{Binding Bg}"
+                                                                        Margin="4,0">
+                                                                    <TextBlock Text="{Binding Value}"
+                                                                               FontSize="16" FontWeight="Bold"
+                                                                               HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"/>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
 
-                                        <!-- línea de dígitos -->
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="26"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="26"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="26"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
+                                                    <!-- Pick4 (4) -->
+                                                    <ItemsControl Grid.Column="2" ItemsSource="{Binding GuidePick4Digits}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <UniformGrid Rows="1" Columns="4"/>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border Width="34" Height="34" CornerRadius="17"
+                                                                        BorderThickness="2" BorderBrush="White"
+                                                                        Background="{Binding Bg}"
+                                                                        Margin="4,0">
+                                                                    <TextBlock Text="{Binding Value}"
+                                                                               FontSize="16" FontWeight="Bold"
+                                                                               HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"/>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
 
-                                            <!-- Pick3 (3) -->
-                                            <ItemsControl x:Name="GuidePick3Items"
-                                                          Grid.Column="0"
-                                                          ItemsSource="{Binding GuidePick3Digits}">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <UniformGrid Rows="1" Columns="3"/>
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Border Width="34" Height="34" CornerRadius="17"
-                                                                BorderThickness="2" BorderBrush="White"
-                                                                Background="{Binding Bg}"
-                                                                Margin="4,0">
-                                                            <TextBlock Text="{Binding Value}"
-                                                                       FontSize="16" FontWeight="Bold"
-                                                                       HorizontalAlignment="Center"
-                                                                       VerticalAlignment="Center"/>
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
+                                                    <!-- Próxima tirada (3) -->
+                                                    <ItemsControl Grid.Column="4" ItemsSource="{Binding GuideNextPick3Digits}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <UniformGrid Rows="1" Columns="3"/>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border Width="34" Height="34" CornerRadius="17"
+                                                                        BorderThickness="2" BorderBrush="White"
+                                                                        Background="{Binding Bg}"
+                                                                        Margin="4,0">
+                                                                    <TextBlock Text="{Binding Value}"
+                                                                               FontSize="16" FontWeight="Bold"
+                                                                               HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"/>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
 
-                                            <!-- Pick4 (4) -->
-                                            <ItemsControl Grid.Column="2" ItemsSource="{Binding GuidePick4Digits}">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <UniformGrid Rows="1" Columns="4"/>
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Border Width="34" Height="34" CornerRadius="17"
-                                                                BorderThickness="2" BorderBrush="White"
-                                                                Background="{Binding Bg}"
-                                                                Margin="4,0">
-                                                            <TextBlock Text="{Binding Value}"
-                                                                       FontSize="16" FontWeight="Bold"
-                                                                       HorizontalAlignment="Center"
-                                                                       VerticalAlignment="Center"/>
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
+                                                    <!-- Codificación (6) -->
+                                                    <ItemsControl Grid.Column="6" ItemsSource="{Binding GuideCodingDigits}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <UniformGrid Rows="1" Columns="6"/>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border Width="34" Height="34" CornerRadius="17"
+                                                                        BorderThickness="2" BorderBrush="White"
+                                                                        Background="{Binding Bg}"
+                                                                        Margin="4,0">
+                                                                    <TextBlock Text="{Binding Value}"
+                                                                               FontSize="16" FontWeight="Bold"
+                                                                               HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"/>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </Grid>
+                                            </StackPanel>
+                                        </Border>
 
-                                            <!-- Próxima tirada (3) -->
-                                            <ItemsControl Grid.Column="4" ItemsSource="{Binding GuideNextPick3Digits}">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <UniformGrid Rows="1" Columns="3"/>
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Border Width="34" Height="34" CornerRadius="17"
-                                                                BorderThickness="2" BorderBrush="White"
-                                                                Background="{Binding Bg}"
-                                                                Margin="4,0">
-                                                            <TextBlock Text="{Binding Value}"
-                                                                       FontSize="16" FontWeight="Bold"
-                                                                       HorizontalAlignment="Center"
-                                                                       VerticalAlignment="Center"/>
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
+                                        <!-- ======= FILA RESULTADO ======= -->
+                                        <Border Background="White" CornerRadius="10" Padding="10" Margin="0,12,0,0">
+                                            <StackPanel>
+                                                <!-- línea de dígitos -->
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="26"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="26"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="26"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
 
-                                            <!-- Codificación (6) -->
-                                            <ItemsControl Grid.Column="6" ItemsSource="{Binding GuideCodingDigits}">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <UniformGrid Rows="1" Columns="6"/>
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Border Width="34" Height="34" CornerRadius="17"
-                                                                BorderThickness="2" BorderBrush="White"
-                                                                Background="{Binding Bg}"
-                                                                Margin="4,0">
-                                                            <TextBlock Text="{Binding Value}"
-                                                                       FontSize="16" FontWeight="Bold"
-                                                                       HorizontalAlignment="Center"
-                                                                       VerticalAlignment="Center"/>
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </Grid>
+                                                    <!-- Pick3 (3) -->
+                                                    <ItemsControl x:Name="ResPick3Items"
+                                                                  Grid.Column="0"
+                                                                  ItemsSource="{Binding ResPick3Digits}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <UniformGrid Rows="1" Columns="3"/>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border Width="34" Height="34" CornerRadius="17"
+                                                                        BorderThickness="2" BorderBrush="White"
+                                                                        Background="{Binding Bg}"
+                                                                        Margin="4,0">
+                                                                    <TextBlock Text="{Binding Value}"
+                                                                               FontSize="16" FontWeight="Bold"
+                                                                               HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"/>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
 
-                                        
+                                                    <!-- Pick4 (4) -->
+                                                    <ItemsControl Grid.Column="2" ItemsSource="{Binding ResPick4Digits}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <UniformGrid Rows="1" Columns="4"/>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border Width="34" Height="34" CornerRadius="17"
+                                                                        BorderThickness="2" BorderBrush="White"
+                                                                        Background="{Binding Bg}"
+                                                                        Margin="4,0">
+                                                                    <TextBlock Text="{Binding Value}"
+                                                                               FontSize="16" FontWeight="Bold"
+                                                                               HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"/>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
 
-                                    </StackPanel>
-                                </Border>
+                                                    <!-- Próxima tirada (3) -->
+                                                    <ItemsControl Grid.Column="4" ItemsSource="{Binding ResNextPick3Digits}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <UniformGrid Rows="1" Columns="3"/>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border Width="34" Height="34" CornerRadius="17"
+                                                                        BorderThickness="2" BorderBrush="White"
+                                                                        Background="{Binding Bg}"
+                                                                        Margin="4,0">
+                                                                    <TextBlock Text="{Binding Value}"
+                                                                               FontSize="16" FontWeight="Bold"
+                                                                               HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"/>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
 
-                                <!-- ======= FILA RESULTADO ======= -->
-                                <Border Background="White" CornerRadius="10" Padding="10" Margin="0,12,0,0">
-                                    <StackPanel>
+                                                    <!-- Codificación (6) -->
+                                                    <ItemsControl Grid.Column="6" ItemsSource="{Binding ResCodingDigits}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <UniformGrid Rows="1" Columns="6"/>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border Width="34" Height="34" CornerRadius="17"
+                                                                        BorderThickness="2" BorderBrush="White"
+                                                                        Background="{Binding Bg}"
+                                                                        Margin="4,0">
+                                                                    <TextBlock Text="{Binding Value}"
+                                                                               FontSize="16" FontWeight="Bold"
+                                                                               HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"/>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </Grid>
 
-                                        <!-- línea de dígitos -->
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="26"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="26"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="26"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <!-- Pick3 (3) -->
-                                            <ItemsControl x:Name="ResPick3Items"
-                                                          Grid.Column="0"
-                                                          ItemsSource="{Binding ResPick3Digits}">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <UniformGrid Rows="1" Columns="3"/>
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Border Width="34" Height="34" CornerRadius="17"
-                                                                BorderThickness="2" BorderBrush="White"
-                                                                Background="{Binding Bg}"
-                                                                Margin="4,0">
-                                                            <TextBlock Text="{Binding Value}"
-                                                                       FontSize="16" FontWeight="Bold"
-                                                                       HorizontalAlignment="Center"
-                                                                       VerticalAlignment="Center"/>
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-
-                                            <!-- Pick4 (4) -->
-                                            <ItemsControl Grid.Column="2" ItemsSource="{Binding ResPick4Digits}">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <UniformGrid Rows="1" Columns="4"/>
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Border Width="34" Height="34" CornerRadius="17"
-                                                                BorderThickness="2" BorderBrush="White"
-                                                                Background="{Binding Bg}"
-                                                                Margin="4,0">
-                                                            <TextBlock Text="{Binding Value}"
-                                                                       FontSize="16" FontWeight="Bold"
-                                                                       HorizontalAlignment="Center"
-                                                                       VerticalAlignment="Center"/>
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-
-                                            <!-- Próxima tirada (3) -->
-                                            <ItemsControl Grid.Column="4" ItemsSource="{Binding ResNextPick3Digits}">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <UniformGrid Rows="1" Columns="3"/>
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Border Width="34" Height="34" CornerRadius="17"
-                                                                BorderThickness="2" BorderBrush="White"
-                                                                Background="{Binding Bg}"
-                                                                Margin="4,0">
-                                                            <TextBlock Text="{Binding Value}"
-                                                                       FontSize="16" FontWeight="Bold"
-                                                                       HorizontalAlignment="Center"
-                                                                       VerticalAlignment="Center"/>
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-
-                                            <!-- Codificación (6) -->
-                                            <ItemsControl Grid.Column="6" ItemsSource="{Binding ResCodingDigits}">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <UniformGrid Rows="1" Columns="6"/>
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Border Width="34" Height="34" CornerRadius="17"
-                                                                BorderThickness="2" BorderBrush="White"
-                                                                Background="{Binding Bg}"
-                                                                Margin="4,0">
-                                                            <TextBlock Text="{Binding Value}"
-                                                                       FontSize="16" FontWeight="Bold"
-                                                                       HorizontalAlignment="Center"
-                                                                       VerticalAlignment="Center"/>
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </Grid>
-
-                                        <!-- fecha/tirada -->
-                                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                                            <TextBlock Text="Fecha:" FontSize="16" FontWeight="Bold"/>
-                                            <TextBlock Text="{Binding ResDateText}" FontSize="16" Margin="6,0,18,0"/>
-                                            <TextBlock Text="Tirada:" FontSize="16" FontWeight="Bold"/>
-                                            <TextBlock Text="{Binding ResDrawIcon}" FontSize="18" Margin="6,0,0,0"/>
-                                        </StackPanel>
-
-                                    </StackPanel>
-                                </Border>
-
+                                                <!-- fecha/tirada -->
+                                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                                    <TextBlock Text="Fecha:" FontSize="16" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding ResDateText}" FontSize="16" Margin="6,0,18,0"/>
+                                                    <TextBlock Text="Tirada:" FontSize="16" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding ResDrawIcon}" FontSize="18" Margin="6,0,0,0"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Border>
                                     </StackPanel>
                                 </Grid>
                             </Border>
@@ -399,4 +408,4 @@
             </StackPanel>
         </ScrollViewer>
     </Grid>
-</Window> 
+</Window>

@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-E:\loterry-main\loterry-main\obj\Release\net8.0-windows\win-x64\
+E:\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\
 FloridaLotteryApp
 none
 false
 TRACE;RELEASE;NET;NET8_0;NETCOREAPP
-E:\loterry-main\loterry-main\App.xaml
+E:\pickDrawFlorida\App.xaml
 111966946891
 
 192105521123
-202-1011978630
+202-1365146656
 AddPick3Window.xaml;AnalysisCardsWindow.xaml;AnalysisLineMatchesWindow.xaml;AnalysisPositionMatchesWindow.xaml;AnalysisResultsWindow.xaml;EditDrawWindow.xaml;MainWindow.xaml;ScrollableMessageWindow.xaml;SearchWindow.xaml;ThirdAnalysisOption1.xaml;ThirdAnalysisWindow.xaml;
 
 False

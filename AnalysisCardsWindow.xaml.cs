@@ -87,7 +87,131 @@ public partial class AnalysisCardsWindow : Window
         thirdAnalysisWindow.ShowDialog();
     }
 
+    // Manejador para todos los items del menú
+    private void MenuItem_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            // Contar cuántas tarjetas había originalmente
+            int originalCount = Cards.Count;
+            
+            // Filtrar las tarjetas
+            var filteredCards = new ObservableCollection<AnalysisPairCardVM>();
+            
+            foreach (var card in Cards)
+            {
+                if (HasSingleStraightLine(card))
+                {
+                    filteredCards.Add(card);
+                }
+            }
+            
+            // Actualizar la colección
+            Cards.Clear();
+            foreach (var card in filteredCards)
+            {
+                Cards.Add(card);
+            }
+            
+            // Mostrar mensaje con el resultado del filtro
+            MessageBox.Show($"Filtro aplicado: Línea recta única\n\n" +
+                           $"Tarjetas originales: {originalCount}\n" +
+                           $"Tarjetas después del filtro: {filteredCards.Count}\n\n" +
+                           $"Mostrando solo tarjetas con exactamente UNA línea recta vertical.",
+                           "Filtro aplicado",
+                           MessageBoxButton.OK,
+                           MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error al aplicar el filtro: {ex.Message}", 
+                           "Error", 
+                           MessageBoxButton.OK, 
+                           MessageBoxImage.Error);
+        }
+    }
+
     
+    // Método para verificar si una tarjeta tiene exactamente una línea recta vertical
+// y NINGUNA línea diagonal
+    private bool HasSingleStraightLine(AnalysisPairCardVM card)
+    {
+        try
+        {
+            // Obtener los dígitos de la fila superior (guía) y fila inferior (resultado)
+            var topDigits = card.GuidePick3Digits;
+            var bottomDigits = card.ResPick3Digits;
+            
+            // Verificar que ambas colecciones tengan 3 dígitos
+            if (topDigits.Count != 3 || bottomDigits.Count != 3)
+                return false;
+            
+            // Contar coincidencias en la MISMA POSICIÓN (línea recta vertical)
+            int straightLineMatches = 0;
+            
+            // Contar coincidencias en DIFERENTES POSICIONES (línea diagonal)
+            int diagonalMatches = 0;
+            
+            for (int i = 0; i < 3; i++)
+            {
+                string topValue = topDigits[i].Value;
+                
+                // Si el dígito superior está vacío, continuar
+                if (string.IsNullOrWhiteSpace(topValue))
+                    continue;
+                
+                for (int j = 0; j < 3; j++)
+                {
+                    string bottomValue = bottomDigits[j].Value;
+                    
+                    // Si el dígito inferior está vacío, continuar
+                    if (string.IsNullOrWhiteSpace(bottomValue))
+                        continue;
+                    
+                    // Verificar si hay coincidencia
+                    if (topValue == bottomValue)
+                    {
+                        if (i == j)
+                        {
+                            // Misma posición = línea recta vertical
+                            straightLineMatches++;
+                        }
+                        else
+                        {
+                            // Diferente posición = línea diagonal
+                            diagonalMatches++;
+                        }
+                    }
+                }
+            }
+            
+            // Una tarjeta válida debe tener:
+            // 1. EXACTAMENTE UNA línea recta vertical
+            // 2. CERO líneas diagonales
+            return straightLineMatches == 1 && diagonalMatches == 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error en HasSingleStraightLine: {ex.Message}");
+            return false;
+        }
+    }
+
+
+    // Método auxiliar para obtener la ruta completa del menú
+    private string GetMenuPath(MenuItem item)
+    {
+        string path = item.Header.ToString();
+        var parent = item.Parent as MenuItem;
+        
+        while (parent != null)
+        {
+            path = parent.Header.ToString() + " → " + path;
+            parent = parent.Parent as MenuItem;
+        }
+        
+        return path;
+    }
 }
 
 public class GuideInfo
@@ -368,4 +492,3 @@ public class DigitVM
     public string Value { get; set; } = "";
     public Brush Bg { get; set; } = Brushes.Transparent;
 }
- 

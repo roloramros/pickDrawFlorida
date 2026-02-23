@@ -10,6 +10,8 @@ using System.Windows;
 using FloridaLotteryApp.Data;
 using System.Linq;
 using System.Windows.Input;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace FloridaLotteryApp;
 
@@ -141,6 +143,43 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         LoadPage(page - 1);
     }
 
+private void AnalysisPlot_Click(object sender, RoutedEventArgs e)
+{
+    var menuItem = sender as MenuItem;
+    if (menuItem == null) return;
+    
+    var contextMenu = menuItem.Parent as ContextMenu;
+    if (contextMenu == null) return;
+    
+    var target = contextMenu.PlacementTarget as FrameworkElement;
+    if (target == null) return;
+    
+    if (target.DataContext is DayCard card)
+    {
+        // Determinar si es Mediodía o Noche basado en el Header del MenuItem
+        string drawTime = menuItem.Header.ToString().Contains("Mediodía") ? "M" : "E";
+        string drawIcon = drawTime == "M" ? "☀️" : "🌙";
+        string pick3 = drawTime == "M" ? card.P3_M_Number : card.P3_E_Number;
+        string pick4 = drawTime == "M" ? card.P4_M_Number : card.P4_E_Number;
+        
+        // Validar que haya números
+        if (pick3 == "---" || pick4 == "----")
+        {
+            MessageBox.Show("No hay datos válidos para esta tirada.", "Información", 
+                MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+        
+        // Crear y mostrar la ventana PlotWindow
+        var plotWindow = new PlotWindow(card.DateText, drawIcon, pick3, pick4)
+        {
+            Owner = this
+        };
+        
+        plotWindow.ShowDialog();
+    }
+}
+
     private void AddManual_Click(object sender, RoutedEventArgs e)
     {
         var win = new AddPick3Window { Owner = this };
@@ -258,6 +297,19 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         }
 
         LoadPage(_pageIndex);
+    }
+
+    private void CardDateMenu_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is not FrameworkElement element || element.ContextMenu is not ContextMenu menu)
+        {
+            return;
+        }
+
+        menu.PlacementTarget = element;
+        menu.Placement = PlacementMode.Bottom;
+        menu.IsOpen = true;
+        e.Handled = true;
     }
 
     private static bool TryParseDrawTimeTag(object? tag, out string drawTime)
