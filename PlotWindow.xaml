@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="Análisis de Patrones" 
         Height="800" 
-        Width="1100"
+        Width="1500"
         WindowStartupLocation="CenterOwner"
         ResizeMode="CanResizeWithGrip">
     
@@ -236,8 +236,8 @@
                         
                             <TextBlock Text=" " Width="15"/>
                         
-                            <!-- Fireball -->
-                            <ItemsControl x:Name="Row1_FireballDigits" ItemsSource="{Binding Row1Fireball}">
+                            <!-- Pick3 siguiente -->
+                            <ItemsControl x:Name="Row1_Pick3SiguienteDigits" ItemsSource="{Binding Row1Pick3Siguiente}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal"/>
@@ -261,10 +261,10 @@
                                       VerticalAlignment="Center"/>
                         </StackPanel>
                 
-                        <!-- Centro: Label "Fecha" -->
+                
+                        <!-- Centro: Fecha -->
                         <TextBlock Grid.Column="1" 
-
-                                  Text="Fecha" 
+                                  Text="{Binding Row1Date}" 
                                   FontWeight="Bold" 
                                   FontSize="14" 
                                   VerticalAlignment="Center"
@@ -296,7 +296,7 @@
 
         
                 <!-- FILA 2: Segunda fila (misma estructura) -->
-                <Border Background="#F5F5F5" CornerRadius="8" Padding="12" Margin="0,0,0,10">
+                <Border CornerRadius="8" Padding="12" Margin="0,0,0,10">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -389,7 +389,7 @@
                 </Border>
         
                 <!-- FILA 3: Tercera fila (misma estructura) -->
-                <Border Background="#F5F5F5" CornerRadius="8" Padding="12" Margin="0,0,0,10">
+                <Border CornerRadius="8" Padding="12" Margin="0,0,0,10">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -482,7 +482,7 @@
                 </Border>
         
                 <!-- FILA 4: Cuarta fila (misma estructura) -->
-                <Border Background="#F5F5F5" CornerRadius="8" Padding="12">
+                <Border CornerRadius="8" Padding="12">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>

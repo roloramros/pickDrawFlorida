@@ -156,8 +156,13 @@ private void AnalysisPlot_Click(object sender, RoutedEventArgs e)
     
     if (target.DataContext is DayCard card)
     {
-        // Determinar si es Mediodía o Noche basado en el Header del MenuItem
-        string drawTime = menuItem.Header.ToString().Contains("Mediodía") ? "M" : "E";
+        if (menuItem.Tag is not string drawTime || (drawTime is not "M" and not "E"))
+        {
+            MessageBox.Show("No se pudo determinar si la tirada es de Mediodía o Noche.", "Información",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
         string drawIcon = drawTime == "M" ? "☀️" : "🌙";
         string pick3 = drawTime == "M" ? card.P3_M_Number : card.P3_E_Number;
         string pick4 = drawTime == "M" ? card.P4_M_Number : card.P4_E_Number;
@@ -170,8 +175,17 @@ private void AnalysisPlot_Click(object sender, RoutedEventArgs e)
             return;
         }
         
+        if (!DateTime.TryParse(card.DateText, out var date))
+        {
+            MessageBox.Show("Fecha inválida para esta tirada.", "Información",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        var pick3Siguiente = GetPlotRow1NextNumber(date, drawTime);
+
         // Crear y mostrar la ventana PlotWindow
-        var plotWindow = new PlotWindow(card.DateText, drawIcon, pick3, pick4)
+        var plotWindow = new PlotWindow(card.DateText, drawIcon, pick3, pick4, pick3Siguiente)
         {
             Owner = this
         };
@@ -332,6 +346,22 @@ private void AnalysisPlot_Click(object sender, RoutedEventArgs e)
             "E" => "🌙",
             _ => ""
         };
+    }
+
+    private static string GetPlotRow1NextNumber(DateTime date, string drawTime)
+    {
+        if (drawTime == "M")
+        {
+            return DrawRepository.GetResult("pick3", date, "E").Number ?? "";
+        }
+
+        var nextDate = DrawRepository.GetNextPick3Date(date);
+        if (nextDate == null)
+        {
+            return "";
+        }
+
+        return DrawRepository.GetResult("pick3", nextDate.Value, "M").Number ?? "";
     }
 
     private void RunAnalysis(string? pick3Input, string? pick4Input, string? dateText, string? drawTime)

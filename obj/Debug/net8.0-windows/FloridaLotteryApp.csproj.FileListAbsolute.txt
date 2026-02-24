@@ -162,6 +162,7 @@ E:\pickDrawFlorida\obj\Debug\net8.0-windows\AnalysisPositionMatchesWindow.baml
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\AnalysisResultsWindow.baml
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\EditDrawWindow.baml
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\MainWindow.baml
+E:\pickDrawFlorida\obj\Debug\net8.0-windows\PlotWindow.baml
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\ScrollableMessageWindow.baml
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\SearchWindow.baml
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\ThirdAnalysisOption1.baml
@@ -172,6 +173,7 @@ E:\pickDrawFlorida\obj\Debug\net8.0-windows\AnalysisPositionMatchesWindow.g.cs
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\AnalysisResultsWindow.g.cs
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\EditDrawWindow.g.cs
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\MainWindow.g.cs
+E:\pickDrawFlorida\obj\Debug\net8.0-windows\PlotWindow.g.cs
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\ScrollableMessageWindow.g.cs
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\SearchWindow.g.cs
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\ThirdAnalysisOption1.g.cs

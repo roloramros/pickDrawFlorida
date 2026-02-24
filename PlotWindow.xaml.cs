@@ -16,8 +16,9 @@ public partial class PlotWindow : Window
     // Colecciones para FILA 1 (Tirada seleccionada)
     public List<string> Row1Pick3 { get; set; } = new();
     public List<string> Row1Pick4 { get; set; } = new();
-    public List<string> Row1Fireball { get; set; } = new();
+    public List<string> Row1Pick3Siguiente { get; set; } = new();
     public List<string> Row1Additional { get; set; } = new();
+    public string Row1Date { get; set; } = "";
     
     // Colecciones para FILA 2
     public List<string> Row2Pick3 { get; set; } = new();
@@ -37,7 +38,7 @@ public partial class PlotWindow : Window
     public List<string> Row4Fireball { get; set; } = new();
     public List<string> Row4Additional { get; set; } = new();
 
-    public PlotWindow(string dateText, string drawIcon, string pick3, string pick4)
+    public PlotWindow(string dateText, string drawIcon, string pick3, string pick4, string pick3Siguiente)
     {
         InitializeComponent();
         
@@ -49,8 +50,9 @@ public partial class PlotWindow : Window
         // ==========================================
         Row1Pick3 = pick3.Where(char.IsDigit).Select(c => c.ToString()).ToList();
         Row1Pick4 = pick4.Where(char.IsDigit).Select(c => c.ToString()).ToList();
-        Row1Fireball = new List<string> { "3", "6" }; // Ejemplo - luego lo calculas
-        Row1Additional = new List<string> { "0", "1", "3", "5", "6", "8" }; // Ejemplo
+        Row1Pick3Siguiente = pick3Siguiente.Where(char.IsDigit).Select(c => c.ToString()).ToList();
+        Row1Additional = BuildCodificacionDigits(pick3, pick4);
+        Row1Date = dateText;
         
         // ==========================================
         // FILA 2, 3, 4: Datos de ejemplo (luego los llenas con tu lógica)
@@ -77,7 +79,7 @@ public partial class PlotWindow : Window
         // FILA 1
         Row1_Pick3Digits.ItemsSource = Row1Pick3;
         Row1_Pick4Digits.ItemsSource = Row1Pick4;
-        Row1_FireballDigits.ItemsSource = Row1Fireball;
+        Row1_Pick3SiguienteDigits.ItemsSource = Row1Pick3Siguiente;
         Row1_AdditionalDigits.ItemsSource = Row1Additional;
         Row1_DrawIcon.Text = drawIcon;
         
@@ -154,6 +156,16 @@ public partial class PlotWindow : Window
             SimilarPatternNumber = "2664236",
             SimilarMatchNumber = "1660786"
         });
+    }
+
+    private static List<string> BuildCodificacionDigits(string pick3, string pick4)
+    {
+        return (pick3 + pick4)
+            .Where(char.IsDigit)
+            .Distinct()
+            .OrderBy(c => c)
+            .Select(c => c.ToString())
+            .ToList();
     }
 }
 

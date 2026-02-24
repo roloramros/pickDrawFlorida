@@ -100,7 +100,7 @@
                                                MouseLeftButtonUp="CardDateMenu_MouseLeftButtonUp">
                                         <TextBlock.ContextMenu>
                                             <ContextMenu>
-                                                <MenuItem Header="Analisis: Plot" Click="AnalysisPlot_Click"/>
+                                                <MenuItem Header="Analisis: Plot" Tag="M" Click="AnalysisPlot_Click"/>
                                                 <MenuItem Header="Función 2 (próximamente)" IsEnabled="False"/>
                                                 <Separator/>
                                                 <MenuItem Header="Programar nuevas funciones..." IsEnabled="False"/>
@@ -185,7 +185,7 @@
                                                MouseLeftButtonUp="CardDateMenu_MouseLeftButtonUp">
                                         <TextBlock.ContextMenu>
                                             <ContextMenu>
-                                                <MenuItem Header="Analisis: Plot" Click="AnalysisPlot_Click"/>
+                                                <MenuItem Header="Analisis: Plot" Tag="E" Click="AnalysisPlot_Click"/>
                                                 <MenuItem Header="Función 2 (próximamente)" IsEnabled="False"/>
                                                 <Separator/>
                                                 <MenuItem Header="Programar nuevas funciones..." IsEnabled="False"/>
