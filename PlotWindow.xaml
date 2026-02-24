@@ -48,134 +48,69 @@
         <!-- ============================================ -->
         <!-- SECCIÓN SUPERIOR: TABLA DE PATRONES (4 Columnas) -->
         <!-- ============================================ -->
-        <Border Grid.Row="0" 
+                <Border Grid.Row="0" 
                 Background="White" 
                 CornerRadius="10" 
                 Padding="15"
-                BorderThickness="1" 
-                BorderBrush="#CCCCCC">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <!-- Encabezados de la tabla -->
-                <Grid Grid.Row="0" Margin="0,0,0,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                
-                    <TextBlock Grid.Column="0" 
-                              Text="Patrón de referencia" 
-                              FontWeight="Bold" 
-                              FontSize="14" 
-                              HorizontalAlignment="Center"
-                              Padding="5"/>
-                    <TextBlock Grid.Column="1" 
-                              Text="Coincidencias" 
-                              FontWeight="Bold" 
-                              FontSize="14" 
-                              HorizontalAlignment="Center"
-                              Padding="5"/>
-                    <TextBlock Grid.Column="2" 
-                              Text="Patrones similares" 
-                              FontWeight="Bold" 
-                              FontSize="14" 
-                              HorizontalAlignment="Center"
-                              Padding="5"/>
-                    <TextBlock Grid.Column="3" 
-                              Text="Coincidencias" 
-                              FontWeight="Bold" 
-                              FontSize="14" 
-                              HorizontalAlignment="Center"
-                              Padding="5"/>
-                </Grid>
-
-                <!-- ScrollViewer para la tabla de datos -->
-                <ScrollViewer Grid.Row="1" 
-                             MaxHeight="350" 
-                             VerticalScrollBarVisibility="Auto"
-                             HorizontalScrollBarVisibility="Auto">
-                    <ItemsControl x:Name="PatternsTable">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="0,3,0,3">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                
-                                    <!-- Columna 1: Patrón de referencia -->
-                                    <Border Grid.Column="0" 
-                                           Background="#E3F2FD" 
-                                           Padding="8,4" 
-                                           Margin="2"
-                                           CornerRadius="4"
-                                           BorderThickness="1"
-                                           BorderBrush="#90CAF9">
-                                        <TextBlock Text="{Binding ReferenceNumber}" 
-                                                  FontWeight="Bold" 
-                                                  HorizontalAlignment="Center"
-                                                  FontSize="14"
-                                                  FontFamily="Consolas"/>
-                                    </Border>
-                                
-                                    <!-- Columna 2: Coincidencias del patrón -->
-                                    <Border Grid.Column="1" 
-                                           Background="#F5F5F5" 
-                                           Padding="8,4" 
-                                           Margin="2"
-                                           CornerRadius="4"
-                                           BorderThickness="1"
-                                           BorderBrush="#CCCCCC">
-                                        <TextBlock Text="{Binding MatchNumber}" 
-                                                  FontWeight="Bold" 
-                                                  HorizontalAlignment="Center"
-                                                  FontSize="14"
-                                                  FontFamily="Consolas"/>
-                                    </Border>
-                                
-                                    <!-- Columna 3: Patrones similares -->
-                                    <Border Grid.Column="2" 
-                                           Background="#E8F5E8" 
-                                           Padding="8,4" 
-                                           Margin="2"
-                                           CornerRadius="4"
-                                           BorderThickness="1"
-                                           BorderBrush="#A5D6A5">
-                                        <TextBlock Text="{Binding SimilarPatternNumber}" 
-                                                  FontWeight="Bold" 
-                                                  HorizontalAlignment="Center"
-                                                  FontSize="14"
-                                                  FontFamily="Consolas"/>
-                                    </Border>
-                                
-                                    <!-- Columna 4: Coincidencias de similares -->
-                                    <Border Grid.Column="3" 
-                                           Background="#F5F5F5" 
-                                           Padding="8,4" 
-                                           Margin="2"
-                                           CornerRadius="4"
-                                           BorderThickness="1"
-                                           BorderBrush="#CCCCCC">
-                                        <TextBlock Text="{Binding SimilarMatchNumber}" 
-                                                  FontWeight="Bold" 
-                                                  HorizontalAlignment="Center"
-                                                  FontSize="14"
-                                                  FontFamily="Consolas"/>
-                                    </Border>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </Grid>
+                BorderThickness="1" >
+            <DataGrid x:Name="PatternsTable"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserReorderColumns="False"
+                      CanUserResizeRows="False"
+                      CanUserSortColumns="False"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Vertical"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow"
+                      RowHeaderWidth="0"
+                      MaxHeight="350"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto"
+                      SelectionChanged="PatternsTable_SelectionChanged"
+                      FontSize="14">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#F2F2F2"/>
+                        <Setter Property="BorderBrush" Value="#D0D0D0"/>
+                        <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                        <Setter Property="Padding" Value="8,6"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Padding" Value="8,4"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="FontFamily" Value="Consolas"/>
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="White"/>
+                        <Setter Property="BorderBrush" Value="#E6E6E6"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#D9E8FB"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Patron de referencia" Binding="{Binding ReferenceNumber}" Width="*"/>
+                    <DataGridTextColumn Header="Coincidencias" Binding="{Binding MatchNumber}" Width="*"/>
+                    <DataGridTextColumn Header="Patrones similares" Binding="{Binding SimilarPatternNumber}" Width="*"/>
+                    <DataGridTextColumn Header="Coincidencias" Binding="{Binding SimilarMatchNumber}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </Border>
 
         <!-- ============================================ -->
@@ -193,9 +128,9 @@
                 <Border CornerRadius="8" Padding="12" Margin="0,0,0,10">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                 
                         <!-- Lado Izquierdo: Dígitos de la tirada -->
@@ -273,7 +208,7 @@
                         
                                      
                         <!-- Lado Derecho: Dígitos adicionales (sugeridos/disponibles) -->
-                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                             <ItemsControl x:Name="Row1_AdditionalDigits" ItemsSource="{Binding Row1Additional}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -291,17 +226,15 @@
                         </StackPanel>
                     </Grid>
                 </Border>
-        
-
-
+    
         
                 <!-- FILA 2: Segunda fila (misma estructura) -->
                 <Border CornerRadius="8" Padding="12" Margin="0,0,0,10">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                 
                         <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
@@ -362,14 +295,15 @@
                                       VerticalAlignment="Center"/>
                         </StackPanel>
                 
-                        <TextBlock Grid.Column="1" 
+                        <TextBlock x:Name="Row2_DateText"
+                                  Grid.Column="1" 
                                   Text="Fecha" 
                                   FontWeight="Bold" 
                                   FontSize="14" 
                                   VerticalAlignment="Center"
                                   Margin="20,0"/>
                 
-                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                             <ItemsControl x:Name="Row2_AdditionalDigits" ItemsSource="{Binding Row2Additional}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -392,9 +326,9 @@
                 <Border CornerRadius="8" Padding="12" Margin="0,0,0,10">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                 
                         <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
@@ -462,7 +396,7 @@
                                   VerticalAlignment="Center"
                                   Margin="20,0"/>
                 
-                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                             <ItemsControl x:Name="Row3_AdditionalDigits" ItemsSource="{Binding Row3Additional}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -485,9 +419,9 @@
                 <Border CornerRadius="8" Padding="12">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                 
                         <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
@@ -555,7 +489,7 @@
                                   VerticalAlignment="Center"
                                   Margin="20,0"/>
                 
-                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                             <ItemsControl x:Name="Row4_AdditionalDigits" ItemsSource="{Binding Row4Additional}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -579,3 +513,4 @@
      
     </Grid>
 </Window>
+

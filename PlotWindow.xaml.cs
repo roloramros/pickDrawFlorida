@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using FloridaLotteryApp.Data;
 
 namespace FloridaLotteryApp;
 
@@ -25,6 +26,7 @@ public partial class PlotWindow : Window
     public List<string> Row2Pick4 { get; set; } = new();
     public List<string> Row2Fireball { get; set; } = new();
     public List<string> Row2Additional { get; set; } = new();
+    public string Row2Date { get; set; } = "";
     
     // Colecciones para FILA 3
     public List<string> Row3Pick3 { get; set; } = new();
@@ -57,10 +59,11 @@ public partial class PlotWindow : Window
         // ==========================================
         // FILA 2, 3, 4: Datos de ejemplo (luego los llenas con tu lógica)
         // ==========================================
-        Row2Pick3 = new List<string> { "1", "2", "3" };
-        Row2Pick4 = new List<string> { "4", "5", "6", "7" };
-        Row2Fireball = new List<string> { "0", "8" };
-        Row2Additional = new List<string> { "2", "4", "6", "9" };
+        Row2Pick3 = new List<string>();
+        Row2Pick4 = new List<string>();
+        Row2Fireball = new List<string>();
+        Row2Additional = new List<string>();
+        Row2Date = "";
         
         Row3Pick3 = new List<string> { "7", "8", "9" };
         Row3Pick4 = new List<string> { "0", "1", "2", "3" };
@@ -72,8 +75,8 @@ public partial class PlotWindow : Window
         Row4Fireball = new List<string> { "1", "2" };
         Row4Additional = new List<string> { "0", "2", "4", "6" };
         
-        // Inicializar datos de ejemplo para la tabla superior
-        InitializeSampleData();
+        // Cargar tabla superior según tirada guía
+        LoadPatternRows(pick3, pick4);
         
         // Asignar ItemsSource a todos los ItemsControls
         // FILA 1
@@ -88,6 +91,7 @@ public partial class PlotWindow : Window
         Row2_Pick4Digits.ItemsSource = Row2Pick4;
         Row2_FireballDigits.ItemsSource = Row2Fireball;
         Row2_AdditionalDigits.ItemsSource = Row2Additional;
+        Row2_DateText.Text = Row2Date;
         
         // FILA 3
         Row3_Pick3Digits.ItemsSource = Row3Pick3;
@@ -102,60 +106,79 @@ public partial class PlotWindow : Window
         Row4_AdditionalDigits.ItemsSource = Row4Additional;
         
         PatternsTable.ItemsSource = PatternRows;
+        if (PatternRows.Count > 0)
+        {
+            PatternsTable.SelectedIndex = 0;
+            PatternsTable.ScrollIntoView(PatternRows[0]);
+            ApplySelectionToRow2(PatternRows[0]);
+        }
     }
 
-    private void InitializeSampleData()
+    private void LoadPatternRows(string guidePick3, string guidePick4)
     {
         PatternRows.Clear();
-        
-        // Datos de ejemplo para la tabla
-        PatternRows.Add(new PatternRow 
-        { 
-            ReferenceNumber = "6007630", 
-            MatchNumber = "6002581",
-            SimilarPatternNumber = "2664236",
-            SimilarMatchNumber = "2661958"
-        });
-        
-        PatternRows.Add(new PatternRow 
-        { 
-            ReferenceNumber = "6007630", 
-            MatchNumber = "9002681",
-            SimilarPatternNumber = "1227132",
-            SimilarMatchNumber = "1229068"
-        });
-        
-        PatternRows.Add(new PatternRow 
-        { 
-            ReferenceNumber = "6007630", 
-            MatchNumber = "1002570",
-            SimilarPatternNumber = "2664236",
-            SimilarMatchNumber = "1665846"
-        });
-        
-        PatternRows.Add(new PatternRow 
-        { 
-            ReferenceNumber = "6007630", 
-            MatchNumber = "4008916",
-            SimilarPatternNumber = "1227132",
-            SimilarMatchNumber = "4226901"
-        });
-        
-        PatternRows.Add(new PatternRow 
-        { 
-            ReferenceNumber = "6007630", 
-            MatchNumber = "9009728",
-            SimilarPatternNumber = "2664236",
-            SimilarMatchNumber = "9669415"
-        });
-        
-        PatternRows.Add(new PatternRow 
-        { 
-            ReferenceNumber = "6007630", 
-            MatchNumber = "4009280",
-            SimilarPatternNumber = "2664236",
-            SimilarMatchNumber = "1660786"
-        });
+
+        var suffix = new string((guidePick3 ?? "").Where(char.IsDigit).TakeLast(2).ToArray());
+        if (suffix.Length != 2)
+        {
+            return;
+        }
+
+        var guideNumber = new string(
+            (guidePick3 ?? "")
+                .Where(char.IsDigit)
+                .Concat((guidePick4 ?? "").Where(char.IsDigit))
+                .ToArray());
+
+        var matches = DrawRepository.SearchPick3BySuffixWithPick4(suffix);
+        foreach (var hit in matches)
+        {
+            var nextPick3 = DrawRepository.GetNextPick3Number(hit.Date, hit.DrawTime) ?? "";
+            PatternRows.Add(new PatternRow
+            {
+                ReferenceNumber = guideNumber,
+                MatchNumber = $"{hit.Pick3}{hit.Pick4}",
+                SimilarPatternNumber = "",
+                SimilarMatchNumber = "",
+                MatchPick3 = hit.Pick3,
+                MatchPick4 = hit.Pick4,
+                MatchNextPick3 = nextPick3,
+                MatchDrawTime = hit.DrawTime,
+                MatchDate = hit.Date.ToString("yyyy-MM-dd"),
+                MatchCodificacion = string.Concat(BuildCodificacionDigits(hit.Pick3, hit.Pick4))
+            });
+        }
+    }
+
+    private void PatternsTable_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (PatternsTable.SelectedItem is not PatternRow selected)
+        {
+            return;
+        }
+
+        ApplySelectionToRow2(selected);
+    }
+
+    private void ApplySelectionToRow2(PatternRow selected)
+    {
+        if (selected == null)
+        {
+            return;
+        }
+
+        Row2Pick3 = (selected.MatchPick3 ?? "").Where(char.IsDigit).Select(c => c.ToString()).ToList();
+        Row2Pick4 = (selected.MatchPick4 ?? "").Where(char.IsDigit).Select(c => c.ToString()).ToList();
+        Row2Fireball = (selected.MatchNextPick3 ?? "").Where(char.IsDigit).Select(c => c.ToString()).ToList();
+        Row2Additional = (selected.MatchCodificacion ?? "").Where(char.IsDigit).Select(c => c.ToString()).ToList();
+        Row2Date = selected.MatchDate ?? "";
+
+        Row2_Pick3Digits.ItemsSource = Row2Pick3;
+        Row2_Pick4Digits.ItemsSource = Row2Pick4;
+        Row2_FireballDigits.ItemsSource = Row2Fireball;
+        Row2_AdditionalDigits.ItemsSource = Row2Additional;
+        Row2_DrawIcon.Text = selected.MatchDrawTime == "M" ? "☀️" : "🌙";
+        Row2_DateText.Text = Row2Date;
     }
 
     private static List<string> BuildCodificacionDigits(string pick3, string pick4)
@@ -178,4 +201,10 @@ public class PatternRow
     public string MatchNumber { get; set; } = "";
     public string SimilarPatternNumber { get; set; } = "";
     public string SimilarMatchNumber { get; set; } = "";
+    public string MatchPick3 { get; set; } = "";
+    public string MatchPick4 { get; set; } = "";
+    public string MatchNextPick3 { get; set; } = "";
+    public string MatchDrawTime { get; set; } = "";
+    public string MatchDate { get; set; } = "";
+    public string MatchCodificacion { get; set; } = "";
 }

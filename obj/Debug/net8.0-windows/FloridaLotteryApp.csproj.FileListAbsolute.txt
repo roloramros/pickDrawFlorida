@@ -125,7 +125,6 @@ E:\loterry-main\loterry-main\obj\Debug\net8.0-windows\ThirdAnalysisOption1.baml
 E:\loterry-main\loterry-main\obj\Debug\net8.0-windows\ThirdAnalysisOption1.g.cs
 E:\loterry-main\loterry-main\obj\Debug\net8.0-windows\FloridaLotteryApp_MarkupCompile.lref
 E:\pickDrawFlorida\bin\Debug\net8.0-windows\florida_pick3_pick4_fixed.sqlite
-E:\pickDrawFlorida\bin\Debug\net8.0-windows\FloridaLotteryApp.exe
 E:\pickDrawFlorida\bin\Debug\net8.0-windows\FloridaLotteryApp.deps.json
 E:\pickDrawFlorida\bin\Debug\net8.0-windows\FloridaLotteryApp.runtimeconfig.json
 E:\pickDrawFlorida\bin\Debug\net8.0-windows\FloridaLotteryApp.dll
@@ -194,3 +193,4 @@ E:\pickDrawFlorida\obj\Debug\net8.0-windows\refint\FloridaLotteryApp.dll
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\FloridaLotteryApp.pdb
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\FloridaLotteryApp.genruntimeconfig.cache
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\ref\FloridaLotteryApp.dll
+E:\pickDrawFlorida\bin\Debug\net8.0-windows\FloridaLotteryApp.exe

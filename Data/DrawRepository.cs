@@ -349,6 +349,52 @@ public static class DrawRepository
         return list;
     }
 
+    public static List<ComboHit> SearchPick3BySuffixWithPick4(string pick3Suffix2)
+    {
+        if (string.IsNullOrWhiteSpace(pick3Suffix2) || pick3Suffix2.Length != 2 || !pick3Suffix2.All(char.IsDigit))
+        {
+            return new List<ComboHit>();
+        }
+
+        using var conn = Db.Open();
+        using var cmd = conn.CreateCommand();
+
+        cmd.CommandText = """
+            SELECT p3.draw_date,
+                   p3.draw_time,
+                   p3.number,
+                   p4.number,
+                   p3.fireball,
+                   p4.fireball
+            FROM pick3_draws p3
+            INNER JOIN pick4_draws p4
+                ON p3.draw_date = p4.draw_date
+               AND p3.draw_time = p4.draw_time
+            WHERE p3.number IS NOT NULL
+              AND length(p3.number) = 3
+              AND substr(p3.number, 2, 2) = $suffix
+            ORDER BY p3.draw_date DESC, p3.draw_time DESC, p3.rowid DESC;
+        """;
+
+        cmd.Parameters.AddWithValue("$suffix", pick3Suffix2);
+
+        using var r = cmd.ExecuteReader();
+        var list = new List<ComboHit>();
+        while (r.Read())
+        {
+            list.Add(new ComboHit(
+                DateTime.Parse(r.GetString(0)),
+                r.GetString(1),
+                r.GetString(2),
+                r.GetString(3),
+                r.IsDBNull(4) ? null : r.GetInt32(4),
+                r.IsDBNull(5) ? null : r.GetInt32(5)
+            ));
+        }
+
+        return list;
+    }
+
     private static List<Hit> SearchByNumberGame(string game, string number)
     {
         using var conn = Db.Open();
