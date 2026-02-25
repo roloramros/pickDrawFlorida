@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -33,12 +34,14 @@ public partial class PlotWindow : Window
     public List<string> Row3Pick4 { get; set; } = new();
     public List<string> Row3Fireball { get; set; } = new();
     public List<string> Row3Additional { get; set; } = new();
+    public string Row3Date { get; set; } = "";
     
     // Colecciones para FILA 4
     public List<string> Row4Pick3 { get; set; } = new();
     public List<string> Row4Pick4 { get; set; } = new();
     public List<string> Row4Fireball { get; set; } = new();
     public List<string> Row4Additional { get; set; } = new();
+    public string Row4Date { get; set; } = "";
 
     public PlotWindow(string dateText, string drawIcon, string pick3, string pick4, string pick3Siguiente)
     {
@@ -65,15 +68,17 @@ public partial class PlotWindow : Window
         Row2Additional = new List<string>();
         Row2Date = "";
         
-        Row3Pick3 = new List<string> { "7", "8", "9" };
-        Row3Pick4 = new List<string> { "0", "1", "2", "3" };
-        Row3Fireball = new List<string> { "4", "5" };
-        Row3Additional = new List<string> { "1", "3", "5", "7" };
+        Row3Pick3 = new List<string>();
+        Row3Pick4 = new List<string>();
+        Row3Fireball = new List<string>();
+        Row3Additional = new List<string>();
+        Row3Date = "";
         
-        Row4Pick3 = new List<string> { "4", "5", "6" };
-        Row4Pick4 = new List<string> { "7", "8", "9", "0" };
-        Row4Fireball = new List<string> { "1", "2" };
-        Row4Additional = new List<string> { "0", "2", "4", "6" };
+        Row4Pick3 = new List<string>();
+        Row4Pick4 = new List<string>();
+        Row4Fireball = new List<string>();
+        Row4Additional = new List<string>();
+        Row4Date = "";
         
         // Cargar tabla superior según tirada guía
         LoadPatternRows(pick3, pick4);
@@ -98,19 +103,21 @@ public partial class PlotWindow : Window
         Row3_Pick4Digits.ItemsSource = Row3Pick4;
         Row3_FireballDigits.ItemsSource = Row3Fireball;
         Row3_AdditionalDigits.ItemsSource = Row3Additional;
+        Row3_DateText.Text = Row3Date;
         
         // FILA 4
         Row4_Pick3Digits.ItemsSource = Row4Pick3;
         Row4_Pick4Digits.ItemsSource = Row4Pick4;
         Row4_FireballDigits.ItemsSource = Row4Fireball;
         Row4_AdditionalDigits.ItemsSource = Row4Additional;
+        Row4_DateText.Text = Row4Date;
         
         PatternsTable.ItemsSource = PatternRows;
         if (PatternRows.Count > 0)
         {
             PatternsTable.SelectedIndex = 0;
             PatternsTable.ScrollIntoView(PatternRows[0]);
-            ApplySelectionToRow2(PatternRows[0]);
+            ApplySelectionToRows(PatternRows[0]);
         }
     }
 
@@ -118,36 +125,130 @@ public partial class PlotWindow : Window
     {
         PatternRows.Clear();
 
-        var suffix = new string((guidePick3 ?? "").Where(char.IsDigit).TakeLast(2).ToArray());
-        if (suffix.Length != 2)
-        {
-            return;
-        }
-
         var guideNumber = new string(
             (guidePick3 ?? "")
                 .Where(char.IsDigit)
                 .Concat((guidePick4 ?? "").Where(char.IsDigit))
                 .ToArray());
-
-        var matches = DrawRepository.SearchPick3BySuffixWithPick4(suffix);
-        foreach (var hit in matches)
+        if (guideNumber.Length != 7)
         {
-            var nextPick3 = DrawRepository.GetNextPick3Number(hit.Date, hit.DrawTime) ?? "";
+            return;
+        }
+
+        var referencePos23 = GetPos23Key(guideNumber);
+        if (referencePos23 == null)
+        {
+            return;
+        }
+        var referencePattern = BuildRepetitionPattern(guideNumber);
+
+
+        var allHits = DrawRepository.GetAllPick3WithPick4()
+            .Select(hit =>
+            {
+                var combined = BuildSevenDigitNumber(hit.Pick3, hit.Pick4);
+                if (combined.Length != 7)
+                {
+                    return null;
+                }
+
+                return new CandidateRow
+                {
+                    Hit = hit,
+                    Number7 = combined,
+                    Pos23 = GetPos23Key(combined) ?? "",
+                    Pattern = BuildRepetitionPattern(combined)
+                };
+            })
+            .Where(x => x != null)
+            .Cast<CandidateRow>()
+            .ToList();
+
+        var col2Candidates = allHits
+            .Where(x => x.Pos23 == referencePos23)
+            .ToList();
+
+        foreach (var col2 in col2Candidates)
+        {
+            var col3 = allHits.FirstOrDefault(x => x.Pattern == referencePattern && x.Number7 != guideNumber);
+            var col4 = col3 == null
+                ? null
+                : allHits.FirstOrDefault(x => x.Pos23 == col3.Pos23 && x.Pattern == col2.Pattern);
+
+            var nextPick3 = DrawRepository.GetNextPick3Number(col2.Hit.Date, col2.Hit.DrawTime) ?? "";
+            var col3NextPick3 = col3 == null ? "" : DrawRepository.GetNextPick3Number(col3.Hit.Date, col3.Hit.DrawTime) ?? "";
+            var col4NextPick3 = col4 == null ? "" : DrawRepository.GetNextPick3Number(col4.Hit.Date, col4.Hit.DrawTime) ?? "";
             PatternRows.Add(new PatternRow
             {
                 ReferenceNumber = guideNumber,
-                MatchNumber = $"{hit.Pick3}{hit.Pick4}",
-                SimilarPatternNumber = "",
-                SimilarMatchNumber = "",
-                MatchPick3 = hit.Pick3,
-                MatchPick4 = hit.Pick4,
+                MatchNumber = col2.Number7,
+                SimilarPatternNumber = col3?.Number7 ?? "",
+                SimilarMatchNumber = col4?.Number7 ?? "",
+                MatchPick3 = col2.Hit.Pick3,
+                MatchPick4 = col2.Hit.Pick4,
                 MatchNextPick3 = nextPick3,
-                MatchDrawTime = hit.DrawTime,
-                MatchDate = hit.Date.ToString("yyyy-MM-dd"),
-                MatchCodificacion = string.Concat(BuildCodificacionDigits(hit.Pick3, hit.Pick4))
+                MatchDrawTime = col2.Hit.DrawTime,
+                MatchDate = col2.Hit.Date.ToString("yyyy-MM-dd"),
+                MatchCodificacion = string.Concat(BuildCodificacionDigits(col2.Hit.Pick3, col2.Hit.Pick4)),
+                SimilarPick3 = col3?.Hit.Pick3 ?? "",
+                SimilarPick4 = col3?.Hit.Pick4 ?? "",
+                SimilarNextPick3 = col3NextPick3,
+                SimilarDrawTime = col3?.Hit.DrawTime ?? "",
+                SimilarDate = col3?.Hit.Date.ToString("yyyy-MM-dd") ?? "",
+                SimilarCodificacion = col3 == null ? "" : string.Concat(BuildCodificacionDigits(col3.Hit.Pick3, col3.Hit.Pick4)),
+                SimilarMatchPick3 = col4?.Hit.Pick3 ?? "",
+                SimilarMatchPick4 = col4?.Hit.Pick4 ?? "",
+                SimilarMatchNextPick3 = col4NextPick3,
+                SimilarMatchDrawTime = col4?.Hit.DrawTime ?? "",
+                SimilarMatchDate = col4?.Hit.Date.ToString("yyyy-MM-dd") ?? "",
+                SimilarMatchCodificacion = col4 == null ? "" : string.Concat(BuildCodificacionDigits(col4.Hit.Pick3, col4.Hit.Pick4))
             });
         }
+    }
+
+    private static string BuildSevenDigitNumber(string pick3, string pick4)
+    {
+        return new string(
+            (pick3 ?? "")
+                .Where(char.IsDigit)
+                .Concat((pick4 ?? "").Where(char.IsDigit))
+                .ToArray());
+    }
+
+    private static string? GetPos23Key(string number7)
+    {
+        if (string.IsNullOrWhiteSpace(number7) || number7.Length < 3)
+        {
+            return null;
+        }
+
+        return number7.Substring(1, 2);
+    }
+
+    private static string BuildRepetitionPattern(string number)
+    {
+        var map = new Dictionary<char, char>();
+        var next = 'A';
+        var sb = new StringBuilder(number.Length);
+
+        foreach (var d in number)
+        {
+            if (!map.TryGetValue(d, out var letter))
+            {
+                letter = next;
+                map[d] = letter;
+                next++;
+            }
+
+            sb.Append(letter);
+        }
+
+        return sb.ToString();
+    }
+
+    private static string DrawIconFromTime(string drawTime)
+    {
+        return drawTime == "M" ? "\u2600\uFE0F" : drawTime == "E" ? "\U0001F319" : "";
     }
 
     private void PatternsTable_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -157,10 +258,10 @@ public partial class PlotWindow : Window
             return;
         }
 
-        ApplySelectionToRow2(selected);
+        ApplySelectionToRows(selected);
     }
 
-    private void ApplySelectionToRow2(PatternRow selected)
+    private void ApplySelectionToRows(PatternRow selected)
     {
         if (selected == null)
         {
@@ -177,8 +278,34 @@ public partial class PlotWindow : Window
         Row2_Pick4Digits.ItemsSource = Row2Pick4;
         Row2_FireballDigits.ItemsSource = Row2Fireball;
         Row2_AdditionalDigits.ItemsSource = Row2Additional;
-        Row2_DrawIcon.Text = selected.MatchDrawTime == "M" ? "☀️" : "🌙";
+        Row2_DrawIcon.Text = DrawIconFromTime(selected.MatchDrawTime);
         Row2_DateText.Text = Row2Date;
+
+        Row3Pick3 = (selected.SimilarPick3 ?? "").Where(char.IsDigit).Select(c => c.ToString()).ToList();
+        Row3Pick4 = (selected.SimilarPick4 ?? "").Where(char.IsDigit).Select(c => c.ToString()).ToList();
+        Row3Fireball = (selected.SimilarNextPick3 ?? "").Where(char.IsDigit).Select(c => c.ToString()).ToList();
+        Row3Additional = (selected.SimilarCodificacion ?? "").Where(char.IsDigit).Select(c => c.ToString()).ToList();
+        Row3Date = selected.SimilarDate ?? "";
+
+        Row3_Pick3Digits.ItemsSource = Row3Pick3;
+        Row3_Pick4Digits.ItemsSource = Row3Pick4;
+        Row3_FireballDigits.ItemsSource = Row3Fireball;
+        Row3_AdditionalDigits.ItemsSource = Row3Additional;
+        Row3_DrawIcon.Text = DrawIconFromTime(selected.SimilarDrawTime);
+        Row3_DateText.Text = Row3Date;
+
+        Row4Pick3 = (selected.SimilarMatchPick3 ?? "").Where(char.IsDigit).Select(c => c.ToString()).ToList();
+        Row4Pick4 = (selected.SimilarMatchPick4 ?? "").Where(char.IsDigit).Select(c => c.ToString()).ToList();
+        Row4Fireball = (selected.SimilarMatchNextPick3 ?? "").Where(char.IsDigit).Select(c => c.ToString()).ToList();
+        Row4Additional = (selected.SimilarMatchCodificacion ?? "").Where(char.IsDigit).Select(c => c.ToString()).ToList();
+        Row4Date = selected.SimilarMatchDate ?? "";
+
+        Row4_Pick3Digits.ItemsSource = Row4Pick3;
+        Row4_Pick4Digits.ItemsSource = Row4Pick4;
+        Row4_FireballDigits.ItemsSource = Row4Fireball;
+        Row4_AdditionalDigits.ItemsSource = Row4Additional;
+        Row4_DrawIcon.Text = DrawIconFromTime(selected.SimilarMatchDrawTime);
+        Row4_DateText.Text = Row4Date;
     }
 
     private static List<string> BuildCodificacionDigits(string pick3, string pick4)
@@ -190,6 +317,14 @@ public partial class PlotWindow : Window
             .Select(c => c.ToString())
             .ToList();
     }
+}
+
+file sealed class CandidateRow
+{
+    public required ComboHit Hit { get; set; }
+    public string Number7 { get; set; } = "";
+    public string Pos23 { get; set; } = "";
+    public string Pattern { get; set; } = "";
 }
 
 /// <summary>
@@ -207,4 +342,17 @@ public class PatternRow
     public string MatchDrawTime { get; set; } = "";
     public string MatchDate { get; set; } = "";
     public string MatchCodificacion { get; set; } = "";
+    public string SimilarPick3 { get; set; } = "";
+    public string SimilarPick4 { get; set; } = "";
+    public string SimilarNextPick3 { get; set; } = "";
+    public string SimilarDrawTime { get; set; } = "";
+    public string SimilarDate { get; set; } = "";
+    public string SimilarCodificacion { get; set; } = "";
+    public string SimilarMatchPick3 { get; set; } = "";
+    public string SimilarMatchPick4 { get; set; } = "";
+    public string SimilarMatchNextPick3 { get; set; } = "";
+    public string SimilarMatchDrawTime { get; set; } = "";
+    public string SimilarMatchDate { get; set; } = "";
+    public string SimilarMatchCodificacion { get; set; } = "";
 }
+
