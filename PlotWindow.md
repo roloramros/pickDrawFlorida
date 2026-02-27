@@ -1,199 +1,142 @@
 <Window x:Class="FloridaLotteryApp.PlotWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:FloridaLotteryApp"
-        Title="Análisis de Plot"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Análisis de Patrones" 
         Height="800" 
-        Width="1200"
+        Width="1500"
         WindowStartupLocation="CenterOwner"
-        Background="#F0F0F0">
+        ResizeMode="CanResizeWithGrip">
     
     <Window.Resources>
+        <!-- Estilo para bordes de dígitos -->
         <Style TargetType="Border" x:Key="DigitBorder">
-            <Setter Property="Width" Value="45"/>
-            <Setter Property="Height" Value="45"/>
-            <Setter Property="CornerRadius" Value="22.5"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="CornerRadius" Value="20"/>
             <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="BorderBrush" Value="#333333"/>
-            <Setter Property="Margin" Value="3,0"/>
+            <Setter Property="Margin" Value="4,0"/>
             <Setter Property="Background" Value="White"/>
         </Style>
-        
+    
+        <!-- Estilo para texto de dígitos -->
         <Style TargetType="TextBlock" x:Key="DigitText">
-            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
-        
-        <Style TargetType="Border" x:Key="FireballBorder">
-            <Setter Property="Width" Value="35"/>
-            <Setter Property="Height" Value="35"/>
-            <Setter Property="CornerRadius" Value="17.5"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="BorderBrush" Value="#FF5722"/>
-            <Setter Property="Margin" Value="3,0"/>
-            <Setter Property="Background" Value="#FFE0B2"/>
+
+        <!-- Estilo para dígitos resaltados (en la tirada) -->
+        <Style TargetType="Border" x:Key="HighlightedDigitBorder" BasedOn="{StaticResource DigitBorder}">
+        </Style>
+
+        <!-- Estilo para dígitos sugeridos -->
+        <Style TargetType="Border" x:Key="SuggestedDigitBorder" BasedOn="{StaticResource DigitBorder}">
         </Style>
     </Window.Resources>
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Tabla superior -->
-        <Border Grid.Row="0" 
+        <!-- ============================================ -->
+        <!-- SECCIÓN SUPERIOR: TABLA DE PATRONES (4 Columnas) -->
+        <!-- ============================================ -->
+                <Border Grid.Row="0" 
                 Background="White" 
                 CornerRadius="10" 
                 Padding="15"
-                BorderThickness="1" 
-                BorderBrush="#CCCCCC">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <!-- Encabezados -->
-                <Grid Grid.Row="0" Margin="0,0,0,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    
-                    <TextBlock Grid.Column="0" 
-                               Text="Patrón de referencia" 
-                               FontWeight="Bold" 
-                               FontSize="14" 
-                               HorizontalAlignment="Center"
-                               Padding="5"/>
-                    <TextBlock Grid.Column="1" 
-                               Text="Coincidencias" 
-                               FontWeight="Bold" 
-                               FontSize="14" 
-                               HorizontalAlignment="Center"
-                               Padding="5"/>
-                    <TextBlock Grid.Column="2" 
-                               Text="Patrones similares" 
-                               FontWeight="Bold" 
-                               FontSize="14" 
-                               HorizontalAlignment="Center"
-                               Padding="5"/>
-                    <TextBlock Grid.Column="3" 
-                               Text="Coincidencias" 
-                               FontWeight="Bold" 
-                               FontSize="14" 
-                               HorizontalAlignment="Center"
-                               Padding="5"/>
-                </Grid>
-
-                <!-- ScrollViewer para la tabla -->
-                <ScrollViewer Grid.Row="1" 
-                              MaxHeight="300" 
-                              VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Auto">
-                    <ItemsControl x:Name="PatternsTable">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="0,3,0,3">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    
-                                    <!-- Patrón de referencia -->
-                                    <Border Grid.Column="0" 
-                                            Background="#E3F2FD" 
-                                            Padding="8,4" 
-                                            Margin="2"
-                                            CornerRadius="4"
-                                            BorderThickness="1"
-                                            BorderBrush="#90CAF9">
-                                        <TextBlock Text="{Binding ReferenceNumber}" 
-                                                   FontWeight="Bold" 
-                                                   HorizontalAlignment="Center"
-                                                   FontSize="14"
-                                                   FontFamily="Consolas"/>
-                                    </Border>
-                                    
-                                    <!-- Coincidencias del patrón de referencia -->
-                                    <Border Grid.Column="1" 
-                                            Background="#F5F5F5" 
-                                            Padding="8,4" 
-                                            Margin="2"
-                                            CornerRadius="4"
-                                            BorderThickness="1"
-                                            BorderBrush="#CCCCCC">
-                                        <TextBlock Text="{Binding MatchNumber}" 
-                                                   FontWeight="Bold" 
-                                                   HorizontalAlignment="Center"
-                                                   FontSize="14"
-                                                   FontFamily="Consolas"/>
-                                    </Border>
-                                    
-                                    <!-- Patrones similares -->
-                                    <Border Grid.Column="2" 
-                                            Background="#E8F5E8" 
-                                            Padding="8,4" 
-                                            Margin="2"
-                                            CornerRadius="4"
-                                            BorderThickness="1"
-                                            BorderBrush="#A5D6A5">
-                                        <TextBlock Text="{Binding SimilarPatternNumber}" 
-                                                   FontWeight="Bold" 
-                                                   HorizontalAlignment="Center"
-                                                   FontSize="14"
-                                                   FontFamily="Consolas"/>
-                                    </Border>
-                                    
-                                    <!-- Coincidencias de patrones similares -->
-                                    <Border Grid.Column="3" 
-                                            Background="#F5F5F5" 
-                                            Padding="8,4" 
-                                            Margin="2"
-                                            CornerRadius="4"
-                                            BorderThickness="1"
-                                            BorderBrush="#CCCCCC">
-                                        <TextBlock Text="{Binding SimilarMatchNumber}" 
-                                                   FontWeight="Bold" 
-                                                   HorizontalAlignment="Center"
-                                                   FontSize="14"
-                                                   FontFamily="Consolas"/>
-                                    </Border>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </Grid>
+                BorderThickness="1" >
+            <DataGrid x:Name="PatternsTable"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserReorderColumns="False"
+                      CanUserResizeRows="False"
+                      CanUserSortColumns="False"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Vertical"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow"
+                      RowHeaderWidth="0"
+                      MaxHeight="350"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto"
+                      SelectionChanged="PatternsTable_SelectionChanged"
+                      FontSize="14">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#F2F2F2"/>
+                        <Setter Property="BorderBrush" Value="#D0D0D0"/>
+                        <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                        <Setter Property="Padding" Value="8,6"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Padding" Value="8,4"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="FontFamily" Value="Consolas"/>
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="White"/>
+                        <Setter Property="BorderBrush" Value="#E6E6E6"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#D9E8FB"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Patron de referencia" Binding="{Binding ReferenceNumber}" Width="*"/>
+                    <DataGridTextColumn Header="Coincidencias" Binding="{Binding MatchNumber}" Width="*"/>
+                    <DataGridTextColumn Header="Patrones similares" Binding="{Binding SimilarPatternNumber}" Width="*"/>
+                    <DataGridTextColumn Header="Coincidencias" Binding="{Binding SimilarMatchNumber}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </Border>
 
-        <!-- Sección inferior -->
-        <StackPanel Grid.Row="2" Background="White" CornerRadius="10" Padding="15" BorderThickness="1" BorderBrush="#CCCCCC">
-            
-            <!-- Fila 1: Tirada seleccionada (Pick3 y Pick4) -->
-            <Border Background="#FFF3E0" CornerRadius="8" Padding="10" Margin="0,0,0,10">
-                <StackPanel>
-                    <TextBlock Text="TIRADA SELECCIONADA" FontWeight="Bold" FontSize="12" Foreground="#FF9800" Margin="0,0,0,8"/>
+        <!-- ============================================ -->
+        <!-- SECCIÓN INFERIOR: 4 FILAS DE INFORMACIÓN -->
+        <!-- ============================================ -->
+        <Border Grid.Row="2" 
+                Background="White" 
+                CornerRadius="10" 
+                Padding="15" 
+                BorderThickness="1" 
+                BorderBrush="#CCCCCC">
+            <StackPanel>
+        
+                <!-- FILA 1: Tirada seleccionada (datos del click) -->
+                <Border CornerRadius="8" Padding="12" Margin="0,0,0,10">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        
-                        <!-- Pick 3 seleccionado -->
-                        <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="0,0,40,0">
-                            <TextBlock Text="Pick 3:" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                            <ItemsControl x:Name="SelectedPick3Digits" ItemsSource="{Binding SelectedPick3}">
+                
+                        <!-- Lado Izquierdo: Dígitos de la tirada -->
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <!-- Pick 3 -->
+                            <ItemsControl x:Name="Row1_Pick3Digits" ItemsSource="{Binding Row1Pick3}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal"/>
@@ -207,12 +150,11 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                        </StackPanel>
                         
-                        <!-- Pick 4 seleccionado -->
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,40,0">
-                            <TextBlock Text="Pick 4:" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                            <ItemsControl x:Name="SelectedPick4Digits" ItemsSource="{Binding SelectedPick4}">
+                            <TextBlock Text=" " Width="20"/>
+                        
+                            <!-- Pick 4 -->
+                            <ItemsControl x:Name="Row1_Pick4Digits" ItemsSource="{Binding Row1Pick4}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal"/>
@@ -226,85 +168,77 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                        </StackPanel>
                         
-                        <!-- Fecha y tirada -->
-                        <StackPanel Grid.Column="2" Orientation="Horizontal">
-                            <TextBlock Text="Fecha:" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                            <TextBlock x:Name="SelectedDate" VerticalAlignment="Center" Margin="0,0,20,0"/>
-                            <TextBlock x:Name="SelectedDrawIcon" FontSize="20" VerticalAlignment="Center"/>
+                            <TextBlock Text=" " Width="20"/>
+                        
+                            <!-- Pick3 siguiente -->
+                            <ItemsControl x:Name="Row1_Pick3SiguienteDigits" ItemsSource="{Binding Row1Pick3Siguiente}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource HighlightedDigitBorder}">
+                                            <TextBlock Style="{StaticResource DigitText}" Text="{Binding}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        
+                            <TextBlock Text=" " Width="30"/>
+                        
+                            <!-- Ícono de tirada -->
+                            <TextBlock x:Name="Row1_DrawIcon" 
+                                      Text="🌙" 
+                                      FontSize="24" 
+                                      VerticalAlignment="Center"/>
+                        </StackPanel>
+                
+                
+                        <!-- Centro: Fecha -->
+                        <TextBlock Grid.Column="1" 
+                                  Text="{Binding Row1Date}" 
+                                  FontWeight="Bold" 
+                                  FontSize="14" 
+                                  VerticalAlignment="Center"
+                                  Margin="20,0"/>
+                
+                        
+                                     
+                        <!-- Lado Derecho: Dígitos adicionales (sugeridos/disponibles) -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                            <ItemsControl x:Name="Row1_AdditionalDigits" ItemsSource="{Binding Row1Additional}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource SuggestedDigitBorder}">
+                                            <TextBlock Style="{StaticResource DigitText}" Text="{Binding}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </StackPanel>
                     </Grid>
-                </StackPanel>
-            </Border>
-            
-            <!-- Fila 2: Dígitos del 0-9 con los repetidos marcados -->
-            <Border Background="#F5F5F5" CornerRadius="8" Padding="10" Margin="0,0,0,10">
-                <StackPanel>
-                    <TextBlock Text="DÍGITOS DISPONIBLES" FontWeight="Bold" FontSize="12" Foreground="#666666" Margin="0,0,0,8"/>
-                    <WrapPanel>
-                        <ItemsControl x:Name="DigitsPanel" ItemsSource="{Binding Digits}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Style="{StaticResource DigitBorder}" 
-                                            Background="{Binding Background}" 
-                                            BorderBrush="{Binding BorderColor}"
-                                            Margin="3">
-                                        <TextBlock Style="{StaticResource DigitText}" 
-                                                   Text="{Binding Digit}"
-                                                   Foreground="{Binding TextColor}"/>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </WrapPanel>
-                </StackPanel>
-            </Border>
-            
-            <!-- Fila 3: Probabilidades -->
-            <Border Background="#F5F5F5" CornerRadius="8" Padding="10" Margin="0,0,0,10">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    
-                    <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="Probabilidad Pick 3:" FontWeight="Bold" Margin="0,0,10,0"/>
-                        <TextBlock x:Name="Pick3Probability" Text="0%" Foreground="#2196F3" FontWeight="Bold"/>
-                    </StackPanel>
-                    
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="Probabilidad Pick 4:" FontWeight="Bold" Margin="0,0,10,0"/>
-                        <TextBlock x:Name="Pick4Probability" Text="0%" Foreground="#4CAF50" FontWeight="Bold"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
-            
-            <!-- Fila 4: Números sugeridos -->
-            <Border Background="#F5F5F5" CornerRadius="8" Padding="10">
-                <StackPanel>
-                    <TextBlock Text="NÚMEROS SUGERIDOS" FontWeight="Bold" FontSize="12" Foreground="#666666" Margin="0,0,0,8"/>
-                    
+                </Border>
+    
+        
+                <!-- FILA 2: Segunda fila (misma estructura) -->
+                <Border CornerRadius="8" Padding="12" Margin="0,0,0,10">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        
-                        <!-- Pick 3 sugerido -->
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Pick 3:" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,10"/>
-                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,10">
-                            <ItemsControl x:Name="SuggestedPick3Digits" ItemsSource="{Binding SuggestedPick3}">
+                
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <ItemsControl x:Name="Row2_Pick3Digits" ItemsSource="{Binding Row2Pick3}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal"/>
@@ -312,18 +246,16 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Style="{StaticResource DigitBorder}" Background="#E8F5E8">
+                                        <Border Style="{StaticResource DigitBorder}">
                                             <TextBlock Style="{StaticResource DigitText}" Text="{Binding}"/>
                                         </Border>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                        </StackPanel>
                         
-                        <!-- Pick 4 sugerido -->
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Pick 4:" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-                            <ItemsControl x:Name="SuggestedPick4Digits" ItemsSource="{Binding SuggestedPick4}">
+                            <TextBlock Text=" " Width="20"/>
+                        
+                            <ItemsControl x:Name="Row2_Pick4Digits" ItemsSource="{Binding Row2Pick4}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal"/>
@@ -331,7 +263,56 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Style="{StaticResource DigitBorder}" Background="#E3F2FD">
+                                        <Border Style="{StaticResource DigitBorder}">
+                                            <TextBlock Style="{StaticResource DigitText}" Text="{Binding}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        
+                            <TextBlock Text=" " Width="20"/>
+                        
+                            <ItemsControl x:Name="Row2_FireballDigits" ItemsSource="{Binding Row2Fireball}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource HighlightedDigitBorder}">
+                                            <TextBlock Style="{StaticResource DigitText}" Text="{Binding}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        
+                            <TextBlock Text=" " Width="30"/>
+                        
+                            <TextBlock x:Name="Row2_DrawIcon" 
+                                      Text="☀️" 
+                                      FontSize="24" 
+                                      VerticalAlignment="Center"/>
+                        </StackPanel>
+                
+                        <TextBlock x:Name="Row2_DateText"
+                                  Grid.Column="1" 
+                                  Text="Fecha" 
+                                  FontWeight="Bold" 
+                                  FontSize="14" 
+                                  VerticalAlignment="Center"
+                                  Margin="20,0"/>
+                
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                            <ItemsControl x:Name="Row2_AdditionalDigits" ItemsSource="{Binding Row2Additional}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource SuggestedDigitBorder}">
                                             <TextBlock Style="{StaticResource DigitText}" Text="{Binding}"/>
                                         </Border>
                                     </DataTemplate>
@@ -339,8 +320,199 @@
                             </ItemsControl>
                         </StackPanel>
                     </Grid>
-                </StackPanel>
-            </Border>
-        </StackPanel>
+                </Border>
+        
+                <!-- FILA 3: Tercera fila (misma estructura) -->
+                <Border CornerRadius="8" Padding="12" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <ItemsControl x:Name="Row3_Pick3Digits" ItemsSource="{Binding Row3Pick3}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource DigitBorder}">
+                                            <TextBlock Style="{StaticResource DigitText}" Text="{Binding}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        
+                            <TextBlock Text=" " Width="20"/>
+                        
+                            <ItemsControl x:Name="Row3_Pick4Digits" ItemsSource="{Binding Row3Pick4}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource DigitBorder}">
+                                            <TextBlock Style="{StaticResource DigitText}" Text="{Binding}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        
+                            <TextBlock Text=" " Width="20"/>
+                        
+                            <ItemsControl x:Name="Row3_FireballDigits" ItemsSource="{Binding Row3Fireball}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource HighlightedDigitBorder}">
+                                            <TextBlock Style="{StaticResource DigitText}" Text="{Binding}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        
+                            <TextBlock Text=" " Width="30"/>
+                        
+                            <TextBlock x:Name="Row3_DrawIcon" 
+                                      Text="🌙" 
+                                      FontSize="24" 
+                                      VerticalAlignment="Center"/>
+                        </StackPanel>
+                
+                        <TextBlock x:Name="Row3_DateText"
+                                  Grid.Column="1" 
+                                  Text="Fecha" 
+                                  FontWeight="Bold" 
+                                  FontSize="14" 
+                                  VerticalAlignment="Center"
+                                  Margin="20,0"/>
+                
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                            <ItemsControl x:Name="Row3_AdditionalDigits" ItemsSource="{Binding Row3Additional}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource SuggestedDigitBorder}">
+                                            <TextBlock Style="{StaticResource DigitText}" Text="{Binding}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+        
+                <!-- FILA 4: Cuarta fila (misma estructura) -->
+                <Border CornerRadius="8" Padding="12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <ItemsControl x:Name="Row4_Pick3Digits" ItemsSource="{Binding Row4Pick3}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource DigitBorder}">
+                                            <TextBlock Style="{StaticResource DigitText}" Text="{Binding}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        
+                            <TextBlock Text=" " Width="20"/>
+                        
+                            <ItemsControl x:Name="Row4_Pick4Digits" ItemsSource="{Binding Row4Pick4}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource DigitBorder}">
+                                            <TextBlock Style="{StaticResource DigitText}" Text="{Binding}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        
+                            <TextBlock Text=" " Width="20"/>
+                        
+                            <ItemsControl x:Name="Row4_FireballDigits" ItemsSource="{Binding Row4Fireball}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource HighlightedDigitBorder}">
+                                            <TextBlock Style="{StaticResource DigitText}" Text="{Binding}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        
+                            <TextBlock Text=" " Width="30"/>
+                        
+                            <TextBlock x:Name="Row4_DrawIcon" 
+                                      Text="☀️" 
+                                      FontSize="24" 
+                                      VerticalAlignment="Center"/>
+                        </StackPanel>
+                
+                        <TextBlock x:Name="Row4_DateText"
+                                  Grid.Column="1" 
+                                  Text="Fecha" 
+                                  FontWeight="Bold" 
+                                  FontSize="14" 
+                                  VerticalAlignment="Center"
+                                  Margin="20,0"/>
+                
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                            <ItemsControl x:Name="Row4_AdditionalDigits" ItemsSource="{Binding Row4Additional}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource SuggestedDigitBorder}">
+                                            <TextBlock Style="{StaticResource DigitText}" Text="{Binding}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+         
+            </StackPanel>
+        </Border>
+     
     </Grid>
 </Window>
+

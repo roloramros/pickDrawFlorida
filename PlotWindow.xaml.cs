@@ -121,28 +121,33 @@ public partial class PlotWindow : Window
         }
     }
 
+
     private void LoadPatternRows(string guidePick3, string guidePick4)
     {
         PatternRows.Clear();
 
+        // Construir número guía de 7 dígitos
         var guideNumber = new string(
             (guidePick3 ?? "")
                 .Where(char.IsDigit)
                 .Concat((guidePick4 ?? "").Where(char.IsDigit))
                 .ToArray());
+        
         if (guideNumber.Length != 7)
         {
             return;
         }
 
+        // Obtener criterios del número guía
         var referencePos23 = GetPos23Key(guideNumber);
+        var referencePattern = BuildRepetitionPattern(guideNumber);
+        
         if (referencePos23 == null)
         {
             return;
         }
-        var referencePattern = BuildRepetitionPattern(guideNumber);
 
-
+        // Obtener todos los hits con su número de 7 dígitos
         var allHits = DrawRepository.GetAllPick3WithPick4()
             .Select(hit =>
             {
@@ -164,46 +169,83 @@ public partial class PlotWindow : Window
             .Cast<CandidateRow>()
             .ToList();
 
+        // ===== NUEVA LÓGICA =====
+        
+        // 1. TODOS los candidatos para Columna 2 (coinciden en Pos23 con guía)
         var col2Candidates = allHits
-            .Where(x => x.Pos23 == referencePos23)
+            .Where(x => x.Pos23 == referencePos23 &&    // ✓ Coincide Pos23 con guía
+                    x.Number7 != guideNumber)         // ✓ Excluye solo el número idéntico
+            .ToList();     
+        
+        // 2. TODOS los candidatos para Columna 3 (coinciden en patrón con guía, diferente número)
+        var col3Candidates = allHits
+            .Where(x => x.Pattern == referencePattern && x.Number7 != guideNumber)
             .ToList();
 
+        // 3. Generar TODAS las combinaciones
         foreach (var col2 in col2Candidates)
         {
-            var col3 = allHits.FirstOrDefault(x => x.Pattern == referencePattern && x.Number7 != guideNumber);
-            var col4 = col3 == null
-                ? null
-                : allHits.FirstOrDefault(x => x.Pos23 == col3.Pos23 && x.Pattern == col2.Pattern);
-
-            var nextPick3 = DrawRepository.GetNextPick3Number(col2.Hit.Date, col2.Hit.DrawTime) ?? "";
-            var col3NextPick3 = col3 == null ? "" : DrawRepository.GetNextPick3Number(col3.Hit.Date, col3.Hit.DrawTime) ?? "";
-            var col4NextPick3 = col4 == null ? "" : DrawRepository.GetNextPick3Number(col4.Hit.Date, col4.Hit.DrawTime) ?? "";
-            PatternRows.Add(new PatternRow
+            foreach (var col3 in col3Candidates)
             {
-                ReferenceNumber = guideNumber,
-                MatchNumber = col2.Number7,
-                SimilarPatternNumber = col3?.Number7 ?? "",
-                SimilarMatchNumber = col4?.Number7 ?? "",
-                MatchPick3 = col2.Hit.Pick3,
-                MatchPick4 = col2.Hit.Pick4,
-                MatchNextPick3 = nextPick3,
-                MatchDrawTime = col2.Hit.DrawTime,
-                MatchDate = col2.Hit.Date.ToString("yyyy-MM-dd"),
-                MatchCodificacion = string.Concat(BuildCodificacionDigits(col2.Hit.Pick3, col2.Hit.Pick4)),
-                SimilarPick3 = col3?.Hit.Pick3 ?? "",
-                SimilarPick4 = col3?.Hit.Pick4 ?? "",
-                SimilarNextPick3 = col3NextPick3,
-                SimilarDrawTime = col3?.Hit.DrawTime ?? "",
-                SimilarDate = col3?.Hit.Date.ToString("yyyy-MM-dd") ?? "",
-                SimilarCodificacion = col3 == null ? "" : string.Concat(BuildCodificacionDigits(col3.Hit.Pick3, col3.Hit.Pick4)),
-                SimilarMatchPick3 = col4?.Hit.Pick3 ?? "",
-                SimilarMatchPick4 = col4?.Hit.Pick4 ?? "",
-                SimilarMatchNextPick3 = col4NextPick3,
-                SimilarMatchDrawTime = col4?.Hit.DrawTime ?? "",
-                SimilarMatchDate = col4?.Hit.Date.ToString("yyyy-MM-dd") ?? "",
-                SimilarMatchCodificacion = col4 == null ? "" : string.Concat(BuildCodificacionDigits(col4.Hit.Pick3, col4.Hit.Pick4))
-            });
+                // Buscar TODOS los candidatos para Columna 4
+                // que cumplan: Pos23 = Pos23 del col3 Y Patrón = Patrón del col2
+                var col4Candidates = allHits
+                    .Where(x => x.Pos23 == col3.Pos23 && 
+                            x.Pattern == col2.Pattern &&
+                            x.Number7 != col2.Number7 &&  // Opcional: evitar duplicados
+                            x.Number7 != col3.Number7)    // con col2 y col3
+                    .ToList();
+
+                // Si no hay candidatos para col4, podemos:
+                if (col4Candidates.Count > 0)
+                {
+                    foreach (var col4 in col4Candidates)
+                    {
+                        AddPatternRow(col2, col3, col4, guideNumber);
+                    }
+                }
+            }
         }
+    }
+
+    // Método auxiliar para crear y añadir una fila
+    private void AddPatternRow(CandidateRow col2, CandidateRow col3, CandidateRow? col4, string guideNumber)
+    {
+        var nextPick3 = DrawRepository.GetNextPick3Number(col2.Hit.Date, col2.Hit.DrawTime) ?? "";
+        var col3NextPick3 = col3 == null ? "" : DrawRepository.GetNextPick3Number(col3.Hit.Date, col3.Hit.DrawTime) ?? "";
+        var col4NextPick3 = col4 == null ? "" : DrawRepository.GetNextPick3Number(col4.Hit.Date, col4.Hit.DrawTime) ?? "";
+
+        PatternRows.Add(new PatternRow
+        {
+            ReferenceNumber = guideNumber,
+            
+            // Columna 2
+            MatchNumber = col2.Number7,
+            MatchPick3 = col2.Hit.Pick3,
+            MatchPick4 = col2.Hit.Pick4,
+            MatchNextPick3 = nextPick3,
+            MatchDrawTime = col2.Hit.DrawTime,
+            MatchDate = col2.Hit.Date.ToString("yyyy-MM-dd"),
+            MatchCodificacion = string.Concat(BuildCodificacionDigits(col2.Hit.Pick3, col2.Hit.Pick4)),
+            
+            // Columna 3
+            SimilarNumber = col3.Number7,
+            SimilarPick3 = col3.Hit.Pick3,
+            SimilarPick4 = col3.Hit.Pick4,
+            SimilarNextPick3 = col3NextPick3,
+            SimilarDrawTime = col3.Hit.DrawTime,
+            SimilarDate = col3.Hit.Date.ToString("yyyy-MM-dd"),
+            SimilarCodificacion = string.Concat(BuildCodificacionDigits(col3.Hit.Pick3, col3.Hit.Pick4)),
+            
+            // Columna 4 (puede ser null)
+            SimilarMatchNumber = col4?.Number7 ?? "",
+            SimilarMatchPick3 = col4?.Hit.Pick3 ?? "",
+            SimilarMatchPick4 = col4?.Hit.Pick4 ?? "",
+            SimilarMatchNextPick3 = col4NextPick3,
+            SimilarMatchDrawTime = col4?.Hit.DrawTime ?? "",
+            SimilarMatchDate = col4?.Hit.Date.ToString("yyyy-MM-dd") ?? "",
+            SimilarMatchCodificacion = col4 == null ? "" : string.Concat(BuildCodificacionDigits(col4.Hit.Pick3, col4.Hit.Pick4))
+        });
     }
 
     private static string BuildSevenDigitNumber(string pick3, string pick4)
@@ -319,7 +361,11 @@ public partial class PlotWindow : Window
     }
 }
 
-file sealed class CandidateRow
+
+
+
+
+internal class CandidateRow
 {
     public required ComboHit Hit { get; set; }
     public string Number7 { get; set; } = "";
@@ -334,6 +380,7 @@ public class PatternRow
 {
     public string ReferenceNumber { get; set; } = "";
     public string MatchNumber { get; set; } = "";
+    public string SimilarNumber { get; set; } = "";
     public string SimilarPatternNumber { get; set; } = "";
     public string SimilarMatchNumber { get; set; } = "";
     public string MatchPick3 { get; set; } = "";
