@@ -135,3 +135,5 @@ E:\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLotteryApp.pdb
 E:\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLotteryApp.genruntimeconfig.cache
 E:\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\ref\FloridaLotteryApp.dll
 E:\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\florida_pick3_pick4_fixed.sqlite
+E:\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\PlotWindow.baml
+E:\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\PlotWindow.g.cs

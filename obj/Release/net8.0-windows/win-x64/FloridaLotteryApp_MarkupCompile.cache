@@ -10,11 +10,11 @@ none
 false
 TRACE;RELEASE;NET;NET8_0;NETCOREAPP
 E:\pickDrawFlorida\App.xaml
-111966946891
+12823592664
 
-192105521123
+20-86114689
 202-1365146656
-AddPick3Window.xaml;AnalysisCardsWindow.xaml;AnalysisLineMatchesWindow.xaml;AnalysisPositionMatchesWindow.xaml;AnalysisResultsWindow.xaml;EditDrawWindow.xaml;MainWindow.xaml;ScrollableMessageWindow.xaml;SearchWindow.xaml;ThirdAnalysisOption1.xaml;ThirdAnalysisWindow.xaml;
+AddPick3Window.xaml;AnalysisCardsWindow.xaml;AnalysisLineMatchesWindow.xaml;AnalysisPositionMatchesWindow.xaml;AnalysisResultsWindow.xaml;EditDrawWindow.xaml;MainWindow.xaml;PlotWindow.xaml;ScrollableMessageWindow.xaml;SearchWindow.xaml;ThirdAnalysisOption1.xaml;ThirdAnalysisWindow.xaml;
 
 False
 

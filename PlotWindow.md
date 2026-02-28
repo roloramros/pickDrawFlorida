@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="Análisis de Patrones" 
         Height="800" 
-        Width="1500"
+        Width="1150"
         WindowStartupLocation="CenterOwner"
         ResizeMode="CanResizeWithGrip">
     
@@ -98,7 +98,7 @@
                         <Setter Property="BorderThickness" Value="0,0,0,1"/>
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="#D9E8FB"/>
+                                <Setter Property="Background" Value="#0000FF"/>
                                 <Setter Property="Foreground" Value="Black"/>
                             </Trigger>
                         </Style.Triggers>
@@ -107,7 +107,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Patron de referencia" Binding="{Binding ReferenceNumber}" Width="*"/>
                     <DataGridTextColumn Header="Coincidencias" Binding="{Binding MatchNumber}" Width="*"/>
-                    <DataGridTextColumn Header="Patrones similares" Binding="{Binding SimilarPatternNumber}" Width="*"/>
+                    <DataGridTextColumn Header="Patrones similares" Binding="{Binding SimilarNumber}" Width="*"/>
                     <DataGridTextColumn Header="Coincidencias" Binding="{Binding SimilarMatchNumber}" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>

@@ -227,7 +227,6 @@
                     </Grid>
                 </Border>
     
-        
                 <!-- FILA 2: Segunda fila (misma estructura) -->
                 <Border CornerRadius="8" Padding="12" Margin="0,0,0,10">
                     <Grid>
@@ -322,6 +321,9 @@
                     </Grid>
                 </Border>
         
+                <!-- 🔹 LÍNEA FINA ENTRE FILA 2 Y FILA 3 -->
+                    <Rectangle Height="1" Fill="#999696" Margin="0,8,0,8"/>
+
                 <!-- FILA 3: Tercera fila (misma estructura) -->
                 <Border CornerRadius="8" Padding="12" Margin="0,0,0,10">
                     <Grid>
