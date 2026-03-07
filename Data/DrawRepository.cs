@@ -91,6 +91,18 @@ public static class DrawRepository
         // 4. Condición para no repetir dígitos dentro del Pick3
         patternConditions.Add("n1 != n2 AND n1 != n3 AND n2 != n3");
 
+        // 4.5 Condición: NextPick3 (los 3 dígitos de NextPick3) también deben ser distintos
+        // Esto garantiza que no haya dígitos repetidos dentro de NextPick3
+        // (agregado para cumplir el requisito de no repetidos por picks)
+        // Nota: NextPick3Digits aún no se usa para la selección, pero sí filtramos aquí
+        // para alinear con el objetivo de evitar dígitos repetidos en ese bloque de 3 dígitos.
+        // Si quieres que NextPick3 tenga todas sus 3 cifras distintas, descomenta la siguiente línea
+        // o ajusta la validación adecuadamente en la construcción de la consulta.
+        // (La validación de NextPick3 se realiza más adelante en el filtrado por columnas individuales.)
+
+        // 4.6 Excluir patrones con NextPick3 repetidos (opcional, descomentado si se desea estricto)
+        //patternConditions.Add("n8 != n9 AND n8 != n10 AND n9 != n10");
+
         // 5. Excluir el Pick3 Resultado original
         patternConditions.Add($"NOT (n1 = {int.Parse(resultDigits[0])} AND n2 = {int.Parse(resultDigits[1])} AND n3 = {int.Parse(resultDigits[2])})");
 
@@ -181,9 +193,9 @@ public static class DrawRepository
             if (commonDigits.Count != 1)
                 continue;
 
-            // REGLA 4: NextPick3 debe tener 3 dígitos distintos (opcional, puedes quitar esta si no es necesaria)
-            //if (nextPick3Digits.Distinct().Count() != 3)
-                //continue;
+            // REGLA 4: NextPick3 debe tener 3 dígitos distintos
+            if (nextPick3Digits.Distinct().Count() != 3)
+                continue;
 
             results.Add(new FilteredCodificacion(
                 date, drawTime, fullNumber, pick3, pick4, nextPick3

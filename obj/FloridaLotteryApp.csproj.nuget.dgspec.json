@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\pickDrawFlorida\\FloridaLotteryApp.csproj": {}
+    "E:\\!Rolo\\Proyectos\\pickDrawFlorida\\FloridaLotteryApp.csproj": {}
   },
   "projects": {
-    "E:\\pickDrawFlorida\\FloridaLotteryApp.csproj": {
+    "E:\\!Rolo\\Proyectos\\pickDrawFlorida\\FloridaLotteryApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\pickDrawFlorida\\FloridaLotteryApp.csproj",
+        "projectUniqueName": "E:\\!Rolo\\Proyectos\\pickDrawFlorida\\FloridaLotteryApp.csproj",
         "projectName": "FloridaLotteryApp",
-        "projectPath": "E:\\pickDrawFlorida\\FloridaLotteryApp.csproj",
+        "projectPath": "E:\\!Rolo\\Proyectos\\pickDrawFlorida\\FloridaLotteryApp.csproj",
         "packagesPath": "C:\\Users\\Laptop\\.nuget\\packages\\",
-        "outputPath": "E:\\pickDrawFlorida\\obj\\",
+        "outputPath": "E:\\!Rolo\\Proyectos\\pickDrawFlorida\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Laptop\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -46,12 +46,6 @@
             "Microsoft.Data.Sqlite": {
               "target": "Package",
               "version": "[8.0.5, )"
-            },
-            "Microsoft.NET.ILLink.Tasks": {
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[8.0.24, )",
-              "autoReferenced": true
             }
           },
           "imports": [
@@ -74,11 +68,6 @@
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.418/PortableRuntimeIdentifierGraph.json"
-        }
-      },
-      "runtimes": {
-        "win-x64": {
-          "#import": []
         }
       }
     }

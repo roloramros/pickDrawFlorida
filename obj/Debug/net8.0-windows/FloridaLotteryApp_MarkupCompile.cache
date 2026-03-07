@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-E:\pickDrawFlorida\obj\Debug\net8.0-windows\
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\
 FloridaLotteryApp
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-E:\pickDrawFlorida\App.xaml
-12823592664
+E:\!Rolo\Proyectos\pickDrawFlorida\App.xaml
+12-1575588642
 
-201693088395
+221391308759
 202-1365146656
-AddPick3Window.xaml;AnalysisCardsWindow.xaml;AnalysisLineMatchesWindow.xaml;AnalysisPositionMatchesWindow.xaml;AnalysisResultsWindow.xaml;EditDrawWindow.xaml;MainWindow.xaml;PlotWindow.xaml;ScrollableMessageWindow.xaml;SearchWindow.xaml;ThirdAnalysisOption1.xaml;ThirdAnalysisWindow.xaml;
+AddPick3Window.xaml;Analisis Principales\AnalysisCardsWindow.xaml;Analisis Principales\AnalysisLineMatchesWindow.xaml;Analisis Principales\AnalysisPositionMatchesWindow.xaml;Analisis Principales\ThirdAnalysisOption1.xaml;Analisis Principales\ThirdAnalysisWindow.xaml;EditDrawWindow.xaml;MainWindow.xaml;Plot Analisis\PlotWindow.xaml;Plot Analisis\Plot_Opcion1.xaml;ScrollableMessageWindow.xaml;SearchWindow.xaml;
 
 False
 
