@@ -6,7 +6,7 @@ AppVersion=1.0
 DefaultGroupName=FloridaLotteryApp
 OutputDir=Output
 OutputBaseFilename=FloridaLotteryInstaller
-SetupIconFile=E:\pickDrawFlorida\iconoApp.ico
+SetupIconFile=E:\!Rolo\Proyectos\pickDrawFlorida\iconoApp.ico
 UsePreviousAppDir=no
 DefaultDirName={code:GetNoDefaultDir}
 PrivilegesRequired=lowest
@@ -14,8 +14,8 @@ PrivilegesRequired=lowest
 
 
 [Files]
-Source: "E:\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\publish\*"; DestDir: "{app}"; Flags: recursesubdirs
-Source: "E:\pickDrawFlorida\florida_pick3_pick4_fixed.sqlite"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\!Rolo\Proyectos\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\publish\*"; DestDir: "{app}"; Flags: recursesubdirs
+Source: "E:\!Rolo\Proyectos\pickDrawFlorida\florida_pick3_pick4_fixed.sqlite"; DestDir: "{app}"; Flags: ignoreversion
 
 [Tasks]
 Name: "desktopicon"; Description: "Crear acceso directo en el escritorio"; Flags: unchecked

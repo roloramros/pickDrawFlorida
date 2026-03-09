@@ -58,6 +58,9 @@ public partial class PlotWindow : Window
     private bool _hasStartedLoading;
     private bool _hasLoaded = false;
     private bool _isLoading = false;
+    private readonly double _originalWindowHeight;
+    private readonly double _originalWindowWidth;
+    private readonly double _expandedWindowHeight;
     private CancellationTokenSource? _cancellationTokenSource;
     private static readonly Brush[] RepeatPalette =
     {
@@ -73,6 +76,9 @@ public partial class PlotWindow : Window
     public PlotWindow(string dateText, string drawIcon, string pick3, string pick4, string pick3Siguiente)
     {
         InitializeComponent();
+        _originalWindowHeight = Height;
+        _originalWindowWidth = Width;
+        _expandedWindowHeight = Height + 20;
         _guideDateText = dateText ?? " ";
         _guidePick3 = pick3 ?? " ";
         _guidePick4 = pick4 ?? " ";
@@ -153,7 +159,7 @@ public partial class PlotWindow : Window
         UpdateResultsCounter();
         
         // Cambiamos el estado de carga inicial
-        SetLoadingState(true, "Preparando análisis...", 0, true);
+        SetLoadingState(true, "Preparando an�lisis...", 0, 1, false);
         
         // Botón de cancelar
         CancelButton.Visibility = Visibility.Collapsed;
@@ -168,7 +174,7 @@ public partial class PlotWindow : Window
     {
         _cancellationTokenSource?.Cancel();
         CancelButton.IsEnabled = false;
-        SetLoadingState(false, "Cancelando...", 0, true);
+        SetLoadingState(true, "Cancelando analisis...", 0, Math.Max(1, (int)Math.Ceiling(AnalysisProgressBar.Maximum)), false);
     }
 
     
@@ -540,7 +546,8 @@ public partial class PlotWindow : Window
                 return;
 
             // Mostrar progreso
-            SetLoadingState(true, "Filtrando patrones...", 0, true);
+            int totalRows = Math.Max(1, PatternRows.Count);
+            SetLoadingState(true, $"Filtrando patrones... 0 de {totalRows}", 0, totalRows, false);
 
             // Crear una nueva colección con los patrones que NO tienen dígitos repetidos
             var filteredRows = new ObservableCollection<PatternRow>();
@@ -565,9 +572,9 @@ public partial class PlotWindow : Window
                 }
 
                 // Actualizar progreso (opcional)
-                if (processed % 100 == 0)
+                if (processed % 1 == 0)
                 {
-                    SetLoadingState(true, $"Filtrando patrones... {processed} de {PatternRows.Count}", processed, true);
+                    SetLoadingState(true, $"Filtrando patrones... {processed} de {totalRows}", processed, totalRows, false);
                 }
             }
 
@@ -704,7 +711,9 @@ public partial class PlotWindow : Window
         var token = _cancellationTokenSource.Token;
 
         _isLoading = true;
-        UpdateResultsCounterWithHighlight(); // Actualizar contador con fondo amarillo
+        UpdateResultsCounterWithHighlight();
+        SetLoadingState(true, "Analizando combinaciones...", 0, 1, false);
+        CancelButton.IsEnabled = true; // Actualizar contador con fondo amarillo
 
         var progress = new Progress<PatternRow>(patternRow =>
         {
@@ -751,17 +760,6 @@ public partial class PlotWindow : Window
         // Actualizar el texto
         ResultsCounterText.Text = $"{selected} de {total}";
         
-        // Aplicar fondo amarillo si está cargando
-        if (_isLoading)
-        {
-            ResultsCounterText.Background = new SolidColorBrush(Colors.Yellow);
-            ResultsCounterText.Padding = new Thickness(5, 2, 5, 2); // Un poco de padding para que se vea mejor
-        }
-        else
-        {
-            ResultsCounterText.Background = Brushes.Transparent;
-            ResultsCounterText.Padding = new Thickness(0); // Restaurar padding original
-        }
     }
 
 
@@ -842,32 +840,45 @@ public partial class PlotWindow : Window
         }
 
         int patternsFound = 0;
-        int totalIterations = col2Candidates.Count;
+        int totalIterations = Math.Max(1, col2Candidates.Count);
         int currentIteration = 0;
+        int updateFrequency = Math.Max(1, totalIterations / 200);
+
+        Dispatcher.BeginInvoke(() =>
+        {
+            if (!_isLoading) return;
+            SetLoadingState(true, "Analizando combinaciones... 0 de " + totalIterations, 0, totalIterations, false);
+        });
 
         // 3. Generar combinaciones
         for (int col2Index = 0; col2Index < col2Candidates.Count; col2Index++)
         {
-            // Verificar cancelación
+            // Verificar cancelaci�n
             cancellationToken.ThrowIfCancellationRequested();
 
             var col2 = col2Candidates[col2Index];
             currentIteration++;
 
-            // Actualizar estado (opcional, podrías usar otro progreso para esto)
-            if (currentIteration % 100 == 0)
+            // Actualizar progreso visible sin saturar el hilo UI
+            if (currentIteration % updateFrequency == 0 || currentIteration == totalIterations)
             {
+                int progressCompleted = currentIteration;
+                int progressPatterns = patternsFound;
                 Dispatcher.BeginInvoke(() =>
                 {
-                    SetLoadingState(true, $"Analizando combinaciones... {currentIteration} de {totalIterations}", 
-                        currentIteration, false);
+                    if (!_isLoading) return;
+                    SetLoadingState(true,
+                        $"Analizando combinaciones... {progressCompleted} de {totalIterations} | Patrones: {progressPatterns}",
+                        progressCompleted,
+                        totalIterations,
+                        false);
                 });
             }
 
             // Filtrar: Fecha Col2 < Fecha Referencia
             if (col2.Date >= guideDateTime) continue;
 
-            // Extraer el primer dígito de Col2
+            // Extraer el primer d�gito de Col2
             char? col2FirstDigit = null;
             if (!string.IsNullOrEmpty(col2.Hit.Pick3) && char.IsDigit(col2.Hit.Pick3[0]))
             {
@@ -879,10 +890,10 @@ public partial class PlotWindow : Window
 
             foreach (var col3 in col3Candidates)
             {
-                // Verificar cancelación
+                // Verificar cancelaci�n
                 cancellationToken.ThrowIfCancellationRequested();
 
-                // Extraer el primer dígito de Col3
+                // Extraer el primer d�gito de Col3
                 char? col3FirstDigit = null;
                 if (!string.IsNullOrEmpty(col3.Hit.Pick3) && char.IsDigit(col3.Hit.Pick3[0]))
                 {
@@ -940,10 +951,10 @@ public partial class PlotWindow : Window
                 {
                     foreach (var col4 in col4Candidates)
                     {
-                        // Verificar cancelación
+                        // Verificar cancelaci�n
                         cancellationToken.ThrowIfCancellationRequested();
 
-                        // Crear el patrón y reportarlo inmediatamente
+                        // Crear el patr�n y reportarlo inmediatamente
                         var patternRow = CreatePatternRow(col2, col3, col4, guideNumber, guideDateTime);
                         if (patternRow != null)
                         {
@@ -957,9 +968,15 @@ public partial class PlotWindow : Window
 
         Dispatcher.BeginInvoke(() =>
         {
-            SetLoadingState(false, $"Análisis completado. Se encontraron {patternsFound} patrones.", patternsFound, false);
+            if (!_isLoading) return;
+            SetLoadingState(true,
+                $"An�lisis completado. Se encontraron {patternsFound} patrones.",
+                totalIterations,
+                totalIterations,
+                false);
         });
     }
+
 
     private PatternRow? CreatePatternRow(
         CandidateRow col2,
@@ -1057,7 +1074,7 @@ public partial class PlotWindow : Window
             );
 
             nuevaVentana.Owner = this;
-            nuevaVentana.ShowDialog();
+            nuevaVentana.Show();
         }
         catch (Exception ex)
         {
@@ -1439,15 +1456,29 @@ public partial class PlotWindow : Window
         public Brush Background { get; set; } = Brushes.White;
     }
 
-    private void SetLoadingState(bool isLoading, string status, int completed, bool isIndeterminate)
+        private void SetLoadingState(bool isLoading, string status, int completed, int total, bool isIndeterminate)
     {
-        PatternsTable.IsEnabled = true;
-        LoadingPanel.Visibility = Visibility.Collapsed;
+        UpdateWindowSize(isLoading);
+        LoadingPanel.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
+        CancelButton.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
+        AnalysisProgressText.Text = status;
+
         AnalysisProgressBar.IsIndeterminate = false;
-        AnalysisProgressBar.Value = 0;
-        AnalysisProgressText.Text = "";
+        AnalysisProgressBar.Maximum = Math.Max(1, total);
+        AnalysisProgressBar.Value = Math.Min(Math.Max(0, completed), AnalysisProgressBar.Maximum);
     }
 
+    private void SetLoadingState(bool isLoading, string status, int completed, bool isIndeterminate)
+    {
+        int total = Math.Max(1, (int)Math.Ceiling(AnalysisProgressBar.Maximum));
+        SetLoadingState(isLoading, status, completed, total, false);
+    }
+
+    private void UpdateWindowSize(bool isLoading)
+    {
+        Height = isLoading ? _expandedWindowHeight : _originalWindowHeight;
+        Width = _originalWindowWidth;
+    }
     private void UpdateResultsCounter()
     {
         int total = PatternRows.Count;
@@ -1461,3 +1492,14 @@ public partial class PlotWindow : Window
         ResultsCounterText.Text = $"{selected} de {total}";
     }
 }
+
+
+
+
+
+
+
+
+
+
+

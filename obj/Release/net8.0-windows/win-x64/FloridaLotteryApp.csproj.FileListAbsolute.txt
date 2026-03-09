@@ -137,3 +137,52 @@ E:\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\ref\FloridaLotteryApp.dll
 E:\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\florida_pick3_pick4_fixed.sqlite
 E:\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\PlotWindow.baml
 E:\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\PlotWindow.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\florida_pick3_pick4_fixed.sqlite
+E:\!Rolo\Proyectos\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\FloridaLotteryApp.exe
+E:\!Rolo\Proyectos\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\FloridaLotteryApp.deps.json
+E:\!Rolo\Proyectos\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\FloridaLotteryApp.runtimeconfig.json
+E:\!Rolo\Proyectos\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\FloridaLotteryApp.dll
+E:\!Rolo\Proyectos\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\FloridaLotteryApp.pdb
+E:\!Rolo\Proyectos\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\Microsoft.Data.Sqlite.dll
+E:\!Rolo\Proyectos\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\SQLitePCLRaw.batteries_v2.dll
+E:\!Rolo\Proyectos\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\SQLitePCLRaw.core.dll
+E:\!Rolo\Proyectos\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\SQLitePCLRaw.provider.e_sqlite3.dll
+E:\!Rolo\Proyectos\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\e_sqlite3.dll
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLotteryApp.csproj.AssemblyReference.cache
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\AddPick3Window.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Analisis Principales\AnalysisCardsWindow.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Analisis Principales\AnalysisLineMatchesWindow.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Analisis Principales\AnalysisPositionMatchesWindow.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Analisis Principales\ThirdAnalysisOption1.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\EditDrawWindow.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\MainWindow.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Plot Analisis\PlotWindow.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Plot Analisis\Plot_Opcion1.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\SearchWindow.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\AddPick3Window.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Analisis Principales\AnalysisCardsWindow.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Analisis Principales\AnalysisLineMatchesWindow.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Analisis Principales\AnalysisPositionMatchesWindow.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Analisis Principales\ThirdAnalysisOption1.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Analisis Principales\ThirdAnalysisWindow.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\EditDrawWindow.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\MainWindow.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Plot Analisis\PlotWindow.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Plot Analisis\Plot_Opcion1.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\SearchWindow.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\App.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLotteryApp_MarkupCompile.cache
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLotteryApp_MarkupCompile.lref
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Analisis Principales\ThirdAnalysisWindow.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLotteryApp.g.resources
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLotteryApp.GeneratedMSBuildEditorConfig.editorconfig
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLotteryApp.AssemblyInfoInputs.cache
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLotteryApp.AssemblyInfo.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLotteryApp.csproj.CoreCompileInputs.cache
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLotteryApp.sourcelink.json
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaL.C0FEF0F5.Up2Date
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLotteryApp.dll
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\refint\FloridaLotteryApp.dll
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLotteryApp.pdb
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLotteryApp.genruntimeconfig.cache
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\ref\FloridaLotteryApp.dll

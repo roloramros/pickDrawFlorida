@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Análisis de Patrones" 
+        Title="Plot Windows" 
         Height="780" 
         Width="1150"
         WindowStartupLocation="CenterOwner"
@@ -78,28 +78,8 @@
                     Padding="15"
                     BorderThickness="1" >
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <StackPanel x:Name="LoadingPanel" Grid.Row="0" Margin="0,0,0,10" Visibility="Collapsed">
-                        <TextBlock x:Name="AnalysisProgressText"
-                                Text="Analizando..."
-                                FontWeight="SemiBold"
-                                Margin="0,0,0,6"/>
-                        <ProgressBar x:Name="AnalysisProgressBar"
-                                    Height="14"
-                                    Minimum="0"
-                                    Maximum="1"
-                                    Value="0"/>
-                        <Button x:Name="CancelButton" Content="Cancelar Análisis" 
-                                    Width="150" Height="30" Margin="10" 
-                                    HorizontalAlignment="Center"/>            
-                    </StackPanel>
-
-                    <DataGrid x:Name="PatternsTable"
-                            Grid.Row="1"
+<DataGrid x:Name="PatternsTable"
+                            Grid.Row="0"
                             AutoGenerateColumns="False"
                             CanUserAddRows="False"
                             CanUserDeleteRows="False"
@@ -501,14 +481,45 @@
                                 </ItemsControl>
                             </StackPanel>
                         </Grid>
-                    </Border>
-            
-                    <TextBlock x:Name="ResultsCounterText"
-                            Text="0 de 0"
-                            Margin="0,12,0,0"
-                            HorizontalAlignment="Right"
-                            FontWeight="SemiBold"
-                            FontSize="14"/>
+                    </Border>                    <Grid Margin="0,12,0,0" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock x:Name="ResultsCounterText"
+                                Grid.Column="0"
+                                Text="0 de 0"
+                                VerticalAlignment="Center"
+                                FontWeight="SemiBold"
+                                FontSize="14"/>
+
+                        <StackPanel x:Name="LoadingPanel"
+                                Grid.Column="2"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                Visibility="Collapsed">
+                            <TextBlock x:Name="AnalysisProgressText"
+                                    Text="Analizando..."
+                                    VerticalAlignment="Center"
+                                    FontWeight="SemiBold"
+                                    Margin="0,0,10,0"/>
+                            <ProgressBar x:Name="AnalysisProgressBar"
+                                        Width="340"
+                                        Height="14"
+                                        Minimum="0"
+                                        Maximum="1"
+                                        Value="0"
+                                        VerticalAlignment="Center"/>
+                            <Button x:Name="CancelButton"
+                                    Content="Cancelar Analisis"
+                                    Width="150"
+                                    Height="28"
+                                    Margin="10,0,0,0"
+                                    VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
                 </StackPanel>
             </Border>
         
@@ -522,4 +533,8 @@
 
 
 </Window>
+
+
+
+
 

@@ -6,8 +6,13 @@ namespace FloridaLotteryApp
     {
         public string ReferenceNumber { get; set; } = " ";
         public string ReferenceDate { get; set; } = " ";
+        public string ReferencePick3 { get; set; } = " ";
+        public string ReferencePick4 { get; set; } = " ";
+        public string ReferenceNextPick3 { get; set; } = " ";
+        public string ReferenceDrawTime { get; set; } = " ";
+        public string ReferenceCodificacion { get; set; } = " ";
         
-        // Columna 2 (Match)
+// Columna 2 (Match)
         public string MatchNumber { get; set; } = " ";
         public string MatchPick3 { get; set; } = " ";
         public string MatchPick4 { get; set; } = " ";
@@ -38,3 +43,5 @@ namespace FloridaLotteryApp
         public string SimilarPatternNumber { get; set; } = " ";
     }
 }
+
+
