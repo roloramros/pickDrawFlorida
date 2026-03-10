@@ -190,7 +190,7 @@ private void AnalysisPlot_Click(object sender, RoutedEventArgs e)
             Owner = this
         };
         
-        plotWindow.ShowDialog();
+        plotWindow.Show();
     }
 }
 
@@ -208,7 +208,7 @@ private void AnalysisPlot_Click(object sender, RoutedEventArgs e)
     private void Search_Click(object sender, RoutedEventArgs e)
     {
         var win = new SearchWindow { Owner = this };
-        win.ShowDialog();
+        win.Show();
     }
 
     private void Analysis_Click(object sender, RoutedEventArgs e)
@@ -466,7 +466,7 @@ private void AnalysisPlot_Click(object sender, RoutedEventArgs e)
         };
 
         var win = new AnalysisCardsWindow(guide, rows) { Owner = this };
-        win.ShowDialog();
+        win.Show();
     }
 
     private static string BuildCoding(string pick3, string pick4)

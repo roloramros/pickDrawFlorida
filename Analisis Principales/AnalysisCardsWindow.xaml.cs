@@ -84,7 +84,29 @@ public partial class AnalysisCardsWindow : Window
             WindowStartupLocation = WindowStartupLocation.CenterOwner
         };
 
-        thirdAnalysisWindow.ShowDialog();
+        thirdAnalysisWindow.Show();
+    }
+
+    private void ExtendedAnalysis3MenuItem_Click(object sender, RoutedEventArgs e)
+    {
+        var filteredCards = Cards.Where(HasSingleStraightLine).ToList();
+
+        if (filteredCards.Count == 0)
+        {
+            MessageBox.Show("No hay tarjetas que cumplan con el filtro de linea recta unica.",
+                           "Analisis 3 Extendido",
+                           MessageBoxButton.OK,
+                           MessageBoxImage.Information);
+            return;
+        }
+
+        var extendedAnalysisWindow = new Analisis3ExtendidoWindow(filteredCards)
+        {
+            Owner = this,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner
+        };
+
+        extendedAnalysisWindow.Show();
     }
 
     // Manejador para todos los items del menú
@@ -492,3 +514,5 @@ public class DigitVM
     public string Value { get; set; } = "";
     public Brush Bg { get; set; } = Brushes.Transparent;
 }
+
+

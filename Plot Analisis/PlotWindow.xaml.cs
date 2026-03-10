@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using FloridaLotteryApp.Data;
 using System.Windows.Threading;
@@ -504,6 +505,20 @@ public partial class PlotWindow : Window
         QueueDrawConnectingLines();
     }
 
+    private void PatternsTable_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        DependencyObject? source = e.OriginalSource as DependencyObject;
+        while (source != null && source is not DataGridRow)
+        {
+            source = VisualTreeHelper.GetParent(source);
+        }
+
+        if (source is DataGridRow row)
+        {
+            row.IsSelected = true;
+            row.Focus();
+        }
+    }
     private void EliminarDobles_Click(object sender, RoutedEventArgs e)
     {
         try
@@ -1492,14 +1507,3 @@ public partial class PlotWindow : Window
         ResultsCounterText.Text = $"{selected} de {total}";
     }
 }
-
-
-
-
-
-
-
-
-
-
-

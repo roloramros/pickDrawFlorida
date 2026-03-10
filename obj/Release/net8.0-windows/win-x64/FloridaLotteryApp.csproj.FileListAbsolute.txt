@@ -186,3 +186,5 @@ E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\refint\Flo
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLotteryApp.pdb
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLotteryApp.genruntimeconfig.cache
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\ref\FloridaLotteryApp.dll
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Analisis Principales\Analisis3ExtendidoWindow.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Analisis Principales\Analisis3ExtendidoWindow.baml

@@ -238,6 +238,7 @@ E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Plot Analisis\PlotWi
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Plot Analisis\Plot_Opcion1.baml
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\SearchWindow.baml
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\AddPick3Window.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Analisis Principales\Analisis3ExtendidoWindow.g.cs
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Analisis Principales\AnalysisCardsWindow.g.cs
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Analisis Principales\AnalysisLineMatchesWindow.g.cs
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Analisis Principales\AnalysisPositionMatchesWindow.g.cs
@@ -251,6 +252,7 @@ E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\SearchWindow.g.cs
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\App.g.cs
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\FloridaLotteryApp_MarkupCompile.cache
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\FloridaLotteryApp_MarkupCompile.lref
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Analisis Principales\Analisis3ExtendidoWindow.baml
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Analisis Principales\ThirdAnalysisWindow.baml
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\FloridaLotteryApp.g.resources
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\FloridaLotteryApp.GeneratedMSBuildEditorConfig.editorconfig

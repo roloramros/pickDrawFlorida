@@ -46,15 +46,8 @@
 
     
     
-    <!-- ===== MENÚ SUPERIOR ===== -->
+
     <DockPanel>
-        <Menu DockPanel.Dock="Top" Background="#F0F0F0" Height="30">
-            <MenuItem Header="Acciones">
-                <MenuItem Header="Eliminar Repetidos" Click="EliminarDobles_Click"/>
-                <MenuItem Header="Análisis Opción 1" Click="Analisis_Opcion1_Click"/>
-            </MenuItem>
-        </Menu>
-    
         <Grid Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -96,6 +89,7 @@
                             HorizontalScrollBarVisibility="Auto"
                             VerticalScrollBarVisibility="Auto"
                             SelectionChanged="PatternsTable_SelectionChanged"
+                            PreviewMouseRightButtonDown="PatternsTable_PreviewMouseRightButtonDown"
                             FontSize="14">
                         <DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
@@ -117,6 +111,13 @@
                                 <Setter Property="HorizontalContentAlignment" Value="Left"/>
                             </Style>
                         </DataGrid.CellStyle>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Eliminar Repetidos" Click="EliminarDobles_Click"/>
+                                <MenuItem Header="Analisis Opcion 1" Click="Analisis_Opcion1_Click"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="Background" Value="White"/>
@@ -533,8 +534,3 @@
 
 
 </Window>
-
-
-
-
-

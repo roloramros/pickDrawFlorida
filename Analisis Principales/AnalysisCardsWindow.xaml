@@ -20,8 +20,9 @@
               Padding="8,0">
             
             <!-- Menú Archivo -->
-            <MenuItem Header="Filtrar" Click="MenuItem_Click">
-                
+            <MenuItem Header="Acciones">
+                <MenuItem Header="Filtrar" Click="MenuItem_Click"/>
+                <MenuItem Header="Analisis 3 Extendido" Click="ExtendedAnalysis3MenuItem_Click"/>
             </MenuItem>
         </Menu>
 
