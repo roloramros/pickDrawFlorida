@@ -115,6 +115,7 @@
                             <ContextMenu>
                                 <MenuItem Header="Eliminar Repetidos" Click="EliminarDobles_Click"/>
                                 <MenuItem Header="Analisis Opcion 1" Click="Analisis_Opcion1_Click"/>
+                                <MenuItem Header="Analisis Opcion 2" Click="Analisis_Opcion2_Click"/>
                             </ContextMenu>
                         </DataGrid.ContextMenu>
 
@@ -534,3 +535,4 @@
 
 
 </Window>
+

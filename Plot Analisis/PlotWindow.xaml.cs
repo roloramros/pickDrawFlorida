@@ -1102,6 +1102,54 @@ public partial class PlotWindow : Window
 
 
 
+
+    private void Analisis_Opcion2_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            if (PatternsTable.SelectedItem is not PatternRow selectedRow)
+            {
+                MessageBox.Show("Por favor, selecciona una fila en la tabla primero.",
+                    "Analisis Opcion 2", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            bool filaSeleccionadaTieneRepetidos = HasRepeatedDigits(selectedRow);
+            if (filaSeleccionadaTieneRepetidos)
+            {
+                MessageBox.Show(
+                    "La fila seleccionada tiene digitos repetidos en Pick3, Pick4 o Pick3 Siguiente.\n" +
+                    "No se puede realizar el analisis.",
+                    "Patron no valido",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+
+            string dateText = Row1Date;
+            string drawIcon = Row1_DrawIcon.Text;
+            string pick3 = _row1Pick3Number;
+            string pick4 = _row1Pick4Number;
+            string pick3Siguiente = string.Concat(Row1Pick3Siguiente);
+
+            Plot_Opcion2 nuevaVentana = new Plot_Opcion2(
+                dateText,
+                drawIcon,
+                pick3,
+                pick4,
+                pick3Siguiente,
+                selectedRow
+            );
+
+            nuevaVentana.Owner = this;
+            nuevaVentana.Show();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error al abrir la ventana de analisis: {ex.Message}",
+                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
     private class PatronRepeticion
     {
         // Para FILA 2 (Match)
@@ -1507,3 +1555,6 @@ public partial class PlotWindow : Window
         ResultsCounterText.Text = $"{selected} de {total}";
     }
 }
+
+
+

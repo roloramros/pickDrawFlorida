@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -92,12 +92,7 @@ namespace FloridaLotteryApp
             _row1Pick3Number = _originalPick3;
             _row1Pick4Number = _originalPick4;
 
-            var pick3SiguienteDigits = (pick3Siguiente ?? "").Where(char.IsDigit).Select(c => c.ToString()).ToList();
-            Row1Pick3Siguiente = new List<string>();
-            for (int i = 0; i < 3; i++)
-            {
-                Row1Pick3Siguiente.Add(i < pick3SiguienteDigits.Count ? pick3SiguienteDigits[i] : " ");
-            }
+            Row1Pick3Siguiente = BuildFixedDigitSlots(pick3Siguiente, 3);
 
              _guidePatternRow1 = BuildRowPattern(_row1Pick3Number, _row1Pick4Number, string.Concat(Row1Pick3Siguiente));
             _guidePatternRow2 = BuildAnchoredRowPattern(selectedRow?.MatchPick3 ?? " ", selectedRow?.MatchPick4 ?? " ", selectedRow?.MatchNextPick3 ?? " ");
@@ -131,13 +126,13 @@ namespace FloridaLotteryApp
             _row4Pick3Number = " ";
             _row4Pick4Number = " ";
 
-            Row1Pick3Siguiente = new List<string>();
+            Row1Pick3Siguiente = BuildFixedDigitSlots(null, 3);
             Row1Additional = new List<string>();
-            Row2Fireball = new List<string>();
+            Row2Fireball = BuildFixedDigitSlots(null, 3);
             Row2Additional = new List<string>();
-            Row3Fireball = new List<string>();
+            Row3Fireball = BuildFixedDigitSlots(null, 3);
             Row3Additional = new List<string>();
-            Row4Fireball = new List<string>();
+            Row4Fireball = BuildFixedDigitSlots(null, 3);
             Row4Additional = new List<string>();
 
             Row1_DateText.Text = " ";
@@ -666,12 +661,7 @@ namespace FloridaLotteryApp
 
             _row1Pick3Number = !string.IsNullOrWhiteSpace(selected.ReferencePick3) ? selected.ReferencePick3 : (selected.ReferenceNumber?.Length >= 3 ? selected.ReferenceNumber.Substring(0, 3) : " ");
             _row1Pick4Number = !string.IsNullOrWhiteSpace(selected.ReferencePick4) ? selected.ReferencePick4 : (selected.ReferenceNumber?.Length >= 7 ? selected.ReferenceNumber.Substring(3, 4) : " ");
-            var row1NextDigits = (selected.ReferenceNextPick3 ?? "").Where(char.IsDigit).Select(c => c.ToString()).ToList();
-            Row1Pick3Siguiente = new List<string>();
-            for (int i = 0; i < 3; i++)
-            {
-                Row1Pick3Siguiente.Add(i < row1NextDigits.Count ? row1NextDigits[i] : " ");
-            }
+            Row1Pick3Siguiente = BuildFixedDigitSlots(selected.ReferenceNextPick3, 3);
             Row1Additional = string.IsNullOrWhiteSpace(selected.ReferenceCodificacion)
                 ? BuildCodificacionDigits(_row1Pick3Number, _row1Pick4Number)
                 : (selected.ReferenceCodificacion ?? " ").Where(char.IsDigit).Select(c => c.ToString()).ToList();
@@ -680,21 +670,21 @@ namespace FloridaLotteryApp
 
             _row2Pick3Number = selected.MatchPick3 ?? " ";
             _row2Pick4Number = selected.MatchPick4 ?? " ";
-            Row2Fireball = (selected.MatchNextPick3 ?? " ").Where(char.IsDigit).Select(c => c.ToString()).ToList();
+            Row2Fireball = BuildFixedDigitSlots(selected.MatchNextPick3, 3);
             Row2Additional = (selected.MatchCodificacion ?? " ").Where(char.IsDigit).Select(c => c.ToString()).ToList();
             Row2_DateText.Text = selected.MatchDate ?? " ";
             Row2_DrawIcon.Text = DrawIconFromTime(selected.MatchDrawTime);
 
             _row3Pick3Number = selected.SimilarPick3 ?? " ";
             _row3Pick4Number = selected.SimilarPick4 ?? " ";
-            Row3Fireball = (selected.SimilarNextPick3 ?? " ").Where(char.IsDigit).Select(c => c.ToString()).ToList();
+            Row3Fireball = BuildFixedDigitSlots(selected.SimilarNextPick3, 3);
             Row3Additional = (selected.SimilarCodificacion ?? " ").Where(char.IsDigit).Select(c => c.ToString()).ToList();
             Row3_DateText.Text = selected.SimilarDate ?? " ";
             Row3_DrawIcon.Text = DrawIconFromTime(selected.SimilarDrawTime);
 
             _row4Pick3Number = selected.SimilarMatchPick3 ?? " ";
             _row4Pick4Number = selected.SimilarMatchPick4 ?? " ";
-            Row4Fireball = (selected.SimilarMatchNextPick3 ?? " ").Where(char.IsDigit).Select(c => c.ToString()).ToList();
+            Row4Fireball = BuildFixedDigitSlots(selected.SimilarMatchNextPick3, 3);
             Row4Additional = (selected.SimilarMatchCodificacion ?? " ").Where(char.IsDigit).Select(c => c.ToString()).ToList();
             Row4_DateText.Text = selected.SimilarMatchDate ?? " ";
             Row4_DrawIcon.Text = DrawIconFromTime(selected.SimilarMatchDrawTime);
@@ -713,6 +703,22 @@ namespace FloridaLotteryApp
 
             Row4_FireballDigits.ItemsSource = Row4Fireball;
             Row4_AdditionalDigits.ItemsSource = Row4Additional;
+        }
+
+        private static List<string> BuildFixedDigitSlots(string? value, int size)
+        {
+            var digits = (value ?? string.Empty)
+                .Where(char.IsDigit)
+                .Select(c => c.ToString())
+                .Take(size)
+                .ToList();
+
+            while (digits.Count < size)
+            {
+                digits.Add(" ");
+            }
+
+            return digits;
         }
 
         private void QueueDrawConnectingLines()
@@ -1254,6 +1260,8 @@ namespace FloridaLotteryApp
         }
     }
 }
+
+
 
 
 
