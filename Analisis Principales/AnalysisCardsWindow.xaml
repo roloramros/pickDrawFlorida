@@ -4,7 +4,7 @@
         Title="Resultados del análisis"
         Height="900" Width="900"
         WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize">
+        ResizeMode="CanMinimize">
 
     <Grid Margin="16">
         <Grid.RowDefinitions>
@@ -410,3 +410,5 @@
         </ScrollViewer>
     </Grid>
 </Window>
+
+

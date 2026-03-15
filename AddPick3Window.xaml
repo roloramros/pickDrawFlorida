@@ -5,7 +5,7 @@
         Height="320"
         Width="320"
         WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize">
+        ResizeMode="CanMinimize">
 
     <Grid Margin="16">
         <Grid.RowDefinitions>
@@ -41,3 +41,4 @@
         </StackPanel>
     </Grid>
 </Window>
+

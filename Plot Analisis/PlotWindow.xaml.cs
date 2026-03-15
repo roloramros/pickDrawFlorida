@@ -1150,6 +1150,60 @@ public partial class PlotWindow : Window
                 "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+
+    private void Analisis_Opcion2_Expandido_Click(object sender, RoutedEventArgs e)
+    {
+        if (_isLoading)
+        {
+            MessageBox.Show("Debes esperar a que termine el analisis Plot antes de abrir esta ventana.",
+                "Analisis Opcion 2 Expandido", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        try
+        {
+            if (PatternRows.Count == 0)
+            {
+                MessageBox.Show("No hay filas en la tabla para analizar.",
+                    "Analisis Opcion 2 Expandido", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var validRows = PatternRows
+                .Where(row => !HasRepeatedDigits(row))
+                .ToList();
+
+            if (validRows.Count == 0)
+            {
+                MessageBox.Show("Todas las filas de la tabla tienen digitos repetidos. No hay guias validas para analizar.",
+                    "Analisis Opcion 2 Expandido", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            string dateText = Row1Date;
+            string drawIcon = Row1_DrawIcon.Text;
+            string pick3 = _row1Pick3Number;
+            string pick4 = _row1Pick4Number;
+            string pick3Siguiente = string.Concat(Row1Pick3Siguiente);
+
+            Plot_Opcion2_Exp nuevaVentana = new Plot_Opcion2_Exp(
+                dateText,
+                drawIcon,
+                pick3,
+                pick4,
+                pick3Siguiente,
+                validRows
+            );
+
+            nuevaVentana.Owner = this;
+            nuevaVentana.Show();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error al abrir la ventana de analisis expandido: {ex.Message}",
+                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
     private class PatronRepeticion
     {
         // Para FILA 2 (Match)
@@ -1525,6 +1579,7 @@ public partial class PlotWindow : Window
         LoadingPanel.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
         CancelButton.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
         AnalysisProgressText.Text = status;
+        AnalisisOpcion2ExpandidoMenuItem.IsEnabled = !isLoading;
 
         AnalysisProgressBar.IsIndeterminate = false;
         AnalysisProgressBar.Maximum = Math.Max(1, total);
@@ -1555,6 +1610,10 @@ public partial class PlotWindow : Window
         ResultsCounterText.Text = $"{selected} de {total}";
     }
 }
+
+
+
+
 
 
 

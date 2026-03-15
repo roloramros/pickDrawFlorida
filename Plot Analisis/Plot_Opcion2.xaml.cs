@@ -23,6 +23,11 @@ namespace FloridaLotteryApp
         private readonly string _guidePatternRow2;
         private readonly string _guidePatternRow3;
         private readonly string _guidePatternRow4;
+        private readonly string _guideRow2Date;
+        private readonly string _guideRow2DrawTime;
+        private readonly string _guideRow4Date;
+        private readonly string _guideRow4DrawTime;
+        private readonly string _guideRow34ConnectionPattern;
 
         private readonly DateTime _originalDate;
         private readonly string _originalDrawTime;
@@ -71,6 +76,11 @@ namespace FloridaLotteryApp
             _guidePatternRow2 = BuildAnchoredRowPattern(selectedRow?.MatchPick3 ?? " ", selectedRow?.MatchPick4 ?? " ", selectedRow?.MatchNextPick3 ?? " ");
             _guidePatternRow3 = BuildRowPattern(selectedRow?.SimilarPick3 ?? " ", selectedRow?.SimilarPick4 ?? " ", selectedRow?.SimilarNextPick3 ?? " ");
             _guidePatternRow4 = BuildAnchoredRowPattern(selectedRow?.SimilarMatchPick3 ?? " ", selectedRow?.SimilarMatchPick4 ?? " ", selectedRow?.SimilarMatchNextPick3 ?? " ");
+            _guideRow2Date = selectedRow?.MatchDate ?? " ";
+            _guideRow2DrawTime = selectedRow?.MatchDrawTime ?? " ";
+            _guideRow4Date = selectedRow?.SimilarMatchDate ?? " ";
+            _guideRow4DrawTime = selectedRow?.SimilarMatchDrawTime ?? " ";
+            _guideRow34ConnectionPattern = BuildConnectionPattern(selectedRow?.SimilarNextPick3, selectedRow?.SimilarMatchNextPick3);
 
             UpdateResultsCounter();
             UpdateNavigationButtons();
@@ -359,7 +369,20 @@ namespace FloridaLotteryApp
 
                 string row2Pattern = BuildAnchoredRowPattern(col2.Hit.Pick3, col2.Hit.Pick4, col2NextPick3);
                 string row4Pattern = BuildAnchoredRowPattern(col4.Hit.Pick3, col4.Hit.Pick4, col4NextPick3);
-                if (row2Pattern != _guidePatternRow2 || row4Pattern != _guidePatternRow4)
+                string col2DateText = col2.Hit.Date.ToString("yyyy-MM-dd");
+                string col4DateText = col4.Hit.Date.ToString("yyyy-MM-dd");
+
+                if (row2Pattern != _guidePatternRow2 || row4Pattern != _guidePatternRow4 ||
+                    !string.Equals(col2DateText, _guideRow2Date, StringComparison.Ordinal) ||
+                    !string.Equals(col2.Hit.DrawTime, _guideRow2DrawTime, StringComparison.OrdinalIgnoreCase) ||
+                    !string.Equals(col4DateText, _guideRow4Date, StringComparison.Ordinal) ||
+                    !string.Equals(col4.Hit.DrawTime, _guideRow4DrawTime, StringComparison.OrdinalIgnoreCase))
+                {
+                    return null;
+                }
+
+                string row34ConnectionPattern = BuildConnectionPattern(col3NextPick3, col4NextPick3);
+                if (row34ConnectionPattern != _guideRow34ConnectionPattern)
                 {
                     return null;
                 }
@@ -824,6 +847,38 @@ namespace FloridaLotteryApp
             return number7.Substring(1, 2);
         }
 
+        private static string BuildConnectionPattern(string? topNextPick3, string? bottomNextPick3)
+        {
+            var topDigits = BuildFixedDigitSlots(topNextPick3, 3);
+            var bottomDigits = BuildFixedDigitSlots(bottomNextPick3, 3);
+            var connections = new List<string>();
+
+            for (int i = 0; i < topDigits.Count; i++)
+            {
+                var top = topDigits[i]?.Trim();
+                if (string.IsNullOrWhiteSpace(top))
+                {
+                    continue;
+                }
+
+                for (int j = 0; j < bottomDigits.Count; j++)
+                {
+                    var bottom = bottomDigits[j]?.Trim();
+                    if (string.IsNullOrWhiteSpace(bottom))
+                    {
+                        continue;
+                    }
+
+                    if (string.Equals(top, bottom, StringComparison.Ordinal))
+                    {
+                        connections.Add($"{i}-{j}");
+                    }
+                }
+            }
+
+            return string.Join("|", connections);
+        }
+
         private static string BuildAnchoredRowPattern(string pick3, string pick4, string nextPick3)
         {
             var nextDigits = (nextPick3 ?? " ").Where(char.IsDigit).Take(3).ToList();
@@ -1089,6 +1144,7 @@ namespace FloridaLotteryApp
         public Brush Background { get; set; } = Brushes.White;
     }
 }
+
 
 
 

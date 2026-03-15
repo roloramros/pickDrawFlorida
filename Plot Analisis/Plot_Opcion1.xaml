@@ -1,17 +1,17 @@
-﻿<Window x:Class="FloridaLotteryApp.Plot_Opcion1"
+<Window x:Class="FloridaLotteryApp.Plot_Opcion1"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Plot Anáisis: Opción 1" 
+        Title="Plot: Opción 1" 
         Height="740" 
         Width="1150"
         WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize">
+        ResizeMode="CanMinimize">
     
     <Window.Resources>
-        <!-- Estilo para bordes de dÃ­gitos -->
+        <!-- Estilo para bordes de dígitos -->
         <Style TargetType="Border" x:Key="DigitBorder">
             <Setter Property="Width" Value="40"/>
             <Setter Property="Height" Value="40"/>
@@ -21,7 +21,7 @@
             <Setter Property="Background" Value="White"/>
         </Style>
     
-        <!-- Estilo para texto de dÃ­gitos -->
+        <!-- Estilo para texto de dígitos -->
         <Style TargetType="TextBlock" x:Key="DigitText">
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -29,11 +29,11 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
 
-        <!-- Estilo para dÃ­gitos resaltados (en la tirada) -->
+        <!-- Estilo para dígitos resaltados (en la tirada) -->
         <Style TargetType="Border" x:Key="HighlightedDigitBorder" BasedOn="{StaticResource DigitBorder}">
         </Style>
 
-        <!-- Estilo para dÃ­gitos sugeridos -->
+        <!-- Estilo para dígitos sugeridos -->
         <Style TargetType="Border" x:Key="SuggestedDigitBorder" BasedOn="{StaticResource DigitBorder}">
         </Style>
 
@@ -53,7 +53,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- Canvas superpuesto para las lÃ­neas de conexiÃ³n -->
+            <!-- Canvas superpuesto para las líneas de conexión -->
             <Canvas x:Name="ConnectionCanvas" 
                     Grid.Row="2"
                     IsHitTestVisible="False"
@@ -61,7 +61,7 @@
                     Margin="15,0,15,0"/>
 
             <!-- ============================================ -->
-            <!-- SECCIÃ“N SUPERIOR: TABLA DE PATRONES (4 Columnas) -->
+            <!-- SECCIÓN SUPERIOR: TABLA DE PATRONES (4 Columnas) -->
             <!-- ============================================ -->
             <Border Grid.Row="0" 
                     Background="White" 
@@ -133,7 +133,7 @@
             </Border>
 
             <!-- ============================================ -->
-            <!-- SECCIÃ“N INFERIOR: 4 FILAS DE INFORMACIÃ“N -->
+            <!-- SECCIÓN INFERIOR: 4 FILAS DE INFORMACIÓN -->
             <!-- ============================================ -->
             <Border Grid.Row="2" 
                     Background="White" 
@@ -152,7 +152,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                     
-                            <!-- Lado Izquierdo: DÃ­gitos de la tirada -->
+                            <!-- Lado Izquierdo: Dígitos de la tirada -->
                             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                                 <!-- Pick 3 -->
                                 <ItemsControl x:Name="Row1_Pick3Digits" ItemTemplate="{StaticResource ColoredDigitTemplate}">
@@ -194,9 +194,9 @@
                             
                                 <TextBlock Text=" " Width="30"/>
                             
-                                <!-- Ãcono de tirada -->
+                                <!-- Ícono de tirada -->
                                 <TextBlock x:Name="Row1_DrawIcon" 
-                                        Text="ðŸŒ™" 
+                                        Text="🌙" 
                                         FontSize="24" 
                                         VerticalAlignment="Center"/>
                             </StackPanel>
@@ -209,7 +209,7 @@
                                     VerticalAlignment="Center"
                                     Margin="20,0"/>
                                         
-                            <!-- Lado Derecho: DÃ­gitos adicionales (sugeridos/disponibles) -->
+                            <!-- Lado Derecho: Dígitos adicionales (sugeridos/disponibles) -->
                             <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                                 <ItemsControl x:Name="Row1_AdditionalDigits">
                                     <ItemsControl.ItemsPanel>
@@ -277,7 +277,7 @@
                                 <TextBlock Text=" " Width="30"/>
                             
                                 <TextBlock x:Name="Row2_DrawIcon" 
-                                        Text="â˜€ï¸" 
+                                        Text="☀️" 
                                         FontSize="24" 
                                         VerticalAlignment="Center"/>
                             </StackPanel>
@@ -309,7 +309,7 @@
                         </Grid>
                     </Border>
             
-                    <!-- ðŸ”¹ LÃNEA FINA ENTRE FILA 2 Y FILA 3 -->
+                    <!-- 🔹 LÍNEA FINA ENTRE FILA 2 Y FILA 3 -->
                     <Rectangle Height="1" Fill="#999696" Margin="0,8,0,8"/>
 
                     <!-- FILA 3: Tercera fila (misma estructura) -->
@@ -360,7 +360,7 @@
                                 <TextBlock Text=" " Width="30"/>
                             
                                 <TextBlock x:Name="Row3_DrawIcon" 
-                                        Text="ðŸŒ™" 
+                                        Text="🌙" 
                                         FontSize="24" 
                                         VerticalAlignment="Center"/>
                             </StackPanel>
@@ -440,7 +440,7 @@
                                 <TextBlock Text=" " Width="30"/>
                             
                                 <TextBlock x:Name="Row4_DrawIcon" 
-                                        Text="â˜€ï¸" 
+                                        Text="☀️" 
                                         FontSize="24" 
                                         VerticalAlignment="Center"/>
                             </StackPanel>
@@ -517,6 +517,8 @@
         </Grid>
    
 </Window>
+
+
 
 
 

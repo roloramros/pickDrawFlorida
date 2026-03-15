@@ -6,7 +6,7 @@
         Height="900"
         Width="1000"
         WindowStartupLocation="CenterOwner"
-        ResizeMode="CanResize">
+        ResizeMode="CanMinimize">
     
     <Grid Margin="16">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -701,3 +701,4 @@
         </ScrollViewer>
     </Grid>
 </Window>
+

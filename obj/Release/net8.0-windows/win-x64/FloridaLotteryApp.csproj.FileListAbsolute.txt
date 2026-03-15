@@ -188,3 +188,7 @@ E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\FloridaLot
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\ref\FloridaLotteryApp.dll
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Analisis Principales\Analisis3ExtendidoWindow.g.cs
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Analisis Principales\Analisis3ExtendidoWindow.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Plot Analisis\Plot_Opcion2.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Plot Analisis\Plot_Opcion2.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Plot Analisis\Plot_Opcion2_Exp.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Plot Analisis\Plot_Opcion2_Exp.g.cs

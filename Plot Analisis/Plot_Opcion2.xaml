@@ -1,14 +1,14 @@
-<Window x:Class="FloridaLotteryApp.Plot_Opcion2"
+﻿<Window x:Class="FloridaLotteryApp.Plot_Opcion2"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Plot Analisis: Opcion 2"
+        Title="Plot: Opción 2"
         Height="790"
         Width="1150"
         WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize"
+        ResizeMode="CanMinimize"
         Background="#F3F3F3">
     <Window.Resources>
         <Style TargetType="Border" x:Key="DigitBorder">
@@ -204,4 +204,6 @@
         </StackPanel>
     </Grid>
 </Window>
+
+
 

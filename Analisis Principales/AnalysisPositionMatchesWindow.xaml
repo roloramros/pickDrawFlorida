@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Coincidencias del patrón"
         Height="700" Width="980"
-        ResizeMode="NoResize"
+        ResizeMode="CanMinimize"
         WindowStartupLocation="CenterOwner">
 
     <Grid Margin="16"> 
@@ -146,3 +146,4 @@
         </ScrollViewer>
     </Grid>
 </Window>
+
