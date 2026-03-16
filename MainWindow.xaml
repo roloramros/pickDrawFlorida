@@ -25,32 +25,10 @@
 
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center">
 
-                <!-- Inputs manuales -->
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
-                    <TextBlock Text="Pick 3:" VerticalAlignment="Center" Margin="0,0,6,0" FontWeight="Bold"/>
-                    <TextBox x:Name="TxtManualP3"
-                            Width="70"
-                            MaxLength="3"
-                            VerticalContentAlignment="Center"
-                            Margin="0,0,10,0"/>
-
-                    <TextBlock Text="Pick 4:" VerticalAlignment="Center" Margin="0,0,6,0" FontWeight="Bold"/>
-                    <TextBox x:Name="TxtManualP4"
-                            Width="80"
-                            MaxLength="4"
-                            VerticalContentAlignment="Center"/>
-                </StackPanel>
-
-                <!-- Fecha para análisis -->
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
-                    <TextBlock Text="Fecha:" VerticalAlignment="Center" Margin="0,0,6,0" FontWeight="Bold"/>
-                    <DatePicker x:Name="AnalysisDatePicker"
-                                Width="140"
-                                VerticalContentAlignment="Center"/>
-                </StackPanel>
+                
 
                 <!-- Botones -->
-                <Button Content="Análisis"
+                <Button Content="Load Plot 2"
                         Padding="14,8"
                         Margin="0,0,10,0"
                         Click="Analysis_Click"/>

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -549,6 +549,37 @@ namespace FloridaLotteryApp
             _cancellationTokenSource?.Cancel();
         }
 
+        private void Guardar_Click(object sender, RoutedEventArgs e)
+        {
+            var current = GetCurrentResultItem();
+            if (current == null)
+            {
+                MessageBox.Show("No hay un resultado visible para guardar.", "Guardar", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var dialog = new PlotOption2SaveDialog
+            {
+                Owner = this
+            };
+
+            if (dialog.ShowDialog() != true)
+            {
+                return;
+            }
+
+            try
+            {
+                var record = BuildSavedRecord(current, dialog.NoteText);
+                var savedId = PlotOption2SavedRepository.Insert(record);
+                MessageBox.Show($"Resultado guardado correctamente.", "Guardar", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"No se pudo guardar el resultado: {ex.Message}", "Guardar", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void UpdateResultsCounter()
         {
             int total = _resultItems.Count;
@@ -560,6 +591,7 @@ namespace FloridaLotteryApp
         {
             AnteriorButton.IsEnabled = _currentResultIndex > 0;
             SiguienteButton.IsEnabled = _currentResultIndex >= 0 && _currentResultIndex < _resultItems.Count - 1;
+            GuardarButton.IsEnabled = _currentResultIndex >= 0 && _currentResultIndex < _resultItems.Count;
         }
 
         private void SetLoadingState(bool isLoading, string status, int completed, int total, bool isIndeterminate)
@@ -576,6 +608,7 @@ namespace FloridaLotteryApp
             GuideProgressBar.IsIndeterminate = false;
             GuideProgressBar.Maximum = Math.Max(1, _currentGuideTotal);
             GuideProgressBar.Value = isLoading ? Math.Min(Math.Max(0, _currentGuideCompleted), GuideProgressBar.Maximum) : 0;
+            UpdateNavigationButtons();
         }
 
         private void UpdateWindowSize(bool isLoading)
@@ -583,6 +616,50 @@ namespace FloridaLotteryApp
             Height = isLoading ? _expandedWindowHeight : _originalWindowHeight;
             Width = _originalWindowWidth;
         }
+        private ExpandedResultItem? GetCurrentResultItem()
+        {
+            if (_currentResultIndex < 0 || _currentResultIndex >= _resultItems.Count)
+            {
+                return null;
+            }
+
+            return _resultItems[_currentResultIndex];
+        }
+
+        private PlotOption2SavedRecord BuildSavedRecord(ExpandedResultItem current, string label)
+        {
+            return new PlotOption2SavedRecord
+            {
+                Label = string.IsNullOrWhiteSpace(label) ? null : label,
+                G1Date = NormalizeDate(_originalDateText),
+                G1Time = NormalizeDrawTime(_originalDrawTime),
+                G2Date = NormalizeDate(current.GuideRow.MatchDate),
+                G2Time = NormalizeDrawTime(current.GuideRow.MatchDrawTime),
+                G3Date = NormalizeDate(current.GuideRow.SimilarDate),
+                G3Time = NormalizeDrawTime(current.GuideRow.SimilarDrawTime),
+                G4Date = NormalizeDate(current.GuideRow.SimilarMatchDate),
+                G4Time = NormalizeDrawTime(current.GuideRow.SimilarMatchDrawTime),
+                R1Date = NormalizeDate(current.ResultRow.ReferenceDate),
+                R1Time = NormalizeDrawTime(current.ResultRow.ReferenceDrawTime),
+                R2Date = NormalizeDate(current.ResultRow.MatchDate),
+                R2Time = NormalizeDrawTime(current.ResultRow.MatchDrawTime),
+                R3Date = NormalizeDate(current.ResultRow.SimilarDate),
+                R3Time = NormalizeDrawTime(current.ResultRow.SimilarDrawTime),
+                R4Date = NormalizeDate(current.ResultRow.SimilarMatchDate),
+                R4Time = NormalizeDrawTime(current.ResultRow.SimilarMatchDrawTime)
+            };
+        }
+
+        private static string NormalizeDate(string? value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim();
+        }
+
+        private static string NormalizeDrawTime(string? value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim().ToUpperInvariant();
+        }
+
         private static void AssignSessionTags(PlotOption2Session session, string sessionTag)
         {
             session.SessionTag = sessionTag;
@@ -1233,6 +1310,7 @@ namespace FloridaLotteryApp
         }
     }
 }
+
 
 
 

@@ -40,7 +40,6 @@ public partial class MainWindow : Window, INotifyPropertyChanged
     {
         InitializeComponent();
         DataContext = this;
-        AnalysisDatePicker.SelectedDate = DateTime.Today;
 
         Loaded += MainWindow_Loaded;
         LoadPage(0);
@@ -212,7 +211,13 @@ private void AnalysisPlot_Click(object sender, RoutedEventArgs e)
     }
 
     private void Analysis_Click(object sender, RoutedEventArgs e)
-            => RunAnalysis(TxtManualP3.Text, TxtManualP4.Text, null, null);
+    {
+        var win = new PlotOption2SavedRecordsWindow
+        {
+            Owner = this
+        };
+        win.Show();
+    }
 
     
     private void Analysis_Midday_Click(object sender, RoutedEventArgs e)
@@ -410,7 +415,7 @@ private void AnalysisPlot_Click(object sender, RoutedEventArgs e)
         char d = comunes[0];
         int posP3 = p3.IndexOf(d) + 1; // 1..3
         int posP4 = p4.IndexOf(d) + 1; // 1..4
-        var analysisDate = AnalysisDatePicker.SelectedDate ?? DateTime.Today;
+        var analysisDate = DateTime.Today;
         var guideDateText = string.IsNullOrWhiteSpace(dateText)
             ? analysisDate.ToString("yyyy-MM-dd")
             : dateText;

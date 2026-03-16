@@ -270,3 +270,7 @@ E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Plot Analisis\Plot_O
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Plot Analisis\Plot_Opcion2_Exp.baml
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Plot Analisis\Plot_Opcion2_Exp.g.cs
 E:\!Rolo\Proyectos\pickDrawFlorida\bin\Debug\net8.0-windows\FloridaLotteryApp.exe
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Plot Analisis\PlotOption2SaveDialog.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Plot Analisis\PlotOption2SavedRecordsWindow.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Plot Analisis\PlotOption2SaveDialog.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Plot Analisis\PlotOption2SavedRecordsWindow.g.cs
