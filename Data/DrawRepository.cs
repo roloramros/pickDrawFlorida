@@ -194,8 +194,8 @@ public static class DrawRepository
                 continue;
 
             // REGLA 4: NextPick3 debe tener 3 dígitos distintos
-            if (nextPick3Digits.Distinct().Count() != 3)
-                continue;
+            //if (nextPick3Digits.Distinct().Count() != 3)
+            //    continue;
 
             results.Add(new FilteredCodificacion(
                 date, drawTime, fullNumber, pick3, pick4, nextPick3

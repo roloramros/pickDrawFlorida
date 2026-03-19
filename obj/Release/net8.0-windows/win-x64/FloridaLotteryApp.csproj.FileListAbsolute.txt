@@ -192,3 +192,7 @@ E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Plot Anali
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Plot Analisis\Plot_Opcion2.g.cs
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Plot Analisis\Plot_Opcion2_Exp.baml
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Plot Analisis\Plot_Opcion2_Exp.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Plot Analisis\PlotOption2SaveDialog.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Plot Analisis\PlotOption2SavedRecordsWindow.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Plot Analisis\PlotOption2SaveDialog.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Release\net8.0-windows\win-x64\Plot Analisis\PlotOption2SavedRecordsWindow.g.cs

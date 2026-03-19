@@ -49,14 +49,6 @@
                                         Panel.ZIndex="2"/>
                                 
                                 
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
                                 <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Top"
@@ -634,7 +626,7 @@
                             <Button x:Name="FilterButton"
                                     Grid.Row="0"
                                     Grid.Column="0"
-                                    Content="? ? ? ?"
+                                    Content="● ● ○ ○"
                                     FontSize="16"
                                     FontWeight="Bold"
                                     Padding="15,8"
@@ -678,7 +670,7 @@
                             <Button x:Name="FilterButton2"
                                     Grid.Row="0"
                                     Grid.Column="4"
-                                    Content="? ? ? ?"
+                                    Content="○ ○ ● ●"
                                     FontSize="16"
                                     FontWeight="Bold"
                                     Padding="15,8"
@@ -768,7 +760,7 @@
                             <Button x:Name="PreviousButton"
                                     Grid.Row="2"
                                     Grid.Column="0"
-                                    Content="?? Anterior"
+                                    Content="⬅️ Anterior"
                                     FontSize="14"
                                     FontWeight="Bold"
                                     Padding="15,8"
@@ -812,7 +804,7 @@
                             <Button x:Name="NextButton"
                                     Grid.Row="2"
                                     Grid.Column="2"
-                                    Content="Siguiente ??"
+                                    Content="Siguiente ➡️"
                                     FontSize="14"
                                     FontWeight="Bold"
                                     Padding="15,8"
@@ -1477,5 +1469,3 @@
         </TabControl>
     </Grid>
 </Window>
-
-

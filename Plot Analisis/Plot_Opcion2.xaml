@@ -195,6 +195,12 @@
                         Height="34"
                         Margin="0,0,12,0"
                         Click="Anterior_Click"/>
+                <Button x:Name="GuardarButton"
+                        Content="Guardar"
+                        Width="120"
+                        Height="34"
+                        Margin="0,0,12,0"
+                        Click="Guardar_Click"/>
                 <Button x:Name="SiguienteButton"
                         Content="Siguiente"
                         Width="120"
@@ -204,6 +210,8 @@
         </StackPanel>
     </Grid>
 </Window>
+
+
 
 
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -31,6 +31,7 @@ namespace FloridaLotteryApp
 
         private readonly DateTime _originalDate;
         private readonly string _originalDrawTime;
+        private readonly string _originalDateText;
         private readonly string _originalPick3;
         private readonly string _originalPick4;
 
@@ -62,6 +63,7 @@ namespace FloridaLotteryApp
             _originalWindowWidth = Width;
             _expandedWindowHeight = Height + 20;
 
+            _originalDateText = string.IsNullOrWhiteSpace(dateText) ? " " : dateText;
             _originalPick3 = pick3 ?? " ";
             _originalPick4 = pick4 ?? " ";
             _originalDrawTime = DrawTimeFromIcon(drawIcon);
@@ -472,6 +474,37 @@ namespace FloridaLotteryApp
             _cancellationTokenSource?.Cancel();
         }
 
+        private void Guardar_Click(object sender, RoutedEventArgs e)
+        {
+            var current = GetCurrentResultItem();
+            if (current == null)
+            {
+                MessageBox.Show("No hay un resultado visible para guardar.", "Guardar", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var dialog = new PlotOption2SaveDialog
+            {
+                Owner = this
+            };
+
+            if (dialog.ShowDialog() != true)
+            {
+                return;
+            }
+
+            try
+            {
+                var record = BuildSavedRecord(current, dialog.NoteText);
+                var savedId = PlotOption2SavedRepository.Insert(record);
+                MessageBox.Show($"Resultado guardado correctamente.", "Guardar", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"No se pudo guardar el resultado: {ex.Message}", "Guardar", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void UpdateResultsCounter()
         {
             int total = PatternRows.Count;
@@ -483,6 +516,7 @@ namespace FloridaLotteryApp
         {
             AnteriorButton.IsEnabled = _currentResultIndex > 0;
             SiguienteButton.IsEnabled = _currentResultIndex >= 0 && _currentResultIndex < PatternRows.Count - 1;
+            GuardarButton.IsEnabled = _currentResultIndex >= 0 && _currentResultIndex < PatternRows.Count;
         }
 
         private void SetLoadingState(bool isLoading, string status, int completed, int total, bool isIndeterminate)
@@ -503,6 +537,50 @@ namespace FloridaLotteryApp
             Height = isLoading ? _expandedWindowHeight : _originalWindowHeight;
             Width = _originalWindowWidth;
         }
+        private PatternRow? GetCurrentResultItem()
+        {
+            if (_currentResultIndex < 0 || _currentResultIndex >= PatternRows.Count)
+            {
+                return null;
+            }
+
+            return PatternRows[_currentResultIndex];
+        }
+
+        private PlotOption2SavedRecord BuildSavedRecord(PatternRow current, string label)
+        {
+            return new PlotOption2SavedRecord
+            {
+                Label = string.IsNullOrWhiteSpace(label) ? null : label,
+                G1Date = NormalizeDate(_originalDateText),
+                G1Time = NormalizeDrawTime(_originalDrawTime),
+                G2Date = NormalizeDate(Sessions[0].Row2.DateText),
+                G2Time = NormalizeDrawTime(DrawTimeFromIcon(Sessions[0].Row2.DrawIcon)),
+                G3Date = NormalizeDate(Sessions[0].Row3.DateText),
+                G3Time = NormalizeDrawTime(DrawTimeFromIcon(Sessions[0].Row3.DrawIcon)),
+                G4Date = NormalizeDate(Sessions[0].Row4.DateText),
+                G4Time = NormalizeDrawTime(DrawTimeFromIcon(Sessions[0].Row4.DrawIcon)),
+                R1Date = NormalizeDate(current.ReferenceDate),
+                R1Time = NormalizeDrawTime(current.ReferenceDrawTime),
+                R2Date = NormalizeDate(current.MatchDate),
+                R2Time = NormalizeDrawTime(current.MatchDrawTime),
+                R3Date = NormalizeDate(current.SimilarDate),
+                R3Time = NormalizeDrawTime(current.SimilarDrawTime),
+                R4Date = NormalizeDate(current.SimilarMatchDate),
+                R4Time = NormalizeDrawTime(current.SimilarMatchDrawTime)
+            };
+        }
+
+        private static string NormalizeDate(string? value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim();
+        }
+
+        private static string NormalizeDrawTime(string? value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim().ToUpperInvariant();
+        }
+
         private static void AssignSessionTags(PlotOption2Session session, string sessionTag)
         {
             session.SessionTag = sessionTag;
@@ -1144,6 +1222,7 @@ namespace FloridaLotteryApp
         public Brush Background { get; set; } = Brushes.White;
     }
 }
+
 
 
 
