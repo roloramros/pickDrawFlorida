@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -13,11 +13,13 @@ namespace FloridaLotteryApp;
 public partial class Analisis3ExtendidoWindow : Window
 {
     public ObservableCollection<ThirdAnalysisCardVM> AnalysisCards { get; } = new();
+    private readonly ExtendedAnalysis3Mode _analysisMode;
 
-    public Analisis3ExtendidoWindow(IEnumerable<AnalysisPairCardVM> sourceCards)
+    public Analisis3ExtendidoWindow(IEnumerable<AnalysisPairCardVM> sourceCards, ExtendedAnalysis3Mode analysisMode)
     {
         InitializeComponent();
         DataContext = this;
+        _analysisMode = analysisMode;
 
         foreach (var sourceCard in sourceCards)
         {
@@ -32,7 +34,7 @@ public partial class Analisis3ExtendidoWindow : Window
             var cards = ThirdAnalysisCardVM.CreateMultipleFrom(sourceCard, guidePositions, resultPositions);
             foreach (var card in cards)
             {
-                if (MatchesExtendedFilter(card))
+                if (MatchesExtendedFilter(card, _analysisMode))
                 {
                     AnalysisCards.Add(card);
                 }
@@ -40,7 +42,16 @@ public partial class Analisis3ExtendidoWindow : Window
         }
     }
 
-    private static bool MatchesExtendedFilter(ThirdAnalysisCardVM card)
+    private static bool MatchesExtendedFilter(ThirdAnalysisCardVM card, ExtendedAnalysis3Mode analysisMode)
+    {
+        return analysisMode switch
+        {
+            ExtendedAnalysis3Mode.CrossLine => MatchesExtendedCrossLineFilter(card),
+            _ => MatchesExtendedOneLineFilter(card)
+        };
+    }
+
+    private static bool MatchesExtendedOneLineFilter(ThirdAnalysisCardVM card)
     {
         int upperConnections = CountBlockConnections(
             card.Row1Pick3Digits,
@@ -57,24 +68,45 @@ public partial class Analisis3ExtendidoWindow : Window
         return upperConnections == 1 && (lowerConnections == 1 || lowerConnections == 0);
     }
 
+    private static bool MatchesExtendedCrossLineFilter(ThirdAnalysisCardVM card)
+    {
+        var upperForwardConnections = GetPick3ToPick4Matches(card.Row1Pick3Digits, card.Row2Pick4Digits);
+        var upperReverseConnections = GetPick3ToPick4Matches(card.Row2Pick3Digits, card.Row1Pick4Digits);
+        int lowerConnections = CountBlockConnections(
+            card.Row3Pick3Digits,
+            card.Row4Pick4Digits,
+            card.Row4Pick3Digits,
+            card.Row3Pick4Digits);
+
+        if (upperForwardConnections.Count != 1 || upperReverseConnections.Count != 1)
+        {
+            return false;
+        }
+
+        return LinesCross(upperForwardConnections[0], upperReverseConnections[0])
+            && (lowerConnections == 1 || lowerConnections == 0);
+    }
+
     private static int CountBlockConnections(
         ObservableCollection<DigitVM> forwardPick3Digits,
         ObservableCollection<DigitVM> forwardPick4Digits,
         ObservableCollection<DigitVM> reversePick3Digits,
         ObservableCollection<DigitVM> reversePick4Digits)
     {
-        return CountPick3ToPick4Matches(forwardPick3Digits, forwardPick4Digits)
-             + CountPick3ToPick4Matches(reversePick3Digits, reversePick4Digits);
+        return GetPick3ToPick4Matches(forwardPick3Digits, forwardPick4Digits).Count
+             + GetPick3ToPick4Matches(reversePick3Digits, reversePick4Digits).Count;
     }
 
-    private static int CountPick3ToPick4Matches(ObservableCollection<DigitVM> pick3Digits, ObservableCollection<DigitVM> pick4Digits)
+    private static List<(int Pick3Position, int Pick4Position)> GetPick3ToPick4Matches(
+        ObservableCollection<DigitVM> pick3Digits,
+        ObservableCollection<DigitVM> pick4Digits)
     {
+        var matches = new List<(int Pick3Position, int Pick4Position)>();
+
         if (pick3Digits.Count != 3 || pick4Digits.Count != 4)
         {
-            return 0;
+            return matches;
         }
-
-        int matches = 0;
 
         for (int i = 0; i < pick3Digits.Count; i++)
         {
@@ -94,12 +126,19 @@ public partial class Analisis3ExtendidoWindow : Window
 
                 if (pick3Value == pick4Value)
                 {
-                    matches++;
+                    matches.Add((i, j));
                 }
             }
         }
 
         return matches;
+    }
+
+    private static bool LinesCross((int Pick3Position, int Pick4Position) forwardConnection,
+                                   (int Pick3Position, int Pick4Position) reverseConnection)
+    {
+        return forwardConnection.Pick3Position != reverseConnection.Pick3Position
+            && forwardConnection.Pick4Position != reverseConnection.Pick4Position;
     }
 
     private void analysisButton1(object sender, RoutedEventArgs e)
@@ -332,7 +371,7 @@ public partial class Analisis3ExtendidoWindow : Window
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error dibujando línea roja: {ex.Message}");
+            Console.WriteLine($"Error dibujando l�nea roja: {ex.Message}");
         }
     }
 
@@ -462,5 +501,13 @@ public partial class Analisis3ExtendidoWindow : Window
         return null;
     }
 }
+
+
+
+
+
+
+
+
 
 

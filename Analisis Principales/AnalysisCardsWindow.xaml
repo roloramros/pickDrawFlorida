@@ -22,7 +22,8 @@
             <!-- Menú Archivo -->
             <MenuItem Header="Acciones">
                 <MenuItem Header="Filtrar" Click="MenuItem_Click"/>
-                <MenuItem Header="Analisis 3 Extendido" Click="ExtendedAnalysis3MenuItem_Click"/>
+                <MenuItem Header="Analisis 3 Extendido One Line" Click="ExtendedAnalysis3MenuItem_Click"/>
+                <MenuItem Header="Analisis 3 Extendido Cross Line" Click="ExtendedAnalysis3MenuItem_Click"/>
             </MenuItem>
         </Menu>
 

@@ -10,6 +10,13 @@ using System.Windows.Threading;
 
 namespace FloridaLotteryApp;
 
+public enum ExtendedAnalysis3Mode
+{
+    OneLine,
+    CrossLine
+}
+
+
 public partial class AnalysisCardsWindow : Window
 {
     public ObservableCollection<AnalysisPairCardVM> Cards { get; } = new();
@@ -89,6 +96,10 @@ public partial class AnalysisCardsWindow : Window
 
     private void ExtendedAnalysis3MenuItem_Click(object sender, RoutedEventArgs e)
     {
+        var analysisMode = sender is MenuItem menuItem &&
+                           menuItem.Header?.ToString()?.Contains("Cross Line", StringComparison.OrdinalIgnoreCase) == true
+            ? ExtendedAnalysis3Mode.CrossLine
+            : ExtendedAnalysis3Mode.OneLine;
         var filteredCards = Cards.Where(HasSingleStraightLine).ToList();
 
         if (filteredCards.Count == 0)
@@ -100,7 +111,7 @@ public partial class AnalysisCardsWindow : Window
             return;
         }
 
-        var extendedAnalysisWindow = new Analisis3ExtendidoWindow(filteredCards)
+        var extendedAnalysisWindow = new Analisis3ExtendidoWindow(filteredCards, analysisMode)
         {
             Owner = this,
             WindowStartupLocation = WindowStartupLocation.CenterOwner
@@ -514,5 +525,7 @@ public class DigitVM
     public string Value { get; set; } = "";
     public Brush Bg { get; set; } = Brushes.Transparent;
 }
+
+
 
 
