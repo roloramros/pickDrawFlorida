@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Analisis_3-1_Match"
-        Height="760"
+        Height="650"
         Width="1680"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize">
@@ -30,21 +30,43 @@
                     Background="#FFF7F7F7"
                     Loaded="AnalysisCard_Loaded">
                 <Grid>
-                    <Canvas x:Name="Pick3LinksCanvas" IsHitTestVisible="False" Panel.ZIndex="2"/>
-                    <Canvas x:Name="NextPick3LinksCanvas" IsHitTestVisible="False" Panel.ZIndex="2"/>
-                    <Canvas x:Name="Pick3Row3ToPick4Row4LinksCanvas" IsHitTestVisible="False" Panel.ZIndex="2"/>
-                    <Canvas x:Name="Pick3Row4ToPick4Row3LinksCanvas" IsHitTestVisible="False" Panel.ZIndex="2"/>
-                    <Canvas x:Name="Pick3Row1ToPick4Row2LinksCanvas" IsHitTestVisible="False" Panel.ZIndex="2"/>
-                    <Canvas x:Name="Pick3Row2ToPick4Row1LinksCanvas" IsHitTestVisible="False" Panel.ZIndex="2"/>
+                    <Canvas x:Name="Pick3LinksCanvas"
+                            IsHitTestVisible="False"
+                            Panel.ZIndex="2"/>
+                    <Canvas x:Name="NextPick3LinksCanvas"
+                            IsHitTestVisible="False"
+                            Panel.ZIndex="2"/>
+                    <Canvas x:Name="Pick3Row3ToPick4Row4LinksCanvas"
+                            IsHitTestVisible="False"
+                            Panel.ZIndex="2"/>
+                    <Canvas x:Name="Pick3Row4ToPick4Row3LinksCanvas"
+                            IsHitTestVisible="False"
+                            Panel.ZIndex="2"/>
+                    <Canvas x:Name="Pick3Row1ToPick4Row2LinksCanvas"
+                            IsHitTestVisible="False"
+                            Panel.ZIndex="2"/>
+                    <Canvas x:Name="Pick3Row2ToPick4Row1LinksCanvas"
+                            IsHitTestVisible="False"
+                            Panel.ZIndex="2"/>
 
                     <StackPanel>
-                        <Border CornerRadius="10" Padding="10">
+                        <Border CornerRadius="10"
+                                Padding="10">
                             <StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                                    <TextBlock Text="Fecha:" FontSize="16" FontWeight="Bold"/>
-                                    <TextBlock Text="{Binding Row1DateText}" FontSize="16" Margin="6,0,18,0"/>
-                                    <TextBlock Text="Tirada:" FontSize="16" FontWeight="Bold"/>
-                                    <TextBlock Text="{Binding Row1DrawIcon}" FontSize="18" Margin="6,0,0,0"/>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0,10,0,0">
+                                    <TextBlock Text="Fecha:"
+                                               FontSize="16"
+                                               FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Row1DateText}"
+                                               FontSize="16"
+                                               Margin="6,0,18,0"/>
+                                    <TextBlock Text="Tirada:"
+                                               FontSize="16"
+                                               FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Row1DrawIcon}"
+                                               FontSize="18"
+                                               Margin="6,0,0,0"/>
                                 </StackPanel>
 
                                 <Grid Margin="0,10,0,0">
@@ -58,34 +80,50 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <ItemsControl x:Name="Row1Pick3Items" Grid.Column="0" ItemsSource="{Binding Row1Pick3Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                    <ItemsControl x:Name="Row1Pick3Items"
+                                                  Grid.Column="0"
+                                                  ItemsSource="{Binding Row1Pick3Digits}"
+                                                  ItemTemplate="{StaticResource DigitTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1" Columns="3"/>
+                                                <UniformGrid Rows="1"
+                                                             Columns="3"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
 
-                                    <ItemsControl x:Name="Row1Pick4Items" Grid.Column="2" ItemsSource="{Binding Row1Pick4Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                    <ItemsControl x:Name="Row1Pick4Items"
+                                                  Grid.Column="2"
+                                                  ItemsSource="{Binding Row1Pick4Digits}"
+                                                  ItemTemplate="{StaticResource DigitTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1" Columns="4"/>
+                                                <UniformGrid Rows="1"
+                                                             Columns="4"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
 
-                                    <ItemsControl x:Name="Row1NextPick3Items" Grid.Column="4" ItemsSource="{Binding Row1NextPick3Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                    <ItemsControl x:Name="Row1NextPick3Items"
+                                                  Grid.Column="4"
+                                                  ItemsSource="{Binding Row1NextPick3Digits}"
+                                                  ItemTemplate="{StaticResource DigitTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1" Columns="3"/>
+                                                <UniformGrid Rows="1"
+                                                             Columns="3"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
 
-                                    <ItemsControl x:Name="Row1CodingItems" Grid.Column="6" ItemsSource="{Binding Row1CodingDigits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                    <ItemsControl x:Name="Row1CodingItems"
+                                                  Grid.Column="6"
+                                                  ItemsSource="{Binding Row1CodingDigits}"
+                                                  ItemTemplate="{StaticResource DigitTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1" Columns="6"/>
+                                                <UniformGrid Rows="1"
+                                                             Columns="6"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
@@ -93,7 +131,9 @@
                             </StackPanel>
                         </Border>
 
-                        <Border Background="Transparent" Height="30" Margin="0,5,0,5">
+                        <Border Background="Transparent"
+                                Height="30"
+                                Margin="0,5,0,5">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -123,7 +163,8 @@
                             </Grid>
                         </Border>
 
-                        <Border CornerRadius="10" Padding="10">
+                        <Border CornerRadius="10"
+                                Padding="10">
                             <StackPanel>
                                 <Grid Margin="0,10,0,0">
                                     <Grid.ColumnDefinitions>
@@ -136,55 +177,91 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <ItemsControl x:Name="Row2Pick3Items" Grid.Column="0" ItemsSource="{Binding Row2Pick3Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                    <ItemsControl x:Name="Row2Pick3Items"
+                                                  Grid.Column="0"
+                                                  ItemsSource="{Binding Row2Pick3Digits}"
+                                                  ItemTemplate="{StaticResource DigitTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1" Columns="3"/>
+                                                <UniformGrid Rows="1"
+                                                             Columns="3"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
 
-                                    <ItemsControl x:Name="Row2Pick4Items" Grid.Column="2" ItemsSource="{Binding Row2Pick4Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                    <ItemsControl x:Name="Row2Pick4Items"
+                                                  Grid.Column="2"
+                                                  ItemsSource="{Binding Row2Pick4Digits}"
+                                                  ItemTemplate="{StaticResource DigitTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1" Columns="4"/>
+                                                <UniformGrid Rows="1"
+                                                             Columns="4"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
 
-                                    <ItemsControl x:Name="Row2NextPick3Items" Grid.Column="4" ItemsSource="{Binding Row2NextPick3Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                    <ItemsControl x:Name="Row2NextPick3Items"
+                                                  Grid.Column="4"
+                                                  ItemsSource="{Binding Row2NextPick3Digits}"
+                                                  ItemTemplate="{StaticResource DigitTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1" Columns="3"/>
+                                                <UniformGrid Rows="1"
+                                                             Columns="3"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
 
-                                    <ItemsControl x:Name="Row2CodingItems" Grid.Column="6" ItemsSource="{Binding Row2CodingDigits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                    <ItemsControl x:Name="Row2CodingItems"
+                                                  Grid.Column="6"
+                                                  ItemsSource="{Binding Row2CodingDigits}"
+                                                  ItemTemplate="{StaticResource DigitTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1" Columns="6"/>
+                                                <UniformGrid Rows="1"
+                                                             Columns="6"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
                                 </Grid>
 
-                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                                    <TextBlock Text="Fecha:" FontSize="16" FontWeight="Bold"/>
-                                    <TextBlock Text="{Binding Row2DateText}" FontSize="16" Margin="6,0,18,0"/>
-                                    <TextBlock Text="Tirada:" FontSize="16" FontWeight="Bold"/>
-                                    <TextBlock Text="{Binding Row2DrawIcon}" FontSize="18" Margin="6,0,0,0"/>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0,10,0,0">
+                                    <TextBlock Text="Fecha:"
+                                               FontSize="16"
+                                               FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Row2DateText}"
+                                               FontSize="16"
+                                               Margin="6,0,18,0"/>
+                                    <TextBlock Text="Tirada:"
+                                               FontSize="16"
+                                               FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Row2DrawIcon}"
+                                               FontSize="18"
+                                               Margin="6,0,0,0"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
 
-                        <Border CornerRadius="10" Padding="10" Margin="0,42,0,0">
+                        <Border CornerRadius="10"
+                                Padding="10"
+                                Margin="0,12,0,0">
                             <StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                                    <TextBlock Text="Fecha:" FontSize="16" FontWeight="Bold"/>
-                                    <TextBlock Text="{Binding Row3DateText}" FontSize="16" Margin="6,0,18,0"/>
-                                    <TextBlock Text="Tirada:" FontSize="16" FontWeight="Bold"/>
-                                    <TextBlock Text="{Binding Row3DrawIcon}" FontSize="18" Margin="6,0,0,0"/>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0,10,0,0">
+                                    <TextBlock Text="Fecha:"
+                                               FontSize="16"
+                                               FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Row3DateText}"
+                                               FontSize="16"
+                                               Margin="6,0,18,0"/>
+                                    <TextBlock Text="Tirada:"
+                                               FontSize="16"
+                                               FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Row3DrawIcon}"
+                                               FontSize="18"
+                                               Margin="6,0,0,0"/>
                                 </StackPanel>
 
                                 <Grid Margin="0,10,0,0">
@@ -198,34 +275,50 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <ItemsControl x:Name="Row3Pick3Items" Grid.Column="0" ItemsSource="{Binding Row3Pick3Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                    <ItemsControl x:Name="Row3Pick3Items"
+                                                  Grid.Column="0"
+                                                  ItemsSource="{Binding Row3Pick3Digits}"
+                                                  ItemTemplate="{StaticResource DigitTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1" Columns="3"/>
+                                                <UniformGrid Rows="1"
+                                                             Columns="3"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
 
-                                    <ItemsControl x:Name="Row3Pick4Items" Grid.Column="2" ItemsSource="{Binding Row3Pick4Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                    <ItemsControl x:Name="Row3Pick4Items"
+                                                  Grid.Column="2"
+                                                  ItemsSource="{Binding Row3Pick4Digits}"
+                                                  ItemTemplate="{StaticResource DigitTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1" Columns="4"/>
+                                                <UniformGrid Rows="1"
+                                                             Columns="4"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
 
-                                    <ItemsControl x:Name="Row3NextPick3Items" Grid.Column="4" ItemsSource="{Binding Row3NextPick3Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                    <ItemsControl x:Name="Row3NextPick3Items"
+                                                  Grid.Column="4"
+                                                  ItemsSource="{Binding Row3NextPick3Digits}"
+                                                  ItemTemplate="{StaticResource DigitTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1" Columns="3"/>
+                                                <UniformGrid Rows="1"
+                                                             Columns="3"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
 
-                                    <ItemsControl x:Name="Row3CodingItems" Grid.Column="6" ItemsSource="{Binding Row3CodingDigits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                    <ItemsControl x:Name="Row3CodingItems"
+                                                  Grid.Column="6"
+                                                  ItemsSource="{Binding Row3CodingDigits}"
+                                                  ItemTemplate="{StaticResource DigitTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1" Columns="6"/>
+                                                <UniformGrid Rows="1"
+                                                             Columns="6"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
@@ -233,7 +326,9 @@
                             </StackPanel>
                         </Border>
 
-                        <Border Background="Transparent" Height="30" Margin="0,5,0,5">
+                        <Border Background="Transparent"
+                                Height="30"
+                                Margin="0,5,0,5">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -263,7 +358,8 @@
                             </Grid>
                         </Border>
 
-                        <Border CornerRadius="10" Padding="10">
+                        <Border CornerRadius="10"
+                                Padding="10">
                             <StackPanel>
                                 <Grid Margin="0,10,0,0">
                                     <Grid.ColumnDefinitions>
@@ -276,44 +372,69 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <ItemsControl x:Name="Row4Pick3Items" Grid.Column="0" ItemsSource="{Binding Row4Pick3Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                    <ItemsControl x:Name="Row4Pick3Items"
+                                                  Grid.Column="0"
+                                                  ItemsSource="{Binding Row4Pick3Digits}"
+                                                  ItemTemplate="{StaticResource DigitTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1" Columns="3"/>
+                                                <UniformGrid Rows="1"
+                                                             Columns="3"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
 
-                                    <ItemsControl x:Name="Row4Pick4Items" Grid.Column="2" ItemsSource="{Binding Row4Pick4Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                    <ItemsControl x:Name="Row4Pick4Items"
+                                                  Grid.Column="2"
+                                                  ItemsSource="{Binding Row4Pick4Digits}"
+                                                  ItemTemplate="{StaticResource DigitTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1" Columns="4"/>
+                                                <UniformGrid Rows="1"
+                                                             Columns="4"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
 
-                                    <ItemsControl x:Name="Row4NextPick3Items" Grid.Column="4" ItemsSource="{Binding Row4NextPick3Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                    <ItemsControl x:Name="Row4NextPick3Items"
+                                                  Grid.Column="4"
+                                                  ItemsSource="{Binding Row4NextPick3Digits}"
+                                                  ItemTemplate="{StaticResource DigitTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1" Columns="3"/>
+                                                <UniformGrid Rows="1"
+                                                             Columns="3"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
 
-                                    <ItemsControl x:Name="Row4CodingItems" Grid.Column="6" ItemsSource="{Binding Row4CodingDigits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                    <ItemsControl x:Name="Row4CodingItems"
+                                                  Grid.Column="6"
+                                                  ItemsSource="{Binding Row4CodingDigits}"
+                                                  ItemTemplate="{StaticResource DigitTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="1" Columns="6"/>
+                                                <UniformGrid Rows="1"
+                                                             Columns="6"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
                                 </Grid>
 
-                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                                    <TextBlock Text="Fecha:" FontSize="16" FontWeight="Bold"/>
-                                    <TextBlock Text="{Binding Row4DateText}" FontSize="16" Margin="6,0,18,0"/>
-                                    <TextBlock Text="Tirada:" FontSize="16" FontWeight="Bold"/>
-                                    <TextBlock Text="{Binding Row4DrawIcon}" FontSize="18" Margin="6,0,0,0"/>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0,10,0,0">
+                                    <TextBlock Text="Fecha:"
+                                               FontSize="16"
+                                               FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Row4DateText}"
+                                               FontSize="16"
+                                               Margin="6,0,18,0"/>
+                                    <TextBlock Text="Tirada:"
+                                               FontSize="16"
+                                               FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Row4DrawIcon}"
+                                               FontSize="18"
+                                               Margin="6,0,0,0"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -342,37 +463,171 @@
                             ContentTemplate="{StaticResource AnalysisCardTemplate}"/>
 
             <ContentControl Grid.Column="2"
-                            Content="{Binding ResultCard}"
+                            Content="{Binding CurrentResultCard}"
                             ContentTemplate="{StaticResource AnalysisCardTemplate}"/>
         </Grid>
-
-        <Grid Grid.Row="1" Margin="0,8,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="12"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Grid.Column="0"
-                       Text="GUIA"
-                       FontSize="18"
-                       FontWeight="Bold"
+                <StackPanel Grid.Row="1"
+                    Margin="0,8,0,0"
+                    Visibility="{Binding ProgressVisibility}">
+            <ProgressBar Height="16"
+                         IsIndeterminate="True"
+                         Foreground="#2196F3"/>
+            <TextBlock Text="{Binding ProgressMessage}"
+                       Margin="0,6,0,0"
+                       FontSize="14"
+                       FontWeight="SemiBold"
                        HorizontalAlignment="Center"/>
+        </StackPanel>
 
-            <TextBlock Grid.Column="2"
-                       Text="RESULTADO"
-                       FontSize="18"
-                       FontWeight="Bold"
-                       HorizontalAlignment="Center"/>
-        </Grid>
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="0,24,0,20">
 
-        <Button Grid.Row="2"
-                Content="Guardar"
-                Width="130"
-                Height="34"
-                Margin="0,12,0,0"
-                HorizontalAlignment="Center"
-                FontSize="16"
-                FontWeight="Bold"/>
+            <!-- Botón Anterior (FILA INFERIOR, IZQUIERDA) -->
+            <Button Margin="5,0"
+                    x:Name="PreviousButton"
+                    Click="PreviousButton_Click"
+                    Content="Anterior"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Padding="15,8"
+                    Background="#2196F3"
+                    Foreground="White"
+                    BorderBrush="#1976D2"
+                    BorderThickness="1"
+                    Cursor="Hand"
+                    Visibility="Visible">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="8">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="#1976D2"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled"
+                                     Value="False">
+                                <Setter Property="Background"
+                                        Value="#BBDEFB"/>
+                                <Setter Property="Foreground"
+                                        Value="#757575"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+            <!-- Botón Match Guía (FILA Superior, CENTRO) -->
+            <Button Margin="5,0"
+                    x:Name="GuardarButton"
+                    Content="Guardar"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Padding="15,8"
+                    Background="#FF8E24AA"
+                    Foreground="White"
+                    BorderBrush="#FF6A1B9A"
+                    BorderThickness="1"
+                    Cursor="Hand"
+                    Visibility="Visible">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="8">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="#FF6A1B9A"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled"
+                                     Value="False">
+                                <Setter Property="Background"
+                                        Value="#FFCE93D8"/>
+                                <Setter Property="Foreground"
+                                        Value="#757575"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+            <!-- Botón Siguiente (FILA INFERIOR, DERECHA) -->
+            <Button Margin="5,0"
+                    x:Name="NextButton"
+                    Click="NextButton_Click"
+                    Content="Siguiente"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Padding="15,8"
+                    Background="#4CAF50"
+                    Foreground="White"
+                    BorderBrush="#388E3C"
+                    BorderThickness="1"
+                    Cursor="Hand"
+                    Visibility="Visible">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="8">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="#388E3C"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled"
+                                     Value="False">
+                                <Setter Property="Background"
+                                        Value="#C8E6C9"/>
+                                <Setter Property="Foreground"
+                                        Value="#757575"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+        </StackPanel>
     </Grid>
 </Window>
+
+
+
+

@@ -754,8 +754,6 @@
                                 </Button.Style>
                             </Button>
 
-
-
                             <!-- Botón Anterior (FILA INFERIOR, IZQUIERDA) -->
                             <Button x:Name="PreviousButton"
                                     Grid.Row="2"
@@ -871,6 +869,12 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
+            
+
+
+
+
+
             
             <!-- Pestaña 2: Tarjeta de Análisis -->
             <TabItem Header="Patrón Guía" x:Name="AnalysisTab">

@@ -166,13 +166,11 @@ public partial class Analisis3ExtendidoWindow : Window
         if (button.Tag is AnalysisMode mode)
         {
             var thirdAnalysisOption1 = new ThirdAnalysisOption1(selectedCard, mode);
-            thirdAnalysisOption1.Owner = this;
             thirdAnalysisOption1.Show();
         }
         else
         {
             var thirdAnalysisOption1 = new ThirdAnalysisOption1(selectedCard, AnalysisMode.Opcion1);
-            thirdAnalysisOption1.Owner = this;
             thirdAnalysisOption1.Show();
         }
     }
@@ -184,7 +182,7 @@ public partial class Analisis3ExtendidoWindow : Window
 
         var window = new Analisis_3_1_MatchWindow(selectedCard)
         {
-            Owner = this
+            
         };
         window.Show();
     }
@@ -400,7 +398,7 @@ public partial class Analisis3ExtendidoWindow : Window
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error dibujando línea roja: {ex.Message}");
+            Console.WriteLine($"Error dibujando lï¿½nea roja: {ex.Message}");
         }
     }
 

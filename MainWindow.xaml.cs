@@ -270,8 +270,7 @@ private void AnalysisPlot_Click(object sender, RoutedEventArgs e)
             pick3.Number,
             pick3.Fireball,
             pick4.Number,
-            pick4.Fireball)
-        { Owner = this };
+            pick4.Fireball);
         if (win.ShowDialog() == true)
         {
             LoadPage(_pageIndex);
@@ -470,7 +469,7 @@ private void AnalysisPlot_Click(object sender, RoutedEventArgs e)
             RepPosP4 = posP4
         };
 
-        var win = new AnalysisCardsWindow(guide, rows) { Owner = this };
+        var win = new AnalysisCardsWindow(guide, rows);
         win.Show();
     }
 

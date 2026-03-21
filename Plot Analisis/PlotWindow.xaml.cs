@@ -1088,7 +1088,6 @@ public partial class PlotWindow : Window
                 selectedRow
             );
 
-            nuevaVentana.Owner = this;
             nuevaVentana.Show();
         }
         catch (Exception ex)
@@ -1141,7 +1140,6 @@ public partial class PlotWindow : Window
                 selectedRow
             );
 
-            nuevaVentana.Owner = this;
             nuevaVentana.Show();
         }
         catch (Exception ex)
@@ -1195,7 +1193,6 @@ public partial class PlotWindow : Window
                 validRows
             );
 
-            nuevaVentana.Owner = this;
             nuevaVentana.Show();
         }
         catch (Exception ex)

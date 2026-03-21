@@ -52,7 +52,6 @@ public partial class AnalysisCardsWindow : Window
 
         var detailWindow = new AnalysisLineMatchesWindow(selectedCard, Cards)
         {
-            Owner = this,
             WindowStartupLocation = WindowStartupLocation.CenterScreen
         };
 
@@ -70,7 +69,6 @@ public partial class AnalysisCardsWindow : Window
 
         var detailWindow = new AnalysisPositionMatchesWindow(selectedCard, Cards)
         {
-            Owner = this,
             WindowStartupLocation = WindowStartupLocation.CenterScreen
         };
 
@@ -87,7 +85,6 @@ public partial class AnalysisCardsWindow : Window
 
         var thirdAnalysisWindow = new ThirdAnalysisWindow(selectedCard)
         {
-            Owner = this,
             WindowStartupLocation = WindowStartupLocation.CenterScreen
         };
 
@@ -122,7 +119,6 @@ public partial class AnalysisCardsWindow : Window
 
         var extendedAnalysisWindow = new Analisis3ExtendidoWindow(filteredCards, analysisMode)
         {
-            Owner = this,
             WindowStartupLocation = WindowStartupLocation.CenterScreen
         };
 

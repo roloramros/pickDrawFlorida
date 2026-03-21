@@ -46,14 +46,12 @@ public partial class ThirdAnalysisWindow : Window
         {
             // Crear y mostrar la nueva ventana pasando el modo
             var thirdAnalysisOption1 = new ThirdAnalysisOption1(selectedCard, mode);
-            thirdAnalysisOption1.Owner = this;
             thirdAnalysisOption1.Show();
         }
         else
         {
             // Si no hay Tag, usar Opcion1 por defecto
             var thirdAnalysisOption1 = new ThirdAnalysisOption1(selectedCard, AnalysisMode.Opcion1);
-            thirdAnalysisOption1.Owner = this;
             thirdAnalysisOption1.Show();
         }
     }
@@ -65,7 +63,7 @@ public partial class ThirdAnalysisWindow : Window
 
         var window = new Analisis_3_1_MatchWindow(selectedCard)
         {
-            Owner = this
+           
         };
         window.Show();
     }
