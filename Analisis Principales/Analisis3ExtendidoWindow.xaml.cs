@@ -20,6 +20,9 @@ public partial class Analisis3ExtendidoWindow : Window
         InitializeComponent();
         DataContext = this;
         _analysisMode = analysisMode;
+        Title = analysisMode == ExtendedAnalysis3Mode.CrossLine
+            ? "Analisis 3 Extendido - Cross Line"
+            : "Analisis 3 Extendido - Single Line";
 
         foreach (var sourceCard in sourceCards)
         {
@@ -137,8 +140,22 @@ public partial class Analisis3ExtendidoWindow : Window
     private static bool LinesCross((int Pick3Position, int Pick4Position) forwardConnection,
                                    (int Pick3Position, int Pick4Position) reverseConnection)
     {
-        return forwardConnection.Pick3Position != reverseConnection.Pick3Position
-            && forwardConnection.Pick4Position != reverseConnection.Pick4Position;
+        var a1 = (X: (double)forwardConnection.Pick3Position, Y: 0d);
+        var a2 = (X: 4d + forwardConnection.Pick4Position, Y: 1d);
+        var b1 = (X: (double)reverseConnection.Pick3Position, Y: 1d);
+        var b2 = (X: 4d + reverseConnection.Pick4Position, Y: 0d);
+
+        double o1 = Cross(a1, a2, b1);
+        double o2 = Cross(a1, a2, b2);
+        double o3 = Cross(b1, b2, a1);
+        double o4 = Cross(b1, b2, a2);
+
+        return o1 * o2 < 0 && o3 * o4 < 0;
+    }
+
+    private static double Cross((double X, double Y) a, (double X, double Y) b, (double X, double Y) c)
+    {
+        return (b.X - a.X) * (c.Y - a.Y) - (b.Y - a.Y) * (c.X - a.X);
     }
 
     private void analysisButton1(object sender, RoutedEventArgs e)
@@ -501,6 +518,8 @@ public partial class Analisis3ExtendidoWindow : Window
         return null;
     }
 }
+
+
 
 
 

@@ -517,12 +517,8 @@ public class ThirdAnalysisCardVM
             string.Join("", originalCard.ResPick3Digits.Select(d => d.Value)),
             guidePositions,
             resultPositions);
-
         if (analysisResults.Count == 0)
         {
-            // Crear una tarjeta vacía con mensaje de no resultados
-            var emptyCard = CreateEmptyCard(originalCard);
-            resultCollection.Add(emptyCard);
             return resultCollection;
         }
 
@@ -667,13 +663,6 @@ public class ThirdAnalysisCardVM
         foreach (var card in resultCollection)
         {
             ProcessCodingColors(card);
-        }
-
-        if (resultCollection.Count == 0)
-        {
-            var emptyCard = CreateEmptyCard(originalCard);
-            emptyCard.AnalysisSummary = "No se encontraron resultados que cumplan con el filtro de posicion y repeticion en NextPick3";
-            resultCollection.Add(emptyCard);
         }
 
         return resultCollection;
@@ -1066,3 +1055,5 @@ public class ThirdAnalysisResultVM
     public string DrawTime { get; set; } = "";
     public string Fireball { get; set; } = "";
 }
+
+

@@ -91,6 +91,15 @@ public partial class AnalysisCardsWindow : Window
             WindowStartupLocation = WindowStartupLocation.CenterOwner
         };
 
+        if (thirdAnalysisWindow.AnalysisCards.Count == 0)
+        {
+            MessageBox.Show("No se encontraron resultados para el tercer analisis.",
+                            "Tercer analisis",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+            return;
+        }
+
         thirdAnalysisWindow.Show();
     }
 
@@ -525,6 +534,8 @@ public class DigitVM
     public string Value { get; set; } = "";
     public Brush Bg { get; set; } = Brushes.Transparent;
 }
+
+
 
 
 
