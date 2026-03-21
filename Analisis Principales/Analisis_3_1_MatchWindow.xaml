@@ -1,0 +1,378 @@
+<Window x:Class="FloridaLotteryApp.Analisis_3_1_MatchWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Analisis_3-1_Match"
+        Height="760"
+        Width="1680"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize">
+    <Window.Resources>
+        <DataTemplate x:Key="DigitTemplate">
+            <Border Width="34"
+                    Height="34"
+                    CornerRadius="17"
+                    BorderThickness="2"
+                    Background="{Binding Bg}"
+                    Margin="4,0">
+                <TextBlock Text="{Binding Value}"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="AnalysisCardTemplate">
+            <Border CornerRadius="16"
+                    BorderBrush="Black"
+                    BorderThickness="2"
+                    Padding="14"
+                    Background="#FFF7F7F7"
+                    Loaded="AnalysisCard_Loaded">
+                <Grid>
+                    <Canvas x:Name="Pick3LinksCanvas" IsHitTestVisible="False" Panel.ZIndex="2"/>
+                    <Canvas x:Name="NextPick3LinksCanvas" IsHitTestVisible="False" Panel.ZIndex="2"/>
+                    <Canvas x:Name="Pick3Row3ToPick4Row4LinksCanvas" IsHitTestVisible="False" Panel.ZIndex="2"/>
+                    <Canvas x:Name="Pick3Row4ToPick4Row3LinksCanvas" IsHitTestVisible="False" Panel.ZIndex="2"/>
+                    <Canvas x:Name="Pick3Row1ToPick4Row2LinksCanvas" IsHitTestVisible="False" Panel.ZIndex="2"/>
+                    <Canvas x:Name="Pick3Row2ToPick4Row1LinksCanvas" IsHitTestVisible="False" Panel.ZIndex="2"/>
+
+                    <StackPanel>
+                        <Border CornerRadius="10" Padding="10">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                    <TextBlock Text="Fecha:" FontSize="16" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Row1DateText}" FontSize="16" Margin="6,0,18,0"/>
+                                    <TextBlock Text="Tirada:" FontSize="16" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Row1DrawIcon}" FontSize="18" Margin="6,0,0,0"/>
+                                </StackPanel>
+
+                                <Grid Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="26"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="26"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="26"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <ItemsControl x:Name="Row1Pick3Items" Grid.Column="0" ItemsSource="{Binding Row1Pick3Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="3"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+
+                                    <ItemsControl x:Name="Row1Pick4Items" Grid.Column="2" ItemsSource="{Binding Row1Pick4Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="4"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+
+                                    <ItemsControl x:Name="Row1NextPick3Items" Grid.Column="4" ItemsSource="{Binding Row1NextPick3Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="3"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+
+                                    <ItemsControl x:Name="Row1CodingItems" Grid.Column="6" ItemsSource="{Binding Row1CodingDigits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="6"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="Transparent" Height="30" Margin="0,5,0,5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding Pick4MatchesRow1Row2}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Left"
+                                           Foreground="Black"
+                                           Padding="10,5"/>
+
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding CodingMatchesRow1Row2}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Left"
+                                           Margin="350,0,10,0"
+                                           Foreground="Black"
+                                           Padding="10,5"/>
+                            </Grid>
+                        </Border>
+
+                        <Border CornerRadius="10" Padding="10">
+                            <StackPanel>
+                                <Grid Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="26"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="26"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="26"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <ItemsControl x:Name="Row2Pick3Items" Grid.Column="0" ItemsSource="{Binding Row2Pick3Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="3"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+
+                                    <ItemsControl x:Name="Row2Pick4Items" Grid.Column="2" ItemsSource="{Binding Row2Pick4Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="4"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+
+                                    <ItemsControl x:Name="Row2NextPick3Items" Grid.Column="4" ItemsSource="{Binding Row2NextPick3Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="3"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+
+                                    <ItemsControl x:Name="Row2CodingItems" Grid.Column="6" ItemsSource="{Binding Row2CodingDigits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="6"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+                                </Grid>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                    <TextBlock Text="Fecha:" FontSize="16" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Row2DateText}" FontSize="16" Margin="6,0,18,0"/>
+                                    <TextBlock Text="Tirada:" FontSize="16" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Row2DrawIcon}" FontSize="18" Margin="6,0,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border CornerRadius="10" Padding="10" Margin="0,42,0,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                    <TextBlock Text="Fecha:" FontSize="16" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Row3DateText}" FontSize="16" Margin="6,0,18,0"/>
+                                    <TextBlock Text="Tirada:" FontSize="16" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Row3DrawIcon}" FontSize="18" Margin="6,0,0,0"/>
+                                </StackPanel>
+
+                                <Grid Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="26"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="26"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="26"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <ItemsControl x:Name="Row3Pick3Items" Grid.Column="0" ItemsSource="{Binding Row3Pick3Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="3"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+
+                                    <ItemsControl x:Name="Row3Pick4Items" Grid.Column="2" ItemsSource="{Binding Row3Pick4Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="4"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+
+                                    <ItemsControl x:Name="Row3NextPick3Items" Grid.Column="4" ItemsSource="{Binding Row3NextPick3Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="3"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+
+                                    <ItemsControl x:Name="Row3CodingItems" Grid.Column="6" ItemsSource="{Binding Row3CodingDigits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="6"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="Transparent" Height="30" Margin="0,5,0,5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding Pick4MatchesRow3Row4}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Left"
+                                           Foreground="Black"
+                                           Padding="10,5"/>
+
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding CodingMatchesRow3Row4}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Left"
+                                           Margin="350,0,10,0"
+                                           Foreground="Black"
+                                           Padding="10,5"/>
+                            </Grid>
+                        </Border>
+
+                        <Border CornerRadius="10" Padding="10">
+                            <StackPanel>
+                                <Grid Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="26"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="26"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="26"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <ItemsControl x:Name="Row4Pick3Items" Grid.Column="0" ItemsSource="{Binding Row4Pick3Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="3"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+
+                                    <ItemsControl x:Name="Row4Pick4Items" Grid.Column="2" ItemsSource="{Binding Row4Pick4Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="4"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+
+                                    <ItemsControl x:Name="Row4NextPick3Items" Grid.Column="4" ItemsSource="{Binding Row4NextPick3Digits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="3"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+
+                                    <ItemsControl x:Name="Row4CodingItems" Grid.Column="6" ItemsSource="{Binding Row4CodingDigits}" ItemTemplate="{StaticResource DigitTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="1" Columns="6"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+                                </Grid>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                    <TextBlock Text="Fecha:" FontSize="16" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Row4DateText}" FontSize="16" Margin="6,0,18,0"/>
+                                    <TextBlock Text="Tirada:" FontSize="16" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Row4DrawIcon}" FontSize="18" Margin="6,0,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ContentControl Grid.Column="0"
+                            Content="{Binding GuideCard}"
+                            ContentTemplate="{StaticResource AnalysisCardTemplate}"/>
+
+            <ContentControl Grid.Column="2"
+                            Content="{Binding ResultCard}"
+                            ContentTemplate="{StaticResource AnalysisCardTemplate}"/>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="0,8,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0"
+                       Text="GUIA"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
+
+            <TextBlock Grid.Column="2"
+                       Text="RESULTADO"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
+        </Grid>
+
+        <Button Grid.Row="2"
+                Content="Guardar"
+                Width="130"
+                Height="34"
+                Margin="0,12,0,0"
+                HorizontalAlignment="Center"
+                FontSize="16"
+                FontWeight="Bold"/>
+    </Grid>
+</Window>

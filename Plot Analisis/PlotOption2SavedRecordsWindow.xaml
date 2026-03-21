@@ -4,7 +4,7 @@
         Title="Plot: Opción 2 Guardados"
         Height="790"
         Width="1150"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize"
         Background="#F3F3F3">
     <Window.Resources>

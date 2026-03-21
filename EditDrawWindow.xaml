@@ -4,7 +4,7 @@
         Title="Editar registro"
         Height="460"
         Width="340"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize">
 
     <Grid Margin="16">

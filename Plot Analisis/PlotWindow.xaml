@@ -7,7 +7,7 @@
         Title="Plot Windows" 
         Height="780" 
         Width="1150"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize">
     
     <Window.Resources>

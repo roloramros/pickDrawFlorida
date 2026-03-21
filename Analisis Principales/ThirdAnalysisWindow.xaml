@@ -5,7 +5,7 @@
         Title="Tercer Análisis"
         Height="900"
         Width="1000"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize">
     
     <Grid Margin="16">
@@ -14,7 +14,7 @@
                 <ItemsControl ItemsSource="{Binding AnalysisCards}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <!-- Tarjeta para cada resultado del tercer análisis -->
+                            <!-- Tarjeta para cada resultado del tercer an?lisis -->
                             <Border CornerRadius="16"
                                     BorderBrush="Black"
                                     BorderThickness="2"
@@ -24,12 +24,12 @@
                                     Loaded="CardBorder_Loaded">
                                 
                                 <Grid>
-                                    <!-- Canvas para conectar dígitos Pick3 -->
+                                    <!-- Canvas para conectar d?gitos Pick3 -->
                                     <Canvas x:Name="Pick3LinksCanvas"
                                             IsHitTestVisible="False"
                                             Panel.ZIndex="2"/>
                                     
-                                    <!-- Canvas para conectar dígitos NextPick3 -->
+                                    <!-- Canvas para conectar d?gitos NextPick3 -->
                                     <Canvas x:Name="NextPick3LinksCanvas"
                                             IsHitTestVisible="False"
                                             Panel.ZIndex="2"/>
@@ -59,10 +59,10 @@
                                         Margin="0,8,8,0"
                                         Panel.ZIndex="3">
                                 
-                                <!-- Botón 1: Análisis de Línea -->
+                                <!-- Bot?n 1: An?lisis de L?nea -->
                                 <Button x:Name="LineAnalysisButton"
                                         Content="1️⃣"
-                                        ToolTip="Análisis 4 Coincidencias"
+                                        ToolTip="An?lisis 4 Coincidencias"
                                         Width="32"
                                         Height="32"
                                         FontSize="14"
@@ -98,10 +98,10 @@
                                     </Button.Style>
                                 </Button>
                                 
-                                <!-- Botón 2: Análisis de Posición -->
+                                <!-- Bot?n 2: An?lisis de Posici?n -->
                                 <Button x:Name="PositionAnalysisButton"
                                         Content="2️⃣"
-                                        ToolTip="Análisis 3 Coincidencias"
+                                        ToolTip="An?lisis 3 Coincidencias"
                                         Width="32"
                                         Height="32"
                                         FontSize="14"
@@ -137,6 +137,43 @@
                                         </Style>
                                     </Button.Style>
                                 </Button>
+
+                                <Button x:Name="MatchAnalysisButton"
+                                        Content="🆎"
+                                        ToolTip="Analisis_3-1_Match"
+                                        Width="32"
+                                        Height="32"
+                                        FontSize="14"
+                                        Margin="2,0"
+                                        Padding="0"
+                                        Background="Transparent"
+                                        BorderBrush="#CCCCCC"
+                                        BorderThickness="1"
+                                        Click="OpenAnalisis31MatchWindow">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}"
+                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                                CornerRadius="8">
+                                                            <ContentPresenter HorizontalAlignment="Center"
+                                                                              VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#EAF8EA"/>
+                                                    <Setter Property="BorderBrush" Value="#2E7D32"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
                             </StackPanel>             
                                     
                                     <StackPanel>
@@ -151,7 +188,7 @@
                                                     <TextBlock Text="{Binding Row1DrawIcon}" FontSize="18" Margin="6,0,0,0"/>
                                                 </StackPanel>
 
-                                                <!-- Línea de dígitos -->
+                                                <!-- L?nea de d?gitos -->
                                                 <Grid Margin="0,10,0,0">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="Auto"/>
@@ -233,7 +270,7 @@
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
 
-                                                    <!-- Codificación (6) -->
+                                                    <!-- Codificaci?n (6) -->
                                                     <ItemsControl x:Name="Row1CodingItems" Grid.Column="6" ItemsSource="{Binding Row1CodingDigits}">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
@@ -258,7 +295,7 @@
                                             </StackPanel>
                                         </Border>
 
-                                        <!-- ======= FILA NUEVA 1A: CONTADOR CODIFICACIÓN 1-2 ======= -->
+                                        <!-- ======= FILA NUEVA 1A: CONTADOR CODIFICACI?N 1-2 ======= -->
                                         <Border Background="Transparent" Height="30" Margin="0,5,0,5">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
@@ -279,7 +316,7 @@
                                                         Foreground="Black"
                                                         Padding="10,5"/>
                                                 
-                                                <!-- Contador de Codificación -->
+                                                <!-- Contador de Codificaci?n -->
                                                 <TextBlock Grid.Column="2"
                                                         Text="{Binding CodingMatchesRow1Row2}"
                                                         FontSize="16"
@@ -297,7 +334,7 @@
                                             <StackPanel>
                                                 
 
-                                                <!-- Línea de dígitos -->
+                                                <!-- L?nea de d?gitos -->
                                                 <Grid Margin="0,10,0,0">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="Auto"/>
@@ -379,7 +416,7 @@
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
 
-                                                    <!-- Codificación (6) -->
+                                                    <!-- Codificaci?n (6) -->
                                                     <ItemsControl x:Name="Row2CodingItems" Grid.Column="6" ItemsSource="{Binding Row2CodingDigits}">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
@@ -428,7 +465,7 @@
                                                     <TextBlock Text="{Binding Row3DrawIcon}" FontSize="18" Margin="6,0,0,0"/>
                                                 </StackPanel>
 
-                                                <!-- Línea de dígitos -->
+                                                <!-- L?nea de d?gitos -->
                                                 <Grid Margin="0,10,0,0">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="Auto"/>
@@ -508,7 +545,7 @@
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
 
-                                                    <!-- Codificación (6) del resultado -->
+                                                    <!-- Codificaci?n (6) del resultado -->
                                                     <ItemsControl x:Name="Row3CodingItems" Grid.Column="6" ItemsSource="{Binding Row3CodingDigits}">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
@@ -533,7 +570,7 @@
                                             </StackPanel>
                                         </Border>
 
-                                        <!-- ======= FILA NUEVA 3A: CONTADOR CODIFICACIÓN 3-4 ======= -->
+                                        <!-- ======= FILA NUEVA 3A: CONTADOR CODIFICACI?N 3-4 ======= -->
                                         <Border Background="Transparent" Height="30" Margin="0,5,0,5">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
@@ -554,7 +591,7 @@
                                                         Foreground="Black"
                                                         Padding="10,5"/>
 
-                                                <!-- Contador de Codificación -->
+                                                <!-- Contador de Codificaci?n -->
                                                 <TextBlock Grid.Column="2"
                                                         Text="{Binding CodingMatchesRow3Row4}"
                                                         FontSize="16"
@@ -574,7 +611,7 @@
                                             <StackPanel>
                                                 
 
-                                                <!-- Línea de dígitos -->
+                                                <!-- L?nea de d?gitos -->
                                                 <Grid Margin="0,10,0,0">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="Auto"/>
@@ -656,7 +693,7 @@
                                                         </ItemsControl.ItemTemplate>
                                                     </ItemsControl>
 
-                                                    <!-- Codificación (6) -->
+                                                    <!-- Codificaci?n (6) -->
                                                     <ItemsControl x:Name="Row4CodingItems" Grid.Column="6" ItemsSource="{Binding Row4CodingDigits}">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
@@ -701,4 +738,6 @@
         </ScrollViewer>
     </Grid>
 </Window>
+
+
 

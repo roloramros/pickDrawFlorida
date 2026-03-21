@@ -4,7 +4,7 @@
         Title="Guardar resultado"
         Height="220"
         Width="420"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize">
 
     <Grid Margin="16">

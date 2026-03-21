@@ -4,7 +4,7 @@
         Title="Añadir registro"
         Height="320"
         Width="320"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize">
 
     <Grid Margin="16">

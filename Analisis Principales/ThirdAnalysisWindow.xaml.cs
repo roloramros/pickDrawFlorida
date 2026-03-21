@@ -19,7 +19,7 @@ public partial class ThirdAnalysisWindow : Window
         InitializeComponent();
         DataContext = this;
 
-        // Obtener posiciones del dígito repetido en las dos primeras filas
+        // Obtener posiciones del d?gito repetido en las dos primeras filas
         var guidePositions = GetRepeatedDigitPositions(
             string.Join("", selectedCard.GuidePick3Digits.Select(d => d.Value)),
             string.Join("", selectedCard.GuidePick4Digits.Select(d => d.Value)));
@@ -28,7 +28,7 @@ public partial class ThirdAnalysisWindow : Window
             string.Join("", selectedCard.ResPick3Digits.Select(d => d.Value)),
             string.Join("", selectedCard.ResPick4Digits.Select(d => d.Value)));
 
-        // Crear múltiples tarjetas, una para cada resultado del tercer análisis
+        // Crear m?ltiples tarjetas, una para cada resultado del tercer an?lisis
         var cards = ThirdAnalysisCardVM.CreateMultipleFrom(selectedCard, guidePositions, resultPositions);
         foreach (var card in cards)
         {
@@ -41,7 +41,7 @@ public partial class ThirdAnalysisWindow : Window
         if (sender is not Button button) return;
         if (button.DataContext is not ThirdAnalysisCardVM selectedCard) return;
         
-        // Obtener el modo del Tag del botón
+        // Obtener el modo del Tag del bot?n
         if (button.Tag is AnalysisMode mode)
         {
             // Crear y mostrar la nueva ventana pasando el modo
@@ -58,13 +58,25 @@ public partial class ThirdAnalysisWindow : Window
         }
     }
 
+    private void OpenAnalisis31MatchWindow(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button) return;
+        if (button.DataContext is not ThirdAnalysisCardVM selectedCard) return;
+
+        var window = new Analisis_3_1_MatchWindow(selectedCard)
+        {
+            Owner = this
+        };
+        window.Show();
+    }
+
     private (char digit, int pick3Position, int pick4Position)? GetRepeatedDigitPositions(string pick3, string pick4)
     {
         if (string.IsNullOrWhiteSpace(pick3) || pick3.Length != 3 ||
             string.IsNullOrWhiteSpace(pick4) || pick4.Length != 4)
             return null;
 
-        // Buscar dígito repetido y sus posiciones
+        // Buscar d?gito repetido y sus posiciones
         for (int i = 0; i < pick3.Length; i++)
         {
             char digit = pick3[i];
@@ -102,13 +114,13 @@ public partial class ThirdAnalysisWindow : Window
             
             if (row3Pick3Items != null && row4Pick3Items != null && pick3Canvas != null)
             {
-                // Obtener dígitos de fila 3 y 4
+                // Obtener d?gitos de fila 3 y 4
                 var row3Digits = GetDigitContainers(row3Pick3Items);
                 var row4Digits = GetDigitContainers(row4Pick3Items);
                 
                 if (row3Digits.Count == 3 && row4Digits.Count == 3)
                 {
-                    // Conectar dígitos que coincidan SIN LIMPIAR EL CANVAS
+                    // Conectar d?gitos que coincidan SIN LIMPIAR EL CANVAS
                     for (int i = 0; i < 3; i++)
                     {
                         var topDigit = row3Digits[i];
@@ -121,7 +133,7 @@ public partial class ThirdAnalysisWindow : Window
                             
                             if (topText == bottomText)
                             {
-                                // Dibujar línea conectando los dígitos
+                                // Dibujar l?nea conectando los d?gitos
                                 DrawConnectingLine(pick3Canvas, topDigit, bottomDigit);
                             }
                         }
@@ -136,13 +148,13 @@ public partial class ThirdAnalysisWindow : Window
             
             if (row3NextPick3Items != null && row4NextPick3Items != null && nextPick3Canvas != null)
             {
-                // Obtener dígitos de fila 3 y 4
+                // Obtener d?gitos de fila 3 y 4
                 var row3Digits = GetDigitContainers(row3NextPick3Items);
                 var row4Digits = GetDigitContainers(row4NextPick3Items);
                 
                 if (row3Digits.Count == 3 && row4Digits.Count == 3)
                 {
-                    // Conectar dígitos que coincidan SIN LIMPIAR EL CANVAS
+                    // Conectar d?gitos que coincidan SIN LIMPIAR EL CANVAS
                     for (int i = 0; i < 3; i++)
                     {
                         var topDigit = row3Digits[i];
@@ -155,7 +167,7 @@ public partial class ThirdAnalysisWindow : Window
                             
                             if (topText == bottomText)
                             {
-                                // Dibujar línea conectando los dígitos
+                                // Dibujar l?nea conectando los d?gitos
                                 DrawConnectingLine(nextPick3Canvas, topDigit, bottomDigit);
                             }
                         }
@@ -184,7 +196,7 @@ public partial class ThirdAnalysisWindow : Window
             return;
 
 
-        // Obtener los contenedores de los dígitos
+        // Obtener los contenedores de los d?gitos
         var pick3Digits = GetDigitContainers(pick3ItemsControl);
         var pick4Digits = GetDigitContainers(pick4ItemsControl);
 
@@ -193,7 +205,7 @@ public partial class ThirdAnalysisWindow : Window
         // Limpiar canvas antes de dibujar
         canvas.Children.Clear();
 
-        // Conectar dígitos que coincidan
+        // Conectar d?gitos que coincidan
         for (int i = 0; i < 3; i++)
         {
             var pick3Digit = pick3Digits[i];
@@ -206,7 +218,7 @@ public partial class ThirdAnalysisWindow : Window
                 
                 if (pick3Text == pick4Text)
                 {
-                    // Dibujar línea conectando los dígitos
+                    // Dibujar l?nea conectando los d?gitos
                     DrawConnectingLine(canvas, pick3Digit, pick4Digit);
                 }
             }
@@ -223,16 +235,16 @@ public partial class ThirdAnalysisWindow : Window
         if (pick3ItemsControl == null || pick4ItemsControl == null || canvas == null)
             return;
 
-        // Obtener los contenedores de los dígitos
+        // Obtener los contenedores de los d?gitos
         var pick3Digits = GetDigitContainers(pick3ItemsControl);
         var pick4Digits = GetDigitContainers(pick4ItemsControl);
 
         if (pick3Digits.Count != 3 || pick4Digits.Count != 4)
             return;
-        // Limpiar canvas antes de dibujar (opcional, dependiendo de si quieres borrar líneas anteriores)
-        // canvas.Children.Clear(); // Descomenta esta línea si quieres limpiar antes de dibujar las nuevas rojas
+        // Limpiar canvas antes de dibujar (opcional, dependiendo de si quieres borrar l?neas anteriores)
+        // canvas.Children.Clear(); // Descomenta esta l?nea si quieres limpiar antes de dibujar las nuevas rojas
 
-        // Conectar dígitos que coincidan
+        // Conectar d?gitos que coincidan
         for (int i = 0; i < 3; i++)
         {
             var pick3Digit = pick3Digits[i];
@@ -245,8 +257,8 @@ public partial class ThirdAnalysisWindow : Window
 
                 if (pick3Text == pick4Text)
                 {
-                    // Dibujar línea ROJA conectando los dígitos
-                    DrawRedConnectingLine(canvas, pick3Digit, pick4Digit); // Usamos la función que ya existe
+                    // Dibujar l?nea ROJA conectando los d?gitos
+                    DrawRedConnectingLine(canvas, pick3Digit, pick4Digit); // Usamos la funci?n que ya existe
                 }
             }
         }
@@ -256,7 +268,7 @@ public partial class ThirdAnalysisWindow : Window
     {
         try
         {
-            // Verificar que los elementos tengan dimensiones válidas
+            // Verificar que los elementos tengan dimensiones v?lidas
             if (element1.ActualWidth <= 0 || element1.ActualHeight <= 0 ||
                 element2.ActualWidth <= 0 || element2.ActualHeight <= 0)
                 return;
@@ -265,21 +277,21 @@ public partial class ThirdAnalysisWindow : Window
             var center1 = element1.TranslatePoint(new Point(element1.ActualWidth / 2, element1.ActualHeight / 2), canvas);
             var center2 = element2.TranslatePoint(new Point(element2.ActualWidth / 2, element2.ActualHeight / 2), canvas);
 
-            // Calcular vector dirección de element1 a element2
+            // Calcular vector direcci?n de element1 a element2
             double dx = center2.X - center1.X;
             double dy = center2.Y - center1.Y;
 
             // Calcular distancia entre centros
             double distance = Math.Sqrt(dx * dx + dy * dy);
 
-            // Si están en la misma posición, no dibujar línea
+            // Si est?n en la misma posici?n, no dibujar l?nea
             if (distance == 0) return;
 
-            // Calcular radio de cada círculo (mitad del ancho, ya que son círculos)
+            // Calcular radio de cada c?rculo (mitad del ancho, ya que son c?rculos)
             double radius1 = element1.ActualWidth / 2;
             double radius2 = element2.ActualWidth / 2;
 
-            // Normalizar vector dirección
+            // Normalizar vector direcci?n
             double unitX = dx / distance;
             double unitY = dy / distance;
 
@@ -293,21 +305,21 @@ public partial class ThirdAnalysisWindow : Window
                 center2.Y - (unitY * radius2)
             );
 
-            // Crear línea CONTINUA ROJA
+            // Crear l?nea CONTINUA ROJA
             var line = new Line
             {
                 X1 = startPoint.X,
                 Y1 = startPoint.Y,
                 X2 = endPoint.X,
                 Y2 = endPoint.Y,
-                Stroke = Brushes.Red, // <-- Acá está el cambio a Rojo
+                Stroke = Brushes.Red, // <-- Ac? est? el cambio a Rojo
                 StrokeThickness = 2
             };
             canvas.Children.Add(line);
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error dibujando línea roja: {ex.Message}");
+            Console.WriteLine($"Error dibujando l?nea roja: {ex.Message}");
             // Opcional: Mostrar mensaje en UI o log detallado
         }
     }
@@ -322,7 +334,7 @@ public partial class ThirdAnalysisWindow : Window
         if (topItemsControl == null || bottomItemsControl == null || canvas == null)
             return;
 
-        // Obtener los contenedores de los dígitos
+        // Obtener los contenedores de los d?gitos
         var topDigits = GetDigitContainers(topItemsControl);
         var bottomDigits = GetDigitContainers(bottomItemsControl);
 
@@ -332,7 +344,7 @@ public partial class ThirdAnalysisWindow : Window
         // Limpiar canvas antes de dibujar
         canvas.Children.Clear();
 
-        // Conectar dígitos que coincidan
+        // Conectar d?gitos que coincidan
         for (int i = 0; i < 3; i++)
         {
             var topDigit = topDigits[i];
@@ -345,7 +357,7 @@ public partial class ThirdAnalysisWindow : Window
                 
                 if (topText == bottomText)
                 {
-                    // Dibujar línea conectando los dígitos
+                    // Dibujar l?nea conectando los d?gitos
                     DrawConnectingLine(canvas, topDigit, bottomDigit);
                 }
             }
@@ -384,21 +396,21 @@ public partial class ThirdAnalysisWindow : Window
         var center1 = element1.TranslatePoint(new Point(element1.ActualWidth / 2, element1.ActualHeight / 2), canvas);
         var center2 = element2.TranslatePoint(new Point(element2.ActualWidth / 2, element2.ActualHeight / 2), canvas);
         
-        // Calcular vector dirección de element1 a element2
+        // Calcular vector direcci?n de element1 a element2
         double dx = center2.X - center1.X;
         double dy = center2.Y - center1.Y;
         
         // Calcular distancia entre centros
         double distance = Math.Sqrt(dx * dx + dy * dy);
         
-        // Si están en la misma posición, no dibujar línea
+        // Si est?n en la misma posici?n, no dibujar l?nea
         if (distance == 0) return;
         
-        // Calcular radio de cada círculo (mitad del ancho, ya que son círculos)
+        // Calcular radio de cada c?rculo (mitad del ancho, ya que son c?rculos)
         double radius1 = element1.ActualWidth / 2;
         double radius2 = element2.ActualWidth / 2;
         
-        // Normalizar vector dirección
+        // Normalizar vector direcci?n
         double unitX = dx / distance;
         double unitY = dy / distance;
         
@@ -413,7 +425,7 @@ public partial class ThirdAnalysisWindow : Window
             center2.Y - (unitY * radius2)
         );
         
-        // Crear línea CONTINUA NEGRA
+        // Crear l?nea CONTINUA NEGRA
         var line = new Line
         {
             X1 = startPoint.X,
@@ -456,6 +468,16 @@ public partial class ThirdAnalysisWindow : Window
         }
         
         return null;
+    }
+
+    private static string DrawTimeToIcon(string drawTime)
+    {
+        return drawTime switch
+        {
+            "M" => "\u2600\uFE0F",
+            "E" => "\uD83C\uDF19",
+            _ => ""
+        };
     }
 }
 
@@ -504,6 +526,16 @@ public class ThirdAnalysisCardVM
 
     public string AnalysisSummary { get; set; } = "";
 
+    private static string DrawTimeToIcon(string drawTime)
+    {
+        return drawTime switch
+        {
+            "M" => "\u2600\uFE0F",
+            "E" => "\uD83C\uDF19",
+            _ => ""
+        };
+    }
+
     public static ObservableCollection<ThirdAnalysisCardVM> CreateMultipleFrom(
         AnalysisPairCardVM originalCard,
         (char digit, int pick3Position, int pick4Position)? guidePositions,
@@ -511,7 +543,7 @@ public class ThirdAnalysisCardVM
     {
         var resultCollection = new ObservableCollection<ThirdAnalysisCardVM>();
         
-        // Ejecutar análisis para obtener resultados del tercer análisis
+        // Ejecutar an?lisis para obtener resultados del tercer an?lisis
         var analysisResults = ExecuteThirdAnalysis(
             string.Join("", originalCard.GuidePick3Digits.Select(d => d.Value)),
             string.Join("", originalCard.ResPick3Digits.Select(d => d.Value)),
@@ -522,10 +554,10 @@ public class ThirdAnalysisCardVM
             return resultCollection;
         }
 
-        // Crear una tarjeta para cada resultado del análisis
+        // Crear una tarjeta para cada resultado del an?lisis
         foreach (var result in analysisResults)
         {
-            // Obtener la tercera fecha del resultado del análisis
+            // Obtener la tercera fecha del resultado del an?lisis
             DateTime thirdDate = DateTime.Parse(result.Date);
             DateTime guideDate = DateTime.Parse(originalCard.GuideDateText);
             DateTime resultDate = DateTime.Parse(originalCard.ResDateText);
@@ -541,7 +573,7 @@ public class ThirdAnalysisCardVM
             // Ordenar fechas
             var orderedDates = allDates.OrderBy(d => d.Date).ToList();
             
-            // Identificar qué fecha es cuál
+            // Identificar qu? fecha es cu?l
             DateTime minDate = orderedDates[0].Date;
             DateTime middleDate = orderedDates[1].Date;
             DateTime maxDate = orderedDates[2].Date;
@@ -565,7 +597,7 @@ public class ThirdAnalysisCardVM
             }
             else if (Math.Abs((middleDate - guideDate).TotalDays) < 1)
             {
-                // La fecha intermedia es la guía original
+                // La fecha intermedia es la gu?a original
                 card.Row1DateText = originalCard.GuideDateText;
                 card.Row1DrawIcon = originalCard.GuideDrawIcon;
                 card.Row1Pick3Digits = CopyDigitCollection(originalCard.GuidePick3Digits);
@@ -575,9 +607,9 @@ public class ThirdAnalysisCardVM
             }
             else
             {
-                // La fecha intermedia es el resultado del tercer análisis
+                // La fecha intermedia es el resultado del tercer an?lisis
                 card.Row1DateText = result.Date;
-                card.Row1DrawIcon = result.DrawTime == "☀️" ? "☀️" : "🌙";
+                card.Row1DrawIcon = DrawTimeToIcon(result.DrawTime);
                 AssignThirdResultDigits(card.Row1Pick3Digits, result.Pick3Number);
                 AssignThirdResultDigits(card.Row1Pick4Digits, result.Pick4Number);
                 AssignThirdResultDigits(card.Row1NextPick3Digits, result.NextPick3Number);
@@ -606,7 +638,7 @@ public class ThirdAnalysisCardVM
             else
             {
                 card.Row2DateText = result.Date;
-                card.Row2DrawIcon = result.DrawTime == "☀️" ? "☀️" : "🌙";
+                card.Row2DrawIcon = DrawTimeToIcon(result.DrawTime);
                 AssignThirdResultDigits(card.Row2Pick3Digits, result.Pick3Number);
                 AssignThirdResultDigits(card.Row2Pick4Digits, result.Pick4Number);
                 AssignThirdResultDigits(card.Row2NextPick3Digits, result.NextPick3Number);
@@ -635,7 +667,7 @@ public class ThirdAnalysisCardVM
             else
             {
                 card.Row3DateText = result.Date;
-                card.Row3DrawIcon = result.DrawTime == "☀️" ? "☀️" : "🌙";
+                card.Row3DrawIcon = DrawTimeToIcon(result.DrawTime);
                 AssignThirdResultDigits(card.Row3Pick3Digits, result.Pick3Number);
                 AssignThirdResultDigits(card.Row3Pick4Digits, result.Pick4Number);
                 AssignThirdResultDigits(card.Row3NextPick3Digits, result.NextPick3Number);
@@ -659,7 +691,7 @@ public class ThirdAnalysisCardVM
             resultCollection.Add(card);
         }
 
-        // NUEVO: Procesar colores de codificación después de crear todas las tarjetas
+        // NUEVO: Procesar colores de codificaci?n despu?s de crear todas las tarjetas
         foreach (var card in resultCollection)
         {
             ProcessCodingColors(card);
@@ -698,14 +730,14 @@ public class ThirdAnalysisCardVM
         }
     }
 
-    // NUEVO MÉTODO: Procesar colores de dígitos repetidos en codificación
+    // NUEVO M?TODO: Procesar colores de d?gitos repetidos en codificaci?n
     private static void ProcessCodingColors(ThirdAnalysisCardVM card)
     {
-        // Comparar Fila 1 vs Fila 2 - Codificación
+        // Comparar Fila 1 vs Fila 2 - Codificaci?n
         int codingMatches1 = ColorRepeatedDigitsInCollections(
             card.Row1CodingDigits, 
             card.Row2CodingDigits,
-            Colors.LightPink);  // Color para codificación
+            Colors.LightPink);  // Color para codificaci?n
         
         card.CodingMatchesRow1Row2 = $"{codingMatches1}C";
         
@@ -717,7 +749,7 @@ public class ThirdAnalysisCardVM
         
         card.Pick4MatchesRow1Row2 = $"{pick4Matches1}C";
         
-        // Comparar Fila 3 vs Fila 4 - Codificación
+        // Comparar Fila 3 vs Fila 4 - Codificaci?n
         int codingMatches2 = ColorRepeatedDigitsInCollections(
             card.Row3CodingDigits, 
             card.Row4CodingDigits,
@@ -733,31 +765,31 @@ public class ThirdAnalysisCardVM
         
         card.Pick4MatchesRow3Row4 = $"{pick4Matches2}C";
         
-        // NUEVO: Colorear dígito repetido entre Pick3 y Pick4 en la fila 4 que también aparece en NextPick3
+        // NUEVO: Colorear d?gito repetido entre Pick3 y Pick4 en la fila 4 que tambi?n aparece en NextPick3
         ColorRepeatedDigitInRow4(card);
     }
 
-    // NUEVO MÉTODO: Colorear dígito repetido en fila 4
+    // NUEVO M?TODO: Colorear d?gito repetido en fila 4
     private static void ColorRepeatedDigitInRow4(ThirdAnalysisCardVM card)
     {
-        // Encontrar dígito repetido entre Pick3 y Pick4 en la fila 4
+        // Encontrar d?gito repetido entre Pick3 y Pick4 en la fila 4
         var pick3Digits = card.Row4Pick3Digits.Select(d => d.Value).ToList();
         var pick4Digits = card.Row4Pick4Digits.Select(d => d.Value).ToList();
         
-        // Buscar dígitos repetidos entre Pick3 y Pick4
+        // Buscar d?gitos repetidos entre Pick3 y Pick4
         var repeatedDigits = pick3Digits.Intersect(pick4Digits).ToList();
         
-        // Si hay exactamente 1 dígito repetido (como se espera en el análisis)
+        // Si hay exactamente 1 d?gito repetido (como se espera en el an?lisis)
         if (repeatedDigits.Count == 1)
         {
             string repeatedDigit = repeatedDigits[0];
             
-            // Verificar si este dígito también está en el NextPick3 de la misma fila
+            // Verificar si este d?gito tambi?n est? en el NextPick3 de la misma fila
             var nextPick3Digits = card.Row4NextPick3Digits.Select(d => d.Value).ToList();
             
             if (nextPick3Digits.Contains(repeatedDigit))
             {
-                // Colorear el dígito en Pick3
+                // Colorear el d?gito en Pick3
                 foreach (var digitVM in card.Row4Pick3Digits)
                 {
                     if (digitVM.Value == repeatedDigit)
@@ -766,7 +798,7 @@ public class ThirdAnalysisCardVM
                     }
                 }
                 
-                // Colorear el dígito en Pick4
+                // Colorear el d?gito en Pick4
                 foreach (var digitVM in card.Row4Pick4Digits)
                 {
                     if (digitVM.Value == repeatedDigit)
@@ -775,7 +807,7 @@ public class ThirdAnalysisCardVM
                     }
                 }
                 
-                // Colorear el dígito en NextPick3
+                // Colorear el d?gito en NextPick3
                 foreach (var digitVM in card.Row4NextPick3Digits)
                 {
                     if (digitVM.Value == repeatedDigit)
@@ -787,28 +819,28 @@ public class ThirdAnalysisCardVM
         }
     }
 
-    // NUEVO MÉTODO: Colorear dígitos repetidos y devolver el conteo
+    // NUEVO M?TODO: Colorear d?gitos repetidos y devolver el conteo
     private static int ColorRepeatedDigitsInCollections(
         ObservableCollection<DigitVM> collection1, 
         ObservableCollection<DigitVM> collection2,
         Color highlightColor)
     {
-        // Obtener valores únicos de cada colección
+        // Obtener valores ?nicos de cada colecci?n
         var values1 = collection1.Select(d => d.Value).ToList();
         var values2 = collection2.Select(d => d.Value).ToList();
         
-        // Encontrar dígitos que se repiten
+        // Encontrar d?gitos que se repiten
         var repeatedValues = values1.Intersect(values2).ToList();
         int matchCount = repeatedValues.Count;
         
-        // Colorear solo los dígitos repetidos
+        // Colorear solo los d?gitos repetidos
         ColorRepeatedDigits(collection1, repeatedValues, highlightColor);
         ColorRepeatedDigits(collection2, repeatedValues, highlightColor);
         
         return matchCount;
     }
 
-    // NUEVO MÉTODO: Aplicar color a dígitos repetidos
+    // NUEVO M?TODO: Aplicar color a d?gitos repetidos
     private static void ColorRepeatedDigits(
         ObservableCollection<DigitVM> collection, 
         List<string> repeatedValues, 
@@ -853,7 +885,7 @@ public class ThirdAnalysisCardVM
     {
         return new ThirdAnalysisCardVM
         {
-            // Fila 1: Guía original
+            // Fila 1: Gu?a original
             Row1DateText = originalCard.GuideDateText,
             Row1DrawIcon = originalCard.GuideDrawIcon,
             Row1Pick3Digits = CopyDigitCollection(originalCard.GuidePick3Digits),
@@ -881,13 +913,13 @@ public class ThirdAnalysisCardVM
             Row4NextPick3Digits = CopyDigitCollection(originalCard.ResNextPick3Digits),
             Row4CodingDigits = CopyDigitCollection(originalCard.ResCodingDigits),
 
-            // NUEVO: Contadores vacíos
+            // NUEVO: Contadores vac?os
             CodingMatchesRow1Row2 = "0C",
             CodingMatchesRow3Row4 = "0C",
             Pick4MatchesRow1Row2 = "0C",
             Pick4MatchesRow3Row4 = "0C",  
 
-            AnalysisSummary = "No se encontraron resultados que cumplan con el filtro de posición"
+            AnalysisSummary = "No se encontraron resultados que cumplan con el filtro de posici?n"
         };
     }
 
@@ -952,25 +984,25 @@ public class ThirdAnalysisCardVM
                     continue;
                 }
                 
-                // APLICAR FILTRO: Solo 1 dígito repetido entre Pick3 y Pick4
+                // APLICAR FILTRO: Solo 1 d?gito repetido entre Pick3 y Pick4
                 var pick3Digits = match.Number.ToCharArray();
                 var pick4Digits = pick4Number.ToCharArray();
                 
                 var commonDigits = pick3Digits.Intersect(pick4Digits).ToList();
                 
-                // Solo aceptar si hay EXACTAMENTE 1 dígito repetido
+                // Solo aceptar si hay EXACTAMENTE 1 d?gito repetido
                 if (commonDigits.Count != 1)
                 {
                     continue;
                 }
                 
-                // También verificar que dentro de cada Pick no haya dígitos repetidos
+                // Tambi?n verificar que dentro de cada Pick no haya d?gitos repetidos
                 if (pick3Digits.Distinct().Count() != 3 || pick4Digits.Distinct().Count() != 4)
                 {
                     continue;
                 }
 
-                // NUEVO FILTRO: Verificar posición del dígito repetido
+                // NUEVO FILTRO: Verificar posici?n del d?gito repetido
                 char repeatedDigit = commonDigits[0];
                 int pick3Position = Array.IndexOf(pick3Digits, repeatedDigit);
                 int pick4Position = Array.IndexOf(pick4Digits, repeatedDigit);
@@ -984,7 +1016,7 @@ public class ThirdAnalysisCardVM
                                             pick3Position == resultPositions.Value.pick3Position && 
                                             pick4Position == resultPositions.Value.pick4Position;
 
-                // Solo aceptar si la posición del dígito repetido coincide con AL MENOS UNA de las dos primeras filas
+                // Solo aceptar si la posici?n del d?gito repetido coincide con AL MENOS UNA de las dos primeras filas
                 if (!positionMatchesGuide && !positionMatchesResult)
                 {
                     continue;
@@ -994,7 +1026,7 @@ public class ThirdAnalysisCardVM
                 {
                     Pick3Number = match.Number,
                     Date = match.Date.ToString("yyyy-MM-dd"),
-                    DrawTime = match.DrawTime == "M" ? "☀️" : "🌙",
+                    DrawTime = match.DrawTime,
                     Pick4Number = pick4Number,
                     NextPick3Number = Data.DrawRepository.GetNextPick3Number(match.Date, match.DrawTime) ?? "",
                     Coding = CalculateCoding(match.Number, pick4Number)
@@ -1005,8 +1037,8 @@ public class ThirdAnalysisCardVM
         }
         catch (Exception ex)
         {
-            // En caso de error, devolver colección vacía
-            Console.WriteLine($"Error en análisis: {ex.Message}");
+            // En caso de error, devolver colecci?n vac?a
+            Console.WriteLine($"Error en an?lisis: {ex.Message}");
         }
 
         return results;
@@ -1055,5 +1087,10 @@ public class ThirdAnalysisResultVM
     public string DrawTime { get; set; } = "";
     public string Fireball { get; set; } = "";
 }
+
+
+
+
+
 
 

@@ -4,7 +4,7 @@
         Title="Buscar en histórico"
         Height="560"
         Width="450"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize">
 
     <Grid Margin="16">

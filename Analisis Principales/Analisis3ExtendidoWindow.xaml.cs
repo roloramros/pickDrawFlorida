@@ -177,6 +177,18 @@ public partial class Analisis3ExtendidoWindow : Window
         }
     }
 
+    private void OpenAnalisis31MatchWindow(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button) return;
+        if (button.DataContext is not ThirdAnalysisCardVM selectedCard) return;
+
+        var window = new Analisis_3_1_MatchWindow(selectedCard)
+        {
+            Owner = this
+        };
+        window.Show();
+    }
+
     private (char digit, int pick3Position, int pick4Position)? GetRepeatedDigitPositions(string pick3, string pick4)
     {
         if (string.IsNullOrWhiteSpace(pick3) || pick3.Length != 3 ||

@@ -4,7 +4,7 @@
         Title="Opción 1 Del Tercer Análisis"
         Height="810"
         Width="850"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize">
     
     <Grid Margin="16">
