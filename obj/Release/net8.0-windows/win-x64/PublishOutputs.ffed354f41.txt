@@ -1,4 +1,2 @@
 E:\!Rolo\Proyectos\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\publish\FloridaLotteryApp.pdb
-E:\!Rolo\Proyectos\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\publish\florida_pick3_pick4_fixed.sqlite
-E:\!Rolo\Proyectos\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\publish\e_sqlite3.dll
 E:\!Rolo\Proyectos\pickDrawFlorida\bin\Release\net8.0-windows\win-x64\publish\FloridaLotteryApp.exe

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,8 @@ namespace FloridaLotteryApp;
 public enum ExtendedAnalysis3Mode
 {
     OneLine,
-    CrossLine
+    CrossLine,
+    ThreeLine1
 }
 
 
@@ -43,7 +44,7 @@ public partial class AnalysisCardsWindow : Window
         root.Dispatcher.BeginInvoke(new Action(() => Pick3LinksRenderer.DrawPick3Links(root)), DispatcherPriority.Loaded);
     }
 
-    // Botón 1: Análisis de Línea (reemplaza clic izquierdo)
+    // Botón 1: Análisis de Lí­nea (reemplaza clic izquierdo)
     private void LineAnalysisButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button button)
@@ -104,10 +105,22 @@ public partial class AnalysisCardsWindow : Window
 
     private void ExtendedAnalysis3MenuItem_Click(object sender, RoutedEventArgs e)
     {
-        var analysisMode = sender is MenuItem menuItem &&
-                           menuItem.Header?.ToString()?.Contains("Cross Line", StringComparison.OrdinalIgnoreCase) == true
-            ? ExtendedAnalysis3Mode.CrossLine
-            : ExtendedAnalysis3Mode.OneLine;
+        var analysisMode = ExtendedAnalysis3Mode.OneLine;
+
+        if (sender is MenuItem menuItem)
+        {
+            string header = menuItem.Header?.ToString() ?? string.Empty;
+
+            if (header.Contains("Three Line 1", StringComparison.OrdinalIgnoreCase))
+            {
+                analysisMode = ExtendedAnalysis3Mode.ThreeLine1;
+            }
+            else if (header.Contains("Cross Line", StringComparison.OrdinalIgnoreCase))
+            {
+                analysisMode = ExtendedAnalysis3Mode.CrossLine;
+            }
+        }
+
         var filteredCards = Cards.Where(HasSingleStraightLine).ToList();
 
         if (filteredCards.Count == 0)
@@ -132,7 +145,7 @@ public partial class AnalysisCardsWindow : Window
     {
         try
         {
-            // Contar cuántas tarjetas había originalmente
+            // Contar cuántas tarjetas habí­a originalmente
             int originalCount = Cards.Count;
             
             // Filtrar las tarjetas
@@ -154,10 +167,10 @@ public partial class AnalysisCardsWindow : Window
             }
             
             // Mostrar mensaje con el resultado del filtro
-            MessageBox.Show($"Filtro aplicado: Línea recta única\n\n" +
+            MessageBox.Show($"Filtro aplicado: Lí­nea recta única\n\n" +
                            $"Tarjetas originales: {originalCount}\n" +
-                           $"Tarjetas después del filtro: {filteredCards.Count}\n\n" +
-                           $"Mostrando solo tarjetas con exactamente UNA línea recta vertical.",
+                           $"Tarjetas despuí©s del filtro: {filteredCards.Count}\n\n" +
+                           $"Mostrando solo tarjetas con exactamente UNA lí­nea recta vertical.",
                            "Filtro aplicado",
                            MessageBoxButton.OK,
                            MessageBoxImage.Information);
@@ -172,31 +185,31 @@ public partial class AnalysisCardsWindow : Window
     }
 
     
-    // Método para verificar si una tarjeta tiene exactamente una línea recta vertical
-// y NINGUNA línea diagonal
+    // Mí©todo para verificar si una tarjeta tiene exactamente una lí­nea recta vertical
+// y NINGUNA lí­nea diagonal
     private bool HasSingleStraightLine(AnalysisPairCardVM card)
     {
         try
         {
-            // Obtener los dígitos de la fila superior (guía) y fila inferior (resultado)
+            // Obtener los dí­gitos de la fila superior (guí­a) y fila inferior (resultado)
             var topDigits = card.GuidePick3Digits;
             var bottomDigits = card.ResPick3Digits;
             
-            // Verificar que ambas colecciones tengan 3 dígitos
+            // Verificar que ambas colecciones tengan 3 dí­gitos
             if (topDigits.Count != 3 || bottomDigits.Count != 3)
                 return false;
             
-            // Contar coincidencias en la MISMA POSICIÓN (línea recta vertical)
+            // Contar coincidencias en la MISMA POSICIí“N (lí­nea recta vertical)
             int straightLineMatches = 0;
             
-            // Contar coincidencias en DIFERENTES POSICIONES (línea diagonal)
+            // Contar coincidencias en DIFERENTES POSICIONES (lí­nea diagonal)
             int diagonalMatches = 0;
             
             for (int i = 0; i < 3; i++)
             {
                 string topValue = topDigits[i].Value;
                 
-                // Si el dígito superior está vacío, continuar
+                // Si el dí­gito superior está vací­o, continuar
                 if (string.IsNullOrWhiteSpace(topValue))
                     continue;
                 
@@ -204,7 +217,7 @@ public partial class AnalysisCardsWindow : Window
                 {
                     string bottomValue = bottomDigits[j].Value;
                     
-                    // Si el dígito inferior está vacío, continuar
+                    // Si el dí­gito inferior está vací­o, continuar
                     if (string.IsNullOrWhiteSpace(bottomValue))
                         continue;
                     
@@ -213,12 +226,12 @@ public partial class AnalysisCardsWindow : Window
                     {
                         if (i == j)
                         {
-                            // Misma posición = línea recta vertical
+                            // Misma posición = lí­nea recta vertical
                             straightLineMatches++;
                         }
                         else
                         {
-                            // Diferente posición = línea diagonal
+                            // Diferente posición = lí­nea diagonal
                             diagonalMatches++;
                         }
                     }
@@ -226,8 +239,8 @@ public partial class AnalysisCardsWindow : Window
             }
             
             // Una tarjeta válida debe tener:
-            // 1. EXACTAMENTE UNA línea recta vertical
-            // 2. CERO líneas diagonales
+            // 1. EXACTAMENTE UNA lí­nea recta vertical
+            // 2. CERO lí­neas diagonales
             return straightLineMatches == 1 && diagonalMatches == 0;
         }
         catch (Exception ex)
@@ -238,7 +251,7 @@ public partial class AnalysisCardsWindow : Window
     }
 
 
-    // Método auxiliar para obtener la ruta completa del menú
+    // Mí©todo auxiliar para obtener la ruta completa del menú
     private string GetMenuPath(MenuItem item)
     {
         string path = item.Header.ToString();
@@ -246,7 +259,7 @@ public partial class AnalysisCardsWindow : Window
         
         while (parent != null)
         {
-            path = parent.Header.ToString() + " → " + path;
+            path = parent.Header.ToString() + " â†’ " + path;
             parent = parent.Parent as MenuItem;
         }
         
@@ -261,7 +274,7 @@ public class GuideInfo
     public string NextPick3 { get; set; } = "";
     public string Coding { get; set; } = "";
     public string DateText { get; set; } = "";     // yyyy-MM-dd
-    public string DrawIcon { get; set; } = "";     // ☀️ / 🌙
+    public string DrawIcon { get; set; } = "";     // â˜€ï¸ / ðŸŒ™
     public int RepPosP3 { get; set; }
     public int RepPosP4 { get; set; }
 }
@@ -279,7 +292,7 @@ public class AnalysisPairCardVM
     new SolidColorBrush(Color.FromRgb(25, 135, 84)); // verde
 
 
-    // GUÍA (igual en todas las cards)
+    // GUíA (igual en todas las cards)
     public string GuidePick3Value { get; set; } = "";
     public string GuidePick4Value { get; set; } = "";
     public string GuideCodingValue { get; set; } = "";
@@ -322,14 +335,14 @@ public class AnalysisPairCardVM
             ResPick4Value = r.Pick4,
             ResNextPick3Value = r.NextPick3,
             ResDateText = r.Date,
-            ResDrawIcon = r.DrawTime, // ☀️/🌙
+            ResDrawIcon = r.DrawTime, // â˜€ï¸/ðŸŒ™
             ResPick3Digits = DigitsFrom(r.Pick3, 3),
             ResPick4Digits = DigitsFrom(r.Pick4, 4),
             ResNextPick3Digits = DigitsFrom(r.NextPick3, 3),
             ResCodingDigits = DigitsFrom(r.Coding, 6),
         };
 
-        // Colorear POSICIONES (no el valor): en Guía y Resultado
+        // Colorear POSICIONES (no el valor): en Guí­a y Resultado
         HighlightPosition(vm.GuidePick3Digits, guide.RepPosP3);
         HighlightPosition(vm.GuidePick4Digits, guide.RepPosP4);
         HighlightPosition(vm.ResPick3Digits, guide.RepPosP3);
@@ -532,6 +545,7 @@ public class DigitVM
     public string Value { get; set; } = "";
     public Brush Bg { get; set; } = Brushes.Transparent;
 }
+
 
 
 

@@ -870,11 +870,6 @@
                 </ScrollViewer>
             </TabItem>
             
-
-
-
-
-
             
             <!-- Pestaña 2: Tarjeta de Análisis -->
             <TabItem Header="Patrón Guía" x:Name="AnalysisTab">

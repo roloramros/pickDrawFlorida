@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -21,6 +21,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
     private int _currentIndex = -1;
     private bool _isLoading;
     private string _progressMessage = string.Empty;
+    private double _progressValue;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -49,8 +50,21 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         }
     }
 
+    public double ProgressValue
+    {
+        get => _progressValue;
+        set
+        {
+            _progressValue = value;
+            OnPropertyChanged(nameof(ProgressValue));
+        }
+    }
+
     public Visibility ProgressVisibility => IsLoading ? Visibility.Visible : Visibility.Collapsed;
 
+    public string ResultCounterText => ResultCards.Count == 0 || _currentIndex < 0
+        ? "Resultado 0 de 0"
+        : $"Resultado {_currentIndex + 1} de {ResultCards.Count}";
     public ThirdAnalysisCardVM? CurrentResultCard
     {
         get => _currentResultCard;
@@ -58,6 +72,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         {
             _currentResultCard = value;
             OnPropertyChanged(nameof(CurrentResultCard));
+            OnPropertyChanged(nameof(ResultCounterText));
             UpdateNavigationButtons();
         }
     }
@@ -85,14 +100,21 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
     private async Task LoadOption1ResultsAsync()
     {
         IsLoading = true;
-        ProgressMessage = "Calculando resultados del análisis 3 opción 1...";
+        ProgressValue = 0;
+        ProgressMessage = "Iniciando análisis 3 opción 1...";
 
         try
         {
             CurrentResultCard = BuildStatusCard("Calculando resultados...");
-            var cards = await Task.Run(BuildOption1ResultCards);
+            var progress = new Progress<(double Value, string Message)>(update =>
+            {
+                ProgressValue = update.Value;
+                ProgressMessage = update.Message;
+            });
+            var cards = await Task.Run(() => BuildOption1ResultCards(progress));
 
             ResultCards.Clear();
+            OnPropertyChanged(nameof(ResultCounterText));
             foreach (var card in cards)
             {
                 ResultCards.Add(card);
@@ -117,17 +139,19 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         }
         finally
         {
+            ProgressValue = 0;
             IsLoading = false;
             ProgressMessage = string.Empty;
         }
     }
 
-    private List<ThirdAnalysisCardVM> BuildOption1ResultCards()
+    private List<ThirdAnalysisCardVM> BuildOption1ResultCards(IProgress<(double Value, string Message)>? progress = null)
     {
         string row3Full = DigitsToString(GuideCard.Row3Pick3Digits) + DigitsToString(GuideCard.Row3Pick4Digits) + DigitsToString(GuideCard.Row3NextPick3Digits);
         string row1Full = DigitsToString(GuideCard.Row1Pick3Digits) + DigitsToString(GuideCard.Row1Pick4Digits) + DigitsToString(GuideCard.Row1NextPick3Digits);
         var guidePair = (row3Full, row1Full);
 
+        ReportProgress(progress, 5, "Cargando codificaciones...");
         var codificaciones = DrawRepository.GetCodificacionesWithSingleCommonDigit();
         var validCodificaciones = codificaciones
             .Where(c => !string.IsNullOrWhiteSpace(c.FullNumber) && c.FullNumber.Length == 10)
@@ -140,12 +164,22 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         var allFullNumbers = codificacionesByFullNumber.Keys.ToList();
         var allResults = new List<(string Original, string Compatible)>();
 
-        foreach (var fullNumber in allFullNumbers)
+        ReportProgress(progress, 12, $"Buscando pares compatibles (0/{allFullNumbers.Count})...");
+        for (int index = 0; index < allFullNumbers.Count; index++)
         {
+            string fullNumber = allFullNumbers[index];
             allResults.AddRange(FindFilteredPairs(fullNumber, allFullNumbers, guidePair));
+
+            if (ShouldReportProgress(index, allFullNumbers.Count))
+            {
+                double stageProgress = CalculateStageProgress(index + 1, allFullNumbers.Count, 12, 62);
+                ReportProgress(progress, stageProgress, $"Buscando pares compatibles ({index + 1}/{allFullNumbers.Count})...");
+            }
         }
 
+        ReportProgress(progress, 66, $"Formando cuartetos desde {allResults.Count} pares...");
         var validCuartetos = FormCuartetosFromPairs(allResults);
+        ReportProgress(progress, 72, $"Aplicando filtros a {validCuartetos.Count} cuartetos...");
         var cuartetosFiltrados = FilterCuartetosByCounters(
             AnalysisMode.Opcion1,
             validCuartetos,
@@ -154,21 +188,63 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
             GuideCard.Pick4MatchesRow3Row4,
             GuideCard.CodingMatchesRow3Row4);
 
+        ReportProgress(progress, 78, $"Expandiendo ocurrencias de {cuartetosFiltrados.Count} cuartetos...");
         var cuartetoOccurrences = ExpandCuartetosWithOccurrences(cuartetosFiltrados, codificacionesByFullNumber);
         var cards = new List<ThirdAnalysisCardVM>();
 
-        foreach (var cuarteto in cuartetoOccurrences)
+        ReportProgress(progress, 84, $"Construyendo tarjetas ({cuartetoOccurrences.Count})...");
+        for (int index = 0; index < cuartetoOccurrences.Count; index++)
         {
+            var cuarteto = cuartetoOccurrences[index];
             var card = BuildCardFromCuarteto(cuarteto);
             if (IsValidDateOrder(card))
             {
                 cards.Add(card);
             }
+
+            if (ShouldReportProgress(index, cuartetoOccurrences.Count))
+            {
+                double stageProgress = CalculateStageProgress(index + 1, cuartetoOccurrences.Count, 84, 96);
+                ReportProgress(progress, stageProgress, $"Construyendo tarjetas ({index + 1}/{cuartetoOccurrences.Count})...");
+            }
         }
 
-        return ApplyRow4NextPick3PositionFilter(ExcludeGuideCard(ApplyCodingRowMatchFilter(ApplyMatchGuideFilter(cards))));
+        ReportProgress(progress, 97, $"Aplicando filtros finales sobre {cards.Count} tarjetas...");
+        var filteredCards = ApplyRow4NextPick3PositionFilter(ExcludeGuideCard(ApplyCodingRowMatchFilter(ApplyMatchGuideFilter(cards))));
+        ReportProgress(progress, 100, $"Análisis completado. {filteredCards.Count} resultados listos.");
+        return filteredCards;
     }
 
+    private static void ReportProgress(IProgress<(double Value, string Message)>? progress, double value, string message)
+    {
+        progress?.Report((Math.Clamp(value, 0, 100), message));
+    }
+
+    private static bool ShouldReportProgress(int index, int total)
+    {
+        if (total <= 0)
+        {
+            return false;
+        }
+
+        if (index == total - 1)
+        {
+            return true;
+        }
+
+        int step = Math.Max(1, total / 50);
+        return (index + 1) % step == 0;
+    }
+
+    private static double CalculateStageProgress(int current, int total, double start, double end)
+    {
+        if (total <= 0)
+        {
+            return end;
+        }
+
+        return start + ((end - start) * current / total);
+    }
     private static bool IsValidDateOrder(ThirdAnalysisCardVM card)
     {
         if (!DateTime.TryParse(card.Row2DateText, out var row2Date) ||
@@ -1248,6 +1324,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
 
         root.Dispatcher.BeginInvoke(new Action(() =>
         {
+            ClearAnalysisCardCanvases(root);
             ConnectPick3Digits(root, "Row1Pick3Items", "Row2Pick3Items", "Pick3LinksCanvas");
             ConnectPick3Digits(root, "Row1NextPick3Items", "Row2NextPick3Items", "NextPick3LinksCanvas");
             ConnectPick3Digits(root, "Row3Pick3Items", "Row4Pick3Items", "Pick3LinksCanvas", false);
@@ -1259,6 +1336,26 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         }), DispatcherPriority.Loaded);
     }
 
+
+
+    private static void ClearAnalysisCardCanvases(FrameworkElement root)
+    {
+        string[] canvasNames =
+        [
+            "Pick3LinksCanvas",
+            "NextPick3LinksCanvas",
+            "Pick3Row3ToPick4Row4LinksCanvas",
+            "Pick3Row4ToPick4Row3LinksCanvas",
+            "Pick3Row1ToPick4Row2LinksCanvas",
+            "Pick3Row2ToPick4Row1LinksCanvas"
+        ];
+
+        foreach (string canvasName in canvasNames)
+        {
+            var canvas = FindVisualChild<Canvas>(root, canvasName);
+            canvas?.Children.Clear();
+        }
+    }
 
     private void ConnectPick3Digits(FrameworkElement root, string topItemsControlName, string bottomItemsControlName, string canvasName, bool clearCanvas = true)
     {
@@ -1352,6 +1449,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
             return;
         }
 
+        canvas.Children.Clear();
         var pick3Digits = GetDigitContainers(pick3ItemsControl);
         var pick4Digits = GetDigitContainers(pick4ItemsControl);
 
@@ -1471,6 +1569,8 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         return null;
     }
 }
+
+
 
 
 

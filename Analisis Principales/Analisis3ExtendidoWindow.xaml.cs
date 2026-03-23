@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -26,9 +26,12 @@ public partial class Analisis3ExtendidoWindow : Window
             this.Top = 0;
         };
         _analysisMode = analysisMode;
-        Title = analysisMode == ExtendedAnalysis3Mode.CrossLine
-            ? "Analisis 3 Extendido - Cross Line"
-            : "Analisis 3 Extendido - Single Line";
+        Title = analysisMode switch
+        {
+            ExtendedAnalysis3Mode.CrossLine => "Analisis 3 Extendido - Cross Line",
+            ExtendedAnalysis3Mode.ThreeLine1 => "Analisis 3 Extendido - Tree Line 1",
+            _ => "Analisis 3 Extendido - Single Line"
+        };
 
         foreach (var sourceCard in sourceCards)
         {
@@ -56,6 +59,7 @@ public partial class Analisis3ExtendidoWindow : Window
         return analysisMode switch
         {
             ExtendedAnalysis3Mode.CrossLine => MatchesExtendedCrossLineFilter(card),
+            ExtendedAnalysis3Mode.ThreeLine1 => MatchesExtendedOneLineFilter(card),
             _ => MatchesExtendedOneLineFilter(card)
         };
     }
@@ -404,7 +408,7 @@ public partial class Analisis3ExtendidoWindow : Window
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error dibujando línea roja: {ex.Message}");
+            Console.WriteLine($"Error dibujando lí­nea roja: {ex.Message}");
         }
     }
 
@@ -534,6 +538,7 @@ public partial class Analisis3ExtendidoWindow : Window
         return null;
     }
 }
+
 
 
 
