@@ -12,6 +12,8 @@ public partial class PlotOption2SaveDialog : Window
     {
         InitializeComponent();
         Loaded += (_, _) => NoteTextBox.Focus();
+        this.Left = (SystemParameters.PrimaryScreenWidth - this.Width) / 2;
+        this.Top = 0;
     }
 
     private void Continue_Click(object sender, RoutedEventArgs e)

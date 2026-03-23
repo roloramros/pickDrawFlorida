@@ -4,8 +4,8 @@
         Title="Guardar resultado"
         Height="220"
         Width="420"
-        WindowStartupLocation="CenterScreen"
-        ResizeMode="CanMinimize">
+        WindowStartupLocation="Manual"
+        ResizeMode="CanResizeWithGrip">
 
     <Grid Margin="16">
         <Grid.RowDefinitions>

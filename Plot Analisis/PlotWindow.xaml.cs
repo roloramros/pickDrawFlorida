@@ -77,6 +77,8 @@ public partial class PlotWindow : Window
     public PlotWindow(string dateText, string drawIcon, string pick3, string pick4, string pick3Siguiente)
     {
         InitializeComponent();
+        this.Left = (SystemParameters.PrimaryScreenWidth - this.Width) / 2;
+        this.Top = 0;
         _originalWindowHeight = Height;
         _originalWindowWidth = Width;
         _expandedWindowHeight = Height + 20;
@@ -160,7 +162,7 @@ public partial class PlotWindow : Window
         UpdateResultsCounter();
         
         // Cambiamos el estado de carga inicial
-        SetLoadingState(true, "Preparando an�lisis...", 0, 1, false);
+        SetLoadingState(true, "Preparando análisis...", 0, 1, false);
         
         // Botón de cancelar
         CancelButton.Visibility = Visibility.Collapsed;
@@ -985,7 +987,7 @@ public partial class PlotWindow : Window
         {
             if (!_isLoading) return;
             SetLoadingState(true,
-                $"An�lisis completado. Se encontraron {patternsFound} patrones.",
+                $"Análisis completado. Se encontraron {patternsFound} patrones.",
                 totalIterations,
                 totalIterations,
                 false);

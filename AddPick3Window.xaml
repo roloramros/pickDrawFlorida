@@ -4,8 +4,8 @@
         Title="Añadir registro"
         Height="320"
         Width="320"
-        WindowStartupLocation="CenterScreen"
-        ResizeMode="CanMinimize">
+        WindowStartupLocation="Manual"
+        ResizeMode="CanResizeWithGrip">
 
     <Grid Margin="16">
         <Grid.RowDefinitions>

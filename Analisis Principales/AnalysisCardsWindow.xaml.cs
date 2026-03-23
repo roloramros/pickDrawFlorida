@@ -26,6 +26,8 @@ public partial class AnalysisCardsWindow : Window
     {
         InitializeComponent();
         DataContext = this;
+        this.Left = (SystemParameters.PrimaryScreenWidth - this.Width) / 2;
+        this.Top = 0;
 
         foreach (var card in resultRows.Select(r => AnalysisPairCardVM.Create(guide, r)))
             Cards.Add(card);

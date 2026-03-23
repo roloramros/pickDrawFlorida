@@ -4,8 +4,8 @@
         Title="Buscar en histórico"
         Height="560"
         Width="450"
-        WindowStartupLocation="CenterScreen"
-        ResizeMode="CanMinimize">
+        WindowStartupLocation="Manual"
+        ResizeMode="CanResizeWithGrip">
 
     <Grid Margin="16">
         <TabControl>

@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Analisis_3-1_Match"
         Height="650"
-        Width="1680"
-        WindowStartupLocation="CenterScreen"
-        ResizeMode="CanMinimize">
+        Width="1585"
+        WindowStartupLocation="Manual"
+        ResizeMode="CanResizeWithGrip">
     <Window.Resources>
         <DataTemplate x:Key="DigitTemplate">
             <Border Width="34"
@@ -26,9 +26,10 @@
             <Border CornerRadius="16"
                     BorderBrush="Black"
                     BorderThickness="2"
-                    Padding="14"
+                    Padding="0,14"
                     Background="#FFF7F7F7"
-                    Loaded="AnalysisCard_Loaded">
+                    Loaded="AnalysisCard_Loaded"
+                    DataContextChanged="AnalysisCard_DataContextChanged">
                 <Grid>
                     <Canvas x:Name="Pick3LinksCanvas"
                             IsHitTestVisible="False"

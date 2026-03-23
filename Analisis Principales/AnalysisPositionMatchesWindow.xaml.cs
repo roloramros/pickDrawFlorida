@@ -12,6 +12,8 @@ namespace FloridaLotteryApp;
     public AnalysisPositionMatchesWindow(AnalysisPairCardVM selectedCard, IEnumerable<AnalysisPairCardVM> allCards)
     {
         InitializeComponent();
+        this.Left = (SystemParameters.PrimaryScreenWidth - this.Width) / 2;
+        this.Top = 0;
         DataContext = this; 
         LoadMatches(selectedCard, allCards);
     }

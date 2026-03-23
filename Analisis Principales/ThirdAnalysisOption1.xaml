@@ -4,8 +4,8 @@
         Title="Opción 1 Del Tercer Análisis"
         Height="810"
         Width="850"
-        WindowStartupLocation="CenterScreen"
-        ResizeMode="CanMinimize">
+        WindowStartupLocation="Manual"
+        ResizeMode="CanResizeWithGrip">
     
     <Grid Margin="16">
          <TabControl SelectionChanged="MainTabControl_SelectionChanged">

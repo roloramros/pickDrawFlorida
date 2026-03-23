@@ -55,6 +55,8 @@ namespace FloridaLotteryApp
         public Plot_Opcion2_Exp(string dateText, string drawIcon, string pick3, string pick4, string pick3Siguiente, IEnumerable<PatternRow> guideRows)
         {
             InitializeComponent();
+            this.Left = (SystemParameters.PrimaryScreenWidth - this.Width) / 2;
+        this.Top = 0;
             DataContext = this;
 
             _originalWindowHeight = Height;

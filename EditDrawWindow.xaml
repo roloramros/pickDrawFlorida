@@ -4,8 +4,8 @@
         Title="Editar registro"
         Height="460"
         Width="340"
-        WindowStartupLocation="CenterScreen"
-        ResizeMode="CanMinimize">
+        WindowStartupLocation="Manual"
+        ResizeMode="CanResizeWithGrip">
 
     <Grid Margin="16">
         <StackPanel>

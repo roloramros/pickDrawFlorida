@@ -53,6 +53,8 @@ public partial class PlotOption2SavedRecordsWindow : Window, INotifyPropertyChan
     {
         InitializeComponent();
         DataContext = this;
+        this.Left = (SystemParameters.PrimaryScreenWidth - this.Width) / 2;
+        this.Top = 0;
 
         Sessions.Add(BuildEmptySession("Top"));
         Sessions.Add(BuildEmptySession("Bottom"));

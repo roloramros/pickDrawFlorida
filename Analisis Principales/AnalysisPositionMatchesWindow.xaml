@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Coincidencias del patrón"
         Height="700" Width="980"
-        ResizeMode="CanMinimize"
-        WindowStartupLocation="CenterScreen">
+        ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="Manual">
 
     <Grid Margin="16"> 
         <ScrollViewer VerticalScrollBarVisibility="Auto">

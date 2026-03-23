@@ -58,6 +58,8 @@ namespace FloridaLotteryApp
         {
             InitializeComponent();
             DataContext = this;
+            this.Left = (SystemParameters.PrimaryScreenWidth - this.Width) / 2;
+        this.Top = 0;
 
             _originalWindowHeight = Height;
             _originalWindowWidth = Width;

@@ -41,6 +41,9 @@ public partial class MainWindow : Window, INotifyPropertyChanged
         InitializeComponent();
         DataContext = this;
 
+        this.Left = (SystemParameters.PrimaryScreenWidth - this.Width) / 2;
+        this.Top = 0;
+
         Loaded += MainWindow_Loaded;
         LoadPage(0);
     }

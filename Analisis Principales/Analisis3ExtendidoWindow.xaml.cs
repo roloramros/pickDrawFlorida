@@ -19,6 +19,12 @@ public partial class Analisis3ExtendidoWindow : Window
     {
         InitializeComponent();
         DataContext = this;
+        this.Loaded += (s, e) =>
+        {
+            // Centrar horizontalmente
+            this.Left = (SystemParameters.PrimaryScreenWidth - this.ActualWidth) / 2;
+            this.Top = 0;
+        };
         _analysisMode = analysisMode;
         Title = analysisMode == ExtendedAnalysis3Mode.CrossLine
             ? "Analisis 3 Extendido - Cross Line"
@@ -398,7 +404,7 @@ public partial class Analisis3ExtendidoWindow : Window
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error dibujando l�nea roja: {ex.Message}");
+            Console.WriteLine($"Error dibujando línea roja: {ex.Message}");
         }
     }
 

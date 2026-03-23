@@ -5,8 +5,8 @@
         Title="Tercer Análisis"
         Height="900"
         Width="1000"
-        WindowStartupLocation="CenterScreen"
-        ResizeMode="CanMinimize">
+        WindowStartupLocation="Manual"
+        ResizeMode="CanResizeWithGrip">
     
     <Grid Margin="16">
         <ScrollViewer VerticalScrollBarVisibility="Auto">

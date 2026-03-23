@@ -16,6 +16,8 @@ public partial class AnalysisLineMatchesWindow : Window
     {
         InitializeComponent();
         DataContext = this;
+        this.Left = (SystemParameters.PrimaryScreenWidth - this.Width) / 2;
+        this.Top = 0;
         LoadMatches(selectedCard, allCards);
     }
 

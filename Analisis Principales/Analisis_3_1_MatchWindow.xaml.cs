@@ -65,6 +65,8 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
     public Analisis_3_1_MatchWindow(ThirdAnalysisCardVM selectedCard)
     {
         InitializeComponent();
+        this.Left = (SystemParameters.PrimaryScreenWidth - this.Width) / 2;
+        this.Top = 0;
         GuideCard = CloneCard(selectedCard);
         CurrentResultCard = BuildStatusCard("Calculando resultados...");
         DataContext = this;
@@ -83,7 +85,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
     private async Task LoadOption1ResultsAsync()
     {
         IsLoading = true;
-        ProgressMessage = "Calculando resultados del an·lisis 3 opciÛn 1...";
+        ProgressMessage = "Calculando resultados del an√°lisis 3 opci√≥n 1...";
 
         try
         {
@@ -109,7 +111,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error al cargar resultados del an·lisis: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Error al cargar resultados del an√°lisis: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             _currentIndex = -1;
             CurrentResultCard = BuildEmptyResultCard();
         }
@@ -1229,7 +1231,17 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
 
     private void AnalysisCard_Loaded(object sender, RoutedEventArgs e)
     {
-        if (sender is not FrameworkElement root)
+        RedrawAnalysisCardConnections(sender as FrameworkElement);
+    }
+
+    private void AnalysisCard_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        RedrawAnalysisCardConnections(sender as FrameworkElement);
+    }
+
+    private void RedrawAnalysisCardConnections(FrameworkElement? root)
+    {
+        if (root == null)
         {
             return;
         }
@@ -1246,6 +1258,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
             ConnectPick3ToPick4DigitsWithRedLine(root, "Row2Pick3Items", "Row1Pick4Items", "Pick3Row2ToPick4Row1LinksCanvas");
         }), DispatcherPriority.Loaded);
     }
+
 
     private void ConnectPick3Digits(FrameworkElement root, string topItemsControlName, string bottomItemsControlName, string canvasName, bool clearCanvas = true)
     {
