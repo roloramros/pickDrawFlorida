@@ -59,7 +59,7 @@ public partial class Analisis3ExtendidoWindow : Window
         return analysisMode switch
         {
             ExtendedAnalysis3Mode.CrossLine => MatchesExtendedCrossLineFilter(card),
-            ExtendedAnalysis3Mode.ThreeLine1 => MatchesExtendedOneLineFilter(card),
+            ExtendedAnalysis3Mode.ThreeLine1 => MatchesExtendedThreeLine1Filter(card),
             _ => MatchesExtendedOneLineFilter(card)
         };
     }
@@ -98,6 +98,33 @@ public partial class Analisis3ExtendidoWindow : Window
 
         return LinesCross(upperForwardConnections[0], upperReverseConnections[0])
             && (lowerConnections == 1 || lowerConnections == 0);
+    }
+
+
+    private static bool MatchesExtendedThreeLine1Filter(ThirdAnalysisCardVM card)
+    {
+        var upperForwardConnections = GetPick3ToPick4Matches(card.Row1Pick3Digits, card.Row2Pick4Digits);
+        var upperReverseConnections = GetPick3ToPick4Matches(card.Row2Pick3Digits, card.Row1Pick4Digits);
+        int lowerConnections = CountBlockConnections(
+            card.Row3Pick3Digits,
+            card.Row4Pick4Digits,
+            card.Row4Pick3Digits,
+            card.Row3Pick4Digits);
+
+        if (upperForwardConnections.Count != 1 || upperReverseConnections.Count != 2)
+        {
+            return false;
+        }
+
+        return ConnectionsCrossSameDirection(upperReverseConnections[0], upperReverseConnections[1])
+            && (lowerConnections == 1 || lowerConnections == 0);
+    }
+
+    private static bool ConnectionsCrossSameDirection((int Pick3Position, int Pick4Position) firstConnection,
+                                                      (int Pick3Position, int Pick4Position) secondConnection)
+    {
+        return (firstConnection.Pick3Position - secondConnection.Pick3Position)
+             * (firstConnection.Pick4Position - secondConnection.Pick4Position) < 0;
     }
 
     private static int CountBlockConnections(

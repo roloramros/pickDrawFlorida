@@ -137,9 +137,18 @@ public partial class AnalysisCardsWindow : Window
             WindowStartupLocation = WindowStartupLocation.CenterScreen
         };
 
-        extendedAnalysisWindow.Show();
-    }
+        if (extendedAnalysisWindow.AnalysisCards.Count == 0)
+        {
+            MessageBox.Show("No se encontraron resultados para este Análisis.",
+                           "Analisis 3 Extendido",
+                           MessageBoxButton.OK,
+                           MessageBoxImage.Information);
+            return;
+        }
 
+        extendedAnalysisWindow.Show();
+
+    }
     // Manejador para todos los items del menú
     private void MenuItem_Click(object sender, RoutedEventArgs e)
     {
