@@ -86,6 +86,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         CurrentResultCard = BuildStatusCard("Calculando resultados...");
         DataContext = this;
         Loaded += Analisis31MatchWindow_Loaded;
+        GuardarButton.Click += GuardarButton_Click;
     }
 
     private void OnPropertyChanged(string propertyName)
@@ -1567,6 +1568,132 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         }
 
         return null;
+    }
+
+    private void GuardarButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (CurrentResultCard == null || string.IsNullOrEmpty(CurrentResultCard.Row1DateText) || 
+            CurrentResultCard.Row1DateText == "Sin resultados")
+        {
+            MessageBox.Show("No hay un resultado válido para guardar.", 
+                        "Guardar análisis", 
+                        MessageBoxButton.OK, 
+                        MessageBoxImage.Information);
+            return;
+        }
+
+        // ✅ Pasar el tipo de análisis como argumento
+        var saveDialog = new AnalisisSaveDialog("Analisis 3 Match");
+        
+        if (saveDialog.ShowDialog() == true)
+        {
+            try
+            {
+                // ✅ Usar el tipo fijo del diálogo
+                GuardarAnalisisActual(saveDialog.TipoAnalisis, saveDialog.SelectedFolder, saveDialog.NoteText);
+                
+                MessageBox.Show("Análisis guardado correctamente.", 
+                            "Guardado exitoso", 
+                            MessageBoxButton.OK, 
+                            MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al guardar el análisis: {ex.Message}", 
+                            "Error", 
+                            MessageBoxButton.OK, 
+                            MessageBoxImage.Error);
+            }
+        }
+    }
+
+    private void GuardarAnalisisActual(string tipoAnalisis, string folder, string note)
+    {
+        var record = new PlotOption2SavedRecord
+        {
+            Label = string.IsNullOrWhiteSpace(note) ? CurrentResultCard.AnalysisSummary : note,
+            
+            // ✅ CORREGIDO: G = Guía (GuideCard)
+            G1Date = GuideCard.Row1DateText,
+            G1Time = GetDrawTimeFromIcon(GuideCard.Row1DrawIcon),
+            G2Date = GuideCard.Row2DateText,
+            G2Time = GetDrawTimeFromIcon(GuideCard.Row2DrawIcon),
+            G3Date = GuideCard.Row3DateText,
+            G3Time = GetDrawTimeFromIcon(GuideCard.Row3DrawIcon),
+            G4Date = GuideCard.Row4DateText,
+            G4Time = GetDrawTimeFromIcon(GuideCard.Row4DrawIcon),
+
+            // ✅ CORREGIDO: R = Resultado (CurrentResultCard)
+            R1Date = CurrentResultCard.Row1DateText,
+            R1Time = GetDrawTimeFromIcon(CurrentResultCard.Row1DrawIcon),
+            R2Date = CurrentResultCard.Row2DateText,
+            R2Time = GetDrawTimeFromIcon(CurrentResultCard.Row2DrawIcon),
+            R3Date = CurrentResultCard.Row3DateText,
+            R3Time = GetDrawTimeFromIcon(CurrentResultCard.Row3DrawIcon),
+            R4Date = CurrentResultCard.Row4DateText,
+            R4Time = GetDrawTimeFromIcon(CurrentResultCard.Row4DrawIcon)
+        };
+        
+        using var conn = Db.Open();
+        using var cmd = conn.CreateCommand();
+        cmd.CommandText = @"
+            INSERT INTO saved_analisis (
+                label,
+                tipo_analisis,
+                folder,
+                g1_date, g1_time,
+                g2_date, g2_time,
+                g3_date, g3_time,
+                g4_date, g4_time,
+                r1_date, r1_time,
+                r2_date, r2_time,
+                r3_date, r3_time,
+                r4_date, r4_time
+            )
+            VALUES (
+                $label, $tipo_analisis, $folder,
+                $g1_date, $g1_time,
+                $g2_date, $g2_time,
+                $g3_date, $g3_time,
+                $g4_date, $g4_time,
+                $r1_date, $r1_time,
+                $r2_date, $r2_time,
+                $r3_date, $r3_time,
+                $r4_date, $r4_time
+            );
+        ";
+        
+        cmd.Parameters.AddWithValue("$label", (object?)record.Label ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("$tipo_analisis", tipoAnalisis);
+        cmd.Parameters.AddWithValue("$folder", folder);
+        cmd.Parameters.AddWithValue("$g1_date", record.G1Date);
+        cmd.Parameters.AddWithValue("$g1_time", record.G1Time);
+        cmd.Parameters.AddWithValue("$g2_date", record.G2Date);
+        cmd.Parameters.AddWithValue("$g2_time", record.G2Time);
+        cmd.Parameters.AddWithValue("$g3_date", record.G3Date);
+        cmd.Parameters.AddWithValue("$g3_time", record.G3Time);
+        cmd.Parameters.AddWithValue("$g4_date", record.G4Date);
+        cmd.Parameters.AddWithValue("$g4_time", record.G4Time);
+        cmd.Parameters.AddWithValue("$r1_date", record.R1Date);
+        cmd.Parameters.AddWithValue("$r1_time", record.R1Time);
+        cmd.Parameters.AddWithValue("$r2_date", record.R2Date);
+        cmd.Parameters.AddWithValue("$r2_time", record.R2Time);
+        cmd.Parameters.AddWithValue("$r3_date", record.R3Date);
+        cmd.Parameters.AddWithValue("$r3_time", record.R3Time);
+        cmd.Parameters.AddWithValue("$r4_date", record.R4Date);
+        cmd.Parameters.AddWithValue("$r4_time", record.R4Time);
+        
+        cmd.ExecuteNonQuery();
+    }
+
+    private string GetDrawTimeFromIcon(string icon)
+    {
+        return icon switch
+        {
+            "\u2600\uFE0F" => "M",  // Sol
+            "\uD83C\uDF19" => "E",  // Luna
+            _ => string.Empty
+        };
     }
 }
 

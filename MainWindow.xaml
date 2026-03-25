@@ -29,7 +29,7 @@
                 
 
                 <!-- Botones -->
-                <Button Content="Load Plot 2"
+                <Button Content="Análisis Guardados"
                         Padding="14,8"
                         Margin="0,0,10,0"
                         Click="Analysis_Click"/>

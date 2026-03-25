@@ -481,29 +481,77 @@ namespace FloridaLotteryApp
             var current = GetCurrentResultItem();
             if (current == null)
             {
-                MessageBox.Show("No hay un resultado visible para guardar.", "Guardar", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("No hay un resultado visible para guardar.", 
+                            "Guardar", 
+                            MessageBoxButton.OK, 
+                            MessageBoxImage.Information);
                 return;
             }
 
-            var dialog = new PlotOption2SaveDialog
+            // ✅ Usar el nuevo AnalisisSaveDialog con el tipo de análisis fijo
+            var saveDialog = new AnalisisSaveDialog("Plot Opcion 2");
+            
+            if (saveDialog.ShowDialog() == true)
             {
-                Owner = this
-            };
-
-            if (dialog.ShowDialog() != true)
-            {
-                return;
-            }
-
-            try
-            {
-                var record = BuildSavedRecord(current, dialog.NoteText);
-                var savedId = PlotOption2SavedRepository.Insert(record);
-                MessageBox.Show($"Resultado guardado correctamente.", "Guardar", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"No se pudo guardar el resultado: {ex.Message}", "Guardar", MessageBoxButton.OK, MessageBoxImage.Error);
+                try
+                {
+                    // ✅ Construir el record con los datos actuales
+                    var record = BuildSavedRecord(current, saveDialog.NoteText);
+                    
+                    // ✅ Insertar en la base de datos con el tipo y folder correctos
+                    using var conn = Db.Open();
+                    using var cmd = conn.CreateCommand();
+                    cmd.CommandText = @"
+                        INSERT INTO saved_analisis (
+                            label, tipo_analisis, folder,
+                            g1_date, g1_time, g2_date, g2_time,
+                            g3_date, g3_time, g4_date, g4_time,
+                            r1_date, r1_time, r2_date, r2_time,
+                            r3_date, r3_time, r4_date, r4_time
+                        )
+                        VALUES (
+                            $label, $tipo_analisis, $folder,
+                            $g1_date, $g1_time, $g2_date, $g2_time,
+                            $g3_date, $g3_time, $g4_date, $g4_time,
+                            $r1_date, $r1_time, $r2_date, $r2_time,
+                            $r3_date, $r3_time, $r4_date, $r4_time
+                        );
+                    ";
+                    
+                    cmd.Parameters.AddWithValue("$label", (object?)record.Label ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("$tipo_analisis", saveDialog.TipoAnalisis);
+                    cmd.Parameters.AddWithValue("$folder", saveDialog.SelectedFolder);
+                    cmd.Parameters.AddWithValue("$g1_date", record.G1Date);
+                    cmd.Parameters.AddWithValue("$g1_time", record.G1Time);
+                    cmd.Parameters.AddWithValue("$g2_date", record.G2Date);
+                    cmd.Parameters.AddWithValue("$g2_time", record.G2Time);
+                    cmd.Parameters.AddWithValue("$g3_date", record.G3Date);
+                    cmd.Parameters.AddWithValue("$g3_time", record.G3Time);
+                    cmd.Parameters.AddWithValue("$g4_date", record.G4Date);
+                    cmd.Parameters.AddWithValue("$g4_time", record.G4Time);
+                    cmd.Parameters.AddWithValue("$r1_date", record.R1Date);
+                    cmd.Parameters.AddWithValue("$r1_time", record.R1Time);
+                    cmd.Parameters.AddWithValue("$r2_date", record.R2Date);
+                    cmd.Parameters.AddWithValue("$r2_time", record.R2Time);
+                    cmd.Parameters.AddWithValue("$r3_date", record.R3Date);
+                    cmd.Parameters.AddWithValue("$r3_time", record.R3Time);
+                    cmd.Parameters.AddWithValue("$r4_date", record.R4Date);
+                    cmd.Parameters.AddWithValue("$r4_time", record.R4Time);
+                    
+                    cmd.ExecuteNonQuery();
+                    
+                    MessageBox.Show("Análisis guardado correctamente.", 
+                                "Guardado exitoso", 
+                                MessageBoxButton.OK, 
+                                MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al guardar el análisis: {ex.Message}", 
+                                "Error", 
+                                MessageBoxButton.OK, 
+                                MessageBoxImage.Error);
+                }
             }
         }
 

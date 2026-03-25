@@ -215,11 +215,14 @@ private void AnalysisPlot_Click(object sender, RoutedEventArgs e)
 
     private void Analysis_Click(object sender, RoutedEventArgs e)
     {
-        var win = new PlotOption2SavedRecordsWindow
-        {
-            Owner = this
-        };
-        win.Show();
+        //var win = new PlotOption2SavedRecordsWindow
+        //{
+         //   Owner = this
+        //};
+        //win.Show();
+
+        var ventana = new AnalisisGuardadosWindow();
+ventana.ShowDialog();
     }
 
     

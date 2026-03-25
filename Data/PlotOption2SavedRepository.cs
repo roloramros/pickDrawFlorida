@@ -45,7 +45,7 @@ public static class PlotOption2SavedRepository
                 r2_date, r2_time,
                 r3_date, r3_time,
                 r4_date, r4_time
-            FROM plot_option2_saved
+            FROM saved_analisis
             ORDER BY rowid DESC;
             """;
 
@@ -84,7 +84,7 @@ public static class PlotOption2SavedRepository
         using var conn = Db.Open();
         using var cmd = conn.CreateCommand();
         cmd.CommandText = """
-            INSERT INTO plot_option2_saved (
+            INSERT INTO saved_analisis (
                 label,
                 g1_date, g1_time,
                 g2_date, g2_time,
@@ -135,7 +135,7 @@ public static class PlotOption2SavedRepository
         using var conn = Db.Open();
         using var cmd = conn.CreateCommand();
         cmd.CommandText = """
-            DELETE FROM plot_option2_saved
+            DELETE FROM saved_analisis
             WHERE rowid = $id;
             """;
         cmd.Parameters.AddWithValue("$id", id);

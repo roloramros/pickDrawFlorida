@@ -1,0 +1,92 @@
+<!-- AnalisisSaveDialog.xaml - Actualizado -->
+<Window x:Class="FloridaLotteryApp.AnalisisSaveDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Guardar análisis"
+        Height="400"
+        Width="480"
+        WindowStartupLocation="Manual"
+        ResizeMode="CanResizeWithGrip">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+        
+        <Style TargetType="ComboBox" x:Key="StyledComboBox">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0,8,0,0"/>
+        </Style>
+        
+        <Style TargetType="TextBox" x:Key="StyledTextBox">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0,8,0,0"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Selector de folder -->
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="Folder"
+                       FontWeight="Bold"
+                       Margin="0,12,0,4"/>
+            <ComboBox x:Name="FolderComboBox"
+                      Style="{StaticResource StyledComboBox}"
+                      SelectionChanged="FolderComboBox_SelectionChanged"/>
+        </StackPanel>
+
+        <!-- Campo para nueva carpeta (visible solo cuando se selecciona crear nueva) -->
+        <StackPanel Grid.Row="2"
+                    Visibility="{Binding IsNewFolderSelected, Converter={StaticResource BoolToVisibility}}">
+            <TextBlock Text="Nombre de la nueva carpeta"
+                       FontWeight="Bold"
+                       Margin="0,12,0,4"/>
+            <TextBox x:Name="NewFolderTextBox"
+                     Style="{StaticResource StyledTextBox}"
+                     TextChanged="NewFolderTextBox_TextChanged"/>
+        </StackPanel>
+
+        <!-- Nota opcional -->
+        <StackPanel Grid.Row="3">
+            <TextBlock Text="Nota (opcional)"
+                       FontWeight="Bold"
+                       Margin="0,12,0,4"/>
+            <TextBox x:Name="NoteTextBox"
+                     Height="80"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto"/>
+        </StackPanel>
+
+        <!-- Botones -->
+        <StackPanel Grid.Row="4"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,16,0,0">
+            <Button Content="Cancelar"
+                    Width="100"
+                    Margin="0,0,10,0"
+                    Click="Cancel_Click"/>
+            <Button x:Name="GuardarButton"
+                    Content="Guardar"
+                    Width="100"
+                    Click="Save_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
