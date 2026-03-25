@@ -197,7 +197,6 @@ E:\pickDrawFlorida\obj\Debug\net8.0-windows\FloridaLotteryApp.pdb
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\FloridaLotteryApp.genruntimeconfig.cache
 E:\pickDrawFlorida\obj\Debug\net8.0-windows\ref\FloridaLotteryApp.dll
 E:\!Rolo\Proyectos\pickDrawFlorida\bin\Debug\net8.0-windows\florida_pick3_pick4_fixed.sqlite
-E:\!Rolo\Proyectos\pickDrawFlorida\bin\Debug\net8.0-windows\FloridaLotteryApp.exe
 E:\!Rolo\Proyectos\pickDrawFlorida\bin\Debug\net8.0-windows\FloridaLotteryApp.deps.json
 E:\!Rolo\Proyectos\pickDrawFlorida\bin\Debug\net8.0-windows\FloridaLotteryApp.runtimeconfig.json
 E:\!Rolo\Proyectos\pickDrawFlorida\bin\Debug\net8.0-windows\FloridaLotteryApp.dll
@@ -233,6 +232,8 @@ E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Analisis Principales
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Analisis Principales\AnalysisLineMatchesWindow.baml
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Analisis Principales\AnalysisPositionMatchesWindow.baml
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Analisis Principales\ThirdAnalysisOption1.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\AnalisisGuardadosWindow.baml
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\AnalisisSaveDialog.baml
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\EditDrawWindow.baml
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\MainWindow.baml
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Plot Analisis\PlotWindow.baml
@@ -248,6 +249,8 @@ E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Analisis Principales
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Analisis Principales\AnalysisPositionMatchesWindow.g.cs
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Analisis Principales\ThirdAnalysisOption1.g.cs
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Analisis Principales\ThirdAnalysisWindow.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\AnalisisGuardadosWindow.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\AnalisisSaveDialog.g.cs
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\EditDrawWindow.g.cs
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\MainWindow.g.cs
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\Plot Analisis\PlotWindow.g.cs
@@ -272,7 +275,4 @@ E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\refint\FloridaLotter
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\FloridaLotteryApp.pdb
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\FloridaLotteryApp.genruntimeconfig.cache
 E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\ref\FloridaLotteryApp.dll
-E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\AnalisisGuardadosWindow.baml
-E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\AnalisisSaveDialog.baml
-E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\AnalisisGuardadosWindow.g.cs
-E:\!Rolo\Proyectos\pickDrawFlorida\obj\Debug\net8.0-windows\AnalisisSaveDialog.g.cs
+E:\!Rolo\Proyectos\pickDrawFlorida\bin\Debug\net8.0-windows\FloridaLotteryApp.exe

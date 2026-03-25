@@ -68,7 +68,7 @@ public partial class ThirdAnalysisWindow : Window
         if (sender is not Button button) return;
         if (button.DataContext is not ThirdAnalysisCardVM selectedCard) return;
 
-        var window = new Analisis_3_1_MatchWindow(selectedCard)
+        var window = new Analisis_3_1_MatchWindow(selectedCard, Analisis31MatchWindowMode.Analysis)
         {
 
         };
@@ -1092,6 +1092,7 @@ public class ThirdAnalysisResultVM
     public string DrawTime { get; set; } = "";
     public string Fireball { get; set; } = "";
 }
+
 
 
 

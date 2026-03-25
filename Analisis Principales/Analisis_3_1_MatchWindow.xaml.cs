@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -13,6 +13,12 @@ using FloridaLotteryApp.Data;
 
 namespace FloridaLotteryApp;
 
+public enum Analisis31MatchWindowMode
+{
+    Analysis,
+    SavedResults
+}
+
 public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
 {
     private sealed record CuartetoOccurrence(FilteredCodificacion Row1, FilteredCodificacion Row2, FilteredCodificacion Row3, FilteredCodificacion Row4);
@@ -22,10 +28,22 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
     private bool _isLoading;
     private string _progressMessage = string.Empty;
     private double _progressValue;
+    private readonly string? _savedFolder;
+    private ThirdAnalysisCardVM _guideCard = new();
+    private readonly List<ThirdAnalysisCardVM> _savedGuideCards = new();
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public ThirdAnalysisCardVM GuideCard { get; }
+    public Analisis31MatchWindowMode Mode { get; }
+    public ThirdAnalysisCardVM GuideCard
+    {
+        get => _guideCard;
+        private set
+        {
+            _guideCard = value;
+            OnPropertyChanged(nameof(GuideCard));
+        }
+    }
     public ObservableCollection<ThirdAnalysisCardVM> ResultCards { get; } = new();
 
     public bool IsLoading
@@ -77,14 +95,19 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         }
     }
 
-    public Analisis_3_1_MatchWindow(ThirdAnalysisCardVM selectedCard)
+    public Analisis_3_1_MatchWindow(ThirdAnalysisCardVM selectedCard, Analisis31MatchWindowMode mode, string? savedFolder = null)
     {
         InitializeComponent();
         this.Left = (SystemParameters.PrimaryScreenWidth - this.Width) / 2;
         this.Top = 0;
+        Mode = mode;
+        _savedFolder = savedFolder;
         GuideCard = CloneCard(selectedCard);
-        CurrentResultCard = BuildStatusCard("Calculando resultados...");
+        CurrentResultCard = mode == Analisis31MatchWindowMode.Analysis
+            ? BuildStatusCard("Calculando resultados...")
+            : BuildStatusCard("Resultados guardados pendientes de carga.");
         DataContext = this;
+        GuardarButton.Content = mode == Analisis31MatchWindowMode.Analysis ? "Guardar" : "Borrar";
         Loaded += Analisis31MatchWindow_Loaded;
         GuardarButton.Click += GuardarButton_Click;
     }
@@ -95,14 +118,25 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
     private async void Analisis31MatchWindow_Loaded(object sender, RoutedEventArgs e)
     {
         Loaded -= Analisis31MatchWindow_Loaded;
-        await LoadOption1ResultsAsync();
+
+        switch (Mode)
+        {
+            case Analisis31MatchWindowMode.Analysis:
+                await LoadOption1ResultsAsync();
+                break;
+            case Analisis31MatchWindowMode.SavedResults:
+                await LoadSavedResultsAsync();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 
     private async Task LoadOption1ResultsAsync()
     {
         IsLoading = true;
         ProgressValue = 0;
-        ProgressMessage = "Iniciando anÃ¡lisis 3 opciÃ³n 1...";
+        ProgressMessage = "Iniciando análisis 3 opción 1...";
 
         try
         {
@@ -134,7 +168,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error al cargar resultados del anÃ¡lisis: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Error al cargar resultados del análisis: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             _currentIndex = -1;
             CurrentResultCard = BuildEmptyResultCard();
         }
@@ -212,7 +246,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
 
         ReportProgress(progress, 97, $"Aplicando filtros finales sobre {cards.Count} tarjetas...");
         var filteredCards = ApplyRow4NextPick3PositionFilter(ExcludeGuideCard(ApplyCodingRowMatchFilter(ApplyMatchGuideFilter(cards))));
-        ReportProgress(progress, 100, $"AnÃ¡lisis completado. {filteredCards.Count} resultados listos.");
+        ReportProgress(progress, 100, $"Análisis completado. {filteredCards.Count} resultados listos.");
         return filteredCards;
     }
 
@@ -344,6 +378,180 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         return BuildStatusCard("Sin resultados");
     }
 
+    private async Task LoadSavedResultsAsync()
+    {
+        IsLoading = true;
+        ProgressValue = 0;
+        ProgressMessage = string.IsNullOrWhiteSpace(_savedFolder)
+            ? "No se seleccionó un folder."
+            : $"Cargando resultados guardados de '{_savedFolder}'...";
+
+        try
+        {
+            if (string.IsNullOrWhiteSpace(_savedFolder))
+            {
+                _savedGuideCards.Clear();
+                GuideCard = new ThirdAnalysisCardVM();
+                ResultCards.Clear();
+                _currentIndex = -1;
+                CurrentResultCard = BuildStatusCard("No se seleccionó un folder.");
+                return;
+            }
+
+            var records = await Task.Run(() => PlotOption2SavedRepository.GetByTipoAndFolder("Analisis 3 Match", _savedFolder));
+
+            _savedGuideCards.Clear();
+            ResultCards.Clear();
+            OnPropertyChanged(nameof(ResultCounterText));
+
+            if (records.Count == 0)
+            {
+                GuideCard = new ThirdAnalysisCardVM();
+                _currentIndex = -1;
+                CurrentResultCard = BuildStatusCard("No hay resultados guardados en este folder.");
+                return;
+            }
+
+            foreach (var record in records)
+            {
+                _savedGuideCards.Add(BuildGuideCardFromSavedRecord(record));
+                ResultCards.Add(BuildResultCardFromSavedRecord(record, ResultCards.Count, records.Count));
+            }
+
+            _currentIndex = 0;
+            GuideCard = _savedGuideCards[0];
+            CurrentResultCard = ResultCards[0];
+            ProgressMessage = $"{ResultCards.Count} resultados guardados cargados.";
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error al cargar resultados guardados: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            _savedGuideCards.Clear();
+            GuideCard = new ThirdAnalysisCardVM();
+            _currentIndex = -1;
+            CurrentResultCard = BuildStatusCard("No se pudieron cargar los resultados guardados.");
+        }
+        finally
+        {
+            ProgressValue = 0;
+            IsLoading = false;
+            if (_currentIndex >= 0)
+            {
+                ProgressMessage = string.Empty;
+            }
+        }
+    }
+
+    private static List<ThirdAnalysisCardVM> BuildSavedResultCards(IReadOnlyList<PlotOption2SavedRecord> records)
+    {
+        var results = new List<ThirdAnalysisCardVM>(records.Count);
+        for (int index = 0; index < records.Count; index++)
+        {
+            results.Add(BuildResultCardFromSavedRecord(records[index], index, records.Count));
+        }
+
+        return results;
+    }
+
+    private static ThirdAnalysisCardVM BuildGuideCardFromSavedRecord(PlotOption2SavedRecord record)
+    {
+        var card = new ThirdAnalysisCardVM
+        {
+            AnalysisSummary = string.IsNullOrWhiteSpace(record.Label) ? "Guía guardada" : record.Label!
+        };
+
+        PopulateSavedRow(card, 1, record.G1Date, record.G1Time);
+        PopulateSavedRow(card, 2, record.G2Date, record.G2Time);
+        PopulateSavedRow(card, 3, record.G3Date, record.G3Time);
+        PopulateSavedRow(card, 4, record.G4Date, record.G4Time);
+        ProcessCodingColors(card);
+        return card;
+    }
+
+    private static ThirdAnalysisCardVM BuildResultCardFromSavedRecord(PlotOption2SavedRecord record, int index, int total)
+    {
+        string summary = string.IsNullOrWhiteSpace(record.Label)
+            ? $"Resultado guardado {index + 1} de {total}"
+            : record.Label!;
+
+        var card = new ThirdAnalysisCardVM
+        {
+            AnalysisSummary = summary
+        };
+
+        PopulateSavedRow(card, 1, record.R1Date, record.R1Time);
+        PopulateSavedRow(card, 2, record.R2Date, record.R2Time);
+        PopulateSavedRow(card, 3, record.R3Date, record.R3Time);
+        PopulateSavedRow(card, 4, record.R4Date, record.R4Time);
+        ProcessCodingColors(card);
+        return card;
+    }
+
+    private static void PopulateSavedRow(ThirdAnalysisCardVM card, int rowNumber, string dateText, string drawTime)
+    {
+        var rowData = BuildSavedRowData(dateText, drawTime);
+
+        switch (rowNumber)
+        {
+            case 1:
+                card.Row1DateText = rowData.DateText;
+                card.Row1DrawIcon = rowData.DrawIcon;
+                card.Row1Pick3Digits = rowData.Pick3Digits;
+                card.Row1Pick4Digits = rowData.Pick4Digits;
+                card.Row1NextPick3Digits = rowData.NextPick3Digits;
+                card.Row1CodingDigits = rowData.CodingDigits;
+                break;
+            case 2:
+                card.Row2DateText = rowData.DateText;
+                card.Row2DrawIcon = rowData.DrawIcon;
+                card.Row2Pick3Digits = rowData.Pick3Digits;
+                card.Row2Pick4Digits = rowData.Pick4Digits;
+                card.Row2NextPick3Digits = rowData.NextPick3Digits;
+                card.Row2CodingDigits = rowData.CodingDigits;
+                break;
+            case 3:
+                card.Row3DateText = rowData.DateText;
+                card.Row3DrawIcon = rowData.DrawIcon;
+                card.Row3Pick3Digits = rowData.Pick3Digits;
+                card.Row3Pick4Digits = rowData.Pick4Digits;
+                card.Row3NextPick3Digits = rowData.NextPick3Digits;
+                card.Row3CodingDigits = rowData.CodingDigits;
+                break;
+            case 4:
+                card.Row4DateText = rowData.DateText;
+                card.Row4DrawIcon = rowData.DrawIcon;
+                card.Row4Pick3Digits = rowData.Pick3Digits;
+                card.Row4Pick4Digits = rowData.Pick4Digits;
+                card.Row4NextPick3Digits = rowData.NextPick3Digits;
+                card.Row4CodingDigits = rowData.CodingDigits;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(rowNumber));
+        }
+    }
+
+    private static (string DateText, string DrawIcon, ObservableCollection<DigitVM> Pick3Digits, ObservableCollection<DigitVM> Pick4Digits, ObservableCollection<DigitVM> NextPick3Digits, ObservableCollection<DigitVM> CodingDigits) BuildSavedRowData(string dateText, string drawTime)
+    {
+        if (!DateTime.TryParse(dateText, out var date) || string.IsNullOrWhiteSpace(drawTime))
+        {
+            return (dateText, DrawTimeToIcon(drawTime), new ObservableCollection<DigitVM>(), new ObservableCollection<DigitVM>(), new ObservableCollection<DigitVM>(), new ObservableCollection<DigitVM>());
+        }
+
+        string normalizedDrawTime = drawTime.Trim().ToUpperInvariant();
+        var pick3 = DrawRepository.GetResult("pick3", date, normalizedDrawTime).Number ?? string.Empty;
+        var pick4 = DrawRepository.GetResult("pick4", date, normalizedDrawTime).Number ?? string.Empty;
+        var nextPick3 = DrawRepository.GetNextPick3Number(date, normalizedDrawTime) ?? string.Empty;
+        var coding = CalculateCoding(pick3, pick4);
+
+        return (
+            date.ToString("yyyy-MM-dd"),
+            DrawTimeToIcon(normalizedDrawTime),
+            BuildDigitsFromNumber(pick3),
+            BuildDigitsFromNumber(pick4),
+            BuildDigitsFromNumber(nextPick3),
+            BuildDigitsFromNumber(coding));
+    }
+
     private void PreviousButton_Click(object sender, RoutedEventArgs e)
     {
         if (_currentIndex <= 0 || ResultCards.Count == 0)
@@ -352,6 +560,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         }
 
         _currentIndex--;
+        SyncGuideCardWithCurrentIndex();
         CurrentResultCard = ResultCards[_currentIndex];
     }
 
@@ -363,7 +572,24 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         }
 
         _currentIndex++;
+        SyncGuideCardWithCurrentIndex();
         CurrentResultCard = ResultCards[_currentIndex];
+    }
+
+    private void SyncGuideCardWithCurrentIndex()
+    {
+        if (Mode != Analisis31MatchWindowMode.SavedResults)
+        {
+            return;
+        }
+
+        if (_currentIndex < 0 || _currentIndex >= _savedGuideCards.Count)
+        {
+            GuideCard = new ThirdAnalysisCardVM();
+            return;
+        }
+
+        GuideCard = _savedGuideCards[_currentIndex];
     }
 
     private void UpdateNavigationButtons()
@@ -1572,34 +1798,41 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
 
     private void GuardarButton_Click(object sender, RoutedEventArgs e)
     {
-        if (CurrentResultCard == null || string.IsNullOrEmpty(CurrentResultCard.Row1DateText) || 
-            CurrentResultCard.Row1DateText == "Sin resultados")
+        if (Mode == Analisis31MatchWindowMode.SavedResults)
         {
-            MessageBox.Show("No hay un resultado vÃ¡lido para guardar.", 
-                        "Guardar anÃ¡lisis", 
+            MessageBox.Show("El borrado de registros guardados aún no está implementado.", 
+                        "Borrar análisis", 
                         MessageBoxButton.OK, 
                         MessageBoxImage.Information);
             return;
         }
 
-        // âœ… Pasar el tipo de anÃ¡lisis como argumento
+        if (CurrentResultCard == null || string.IsNullOrEmpty(CurrentResultCard.Row1DateText) || 
+            CurrentResultCard.Row1DateText == "Sin resultados")
+        {
+            MessageBox.Show("No hay un resultado válido para guardar.", 
+                        "Guardar análisis", 
+                        MessageBoxButton.OK, 
+                        MessageBoxImage.Information);
+            return;
+        }
+
         var saveDialog = new AnalisisSaveDialog("Analisis 3 Match");
         
         if (saveDialog.ShowDialog() == true)
         {
             try
             {
-                // âœ… Usar el tipo fijo del diÃ¡logo
                 GuardarAnalisisActual(saveDialog.TipoAnalisis, saveDialog.SelectedFolder, saveDialog.NoteText);
                 
-                MessageBox.Show("AnÃ¡lisis guardado correctamente.", 
+                MessageBox.Show("Análisis guardado correctamente.", 
                             "Guardado exitoso", 
                             MessageBoxButton.OK, 
                             MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al guardar el anÃ¡lisis: {ex.Message}", 
+                MessageBox.Show($"Error al guardar el análisis: {ex.Message}", 
                             "Error", 
                             MessageBoxButton.OK, 
                             MessageBoxImage.Error);
@@ -1607,13 +1840,14 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         }
     }
 
+
     private void GuardarAnalisisActual(string tipoAnalisis, string folder, string note)
     {
         var record = new PlotOption2SavedRecord
         {
             Label = string.IsNullOrWhiteSpace(note) ? CurrentResultCard.AnalysisSummary : note,
             
-            // âœ… CORREGIDO: G = GuÃ­a (GuideCard)
+            // ? CORREGIDO: G = Guía (GuideCard)
             G1Date = GuideCard.Row1DateText,
             G1Time = GetDrawTimeFromIcon(GuideCard.Row1DrawIcon),
             G2Date = GuideCard.Row2DateText,
@@ -1623,7 +1857,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
             G4Date = GuideCard.Row4DateText,
             G4Time = GetDrawTimeFromIcon(GuideCard.Row4DrawIcon),
 
-            // âœ… CORREGIDO: R = Resultado (CurrentResultCard)
+            // ? CORREGIDO: R = Resultado (CurrentResultCard)
             R1Date = CurrentResultCard.Row1DateText,
             R1Time = GetDrawTimeFromIcon(CurrentResultCard.Row1DrawIcon),
             R2Date = CurrentResultCard.Row2DateText,
@@ -1696,6 +1930,11 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         };
     }
 }
+
+
+
+
+
 
 
 

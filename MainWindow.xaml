@@ -8,6 +8,118 @@
         Width="1500">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+        <Style x:Key="PillButtonBase" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="16,7"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="#2D8CFF"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="14"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.78"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#CFCFCF"/>
+                                <Setter Property="Foreground" Value="#7A7A7A"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="BluePillButton" TargetType="Button" BasedOn="{StaticResource PillButtonBase}">
+            <Setter Property="Background" Value="#2A90FF"/>
+        </Style>
+
+        <Style x:Key="PurplePillButton" TargetType="Button" BasedOn="{StaticResource PillButtonBase}">
+            <Setter Property="Background" Value="#8B2ED6"/>
+        </Style>
+
+        <Style x:Key="GreenPillButton" TargetType="Button" BasedOn="{StaticResource PillButtonBase}">
+            <Setter Property="Background" Value="#43B94A"/>
+        </Style>
+
+        <Style x:Key="PageInputStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#B8C7D9"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+
+        <Style x:Key="CardIconButtonBase" TargetType="Button">
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="6,0,0,0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="#111111"/>
+            <Setter Property="BorderBrush" Value="#8F8F8F"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="#E8E8E8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.92"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.78"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#ECECEC"/>
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#D2D2D2"/>
+                                <Setter Property="Foreground" Value="#9CA3AF"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CardViewButton" TargetType="Button" BasedOn="{StaticResource CardIconButtonBase}">
+        </Style>
+
+        <Style x:Key="CardEditButton" TargetType="Button" BasedOn="{StaticResource CardIconButtonBase}">
+        </Style>
+
+        <Style x:Key="CardDeleteButton" TargetType="Button" BasedOn="{StaticResource CardIconButtonBase}">
+        </Style>
     </Window.Resources>
 
     <Grid Margin="16">
@@ -30,17 +142,17 @@
 
                 <!-- Botones -->
                 <Button Content="Análisis Guardados"
-                        Padding="14,8"
+                        Style="{StaticResource BluePillButton}"
                         Margin="0,0,10,0"
                         Click="Analysis_Click"/>
 
                 <Button Content="Añadir registro"
-                        Padding="14,8"
+                        Style="{StaticResource PurplePillButton}"
                         Margin="0,0,10,0"
                         Click="AddManual_Click"/>
 
                 <Button Content="Buscar"
-                        Padding="14,8"
+                        Style="{StaticResource GreenPillButton}"
                         Click="Search_Click"/>
 
             </StackPanel>
@@ -87,19 +199,18 @@
                                         </TextBlock.ContextMenu>
                                     </TextBlock>
                                     <Button Content="👁️"
-                                            Padding="8,4"
+                                            Style="{StaticResource CardViewButton}"
                                             Margin="8,0,0,0"
                                             Visibility="{Binding P3_M_Analyzable, Converter={StaticResource BoolToVisibility}}"
                                             Click="Analysis_Midday_Click"/>
                                     <Button Content="✏️"
-                                            Padding="6,4"
+                                            Style="{StaticResource CardEditButton}"
                                             Margin="8,0,0,0"
                                             Tag="M"
                                             IsEnabled="{Binding M_Exists}"
                                             Click="Edit_Draw_Click"/>
                                     <Button Content="🗑️"
-                                            Padding="6,4"
-                                            Margin="6,0,0,0"
+                                            Style="{StaticResource CardDeleteButton}"
                                             Tag="M"
                                             IsEnabled="{Binding M_Exists}"
                                             Click="Delete_Draw_Click"/>
@@ -171,20 +282,19 @@
                                             </ContextMenu>
                                         </TextBlock.ContextMenu>
                                     </TextBlock>
-                                    <Button Content="👁️"
-                                        Padding="8,4"
-                                        HorizontalAlignment="Right"
-                                        Visibility="{Binding P3_E_Analyzable, Converter={StaticResource BoolToVisibility}}"
-                                        Click="Analysis_Night_Click"/>
-                                    <Button Content="✏️"
-                                            Padding="6,4"
+                                     <Button Content="👁️"
+                                         Style="{StaticResource CardViewButton}"
+                                         HorizontalAlignment="Right"
+                                         Visibility="{Binding P3_E_Analyzable, Converter={StaticResource BoolToVisibility}}"
+                                         Click="Analysis_Night_Click"/>
+                                     <Button Content="✏️"
+                                            Style="{StaticResource CardEditButton}"
                                             Margin="8,0,0,0"
                                             Tag="E"
                                             IsEnabled="{Binding E_Exists}"
                                             Click="Edit_Draw_Click"/>
-                                    <Button Content="🗑️"
-                                            Padding="6,4"
-                                            Margin="6,0,0,0"
+                                     <Button Content="🗑️"
+                                            Style="{StaticResource CardDeleteButton}"
                                             Tag="E"
                                             IsEnabled="{Binding E_Exists}"
                                             Click="Delete_Draw_Click"/>
@@ -255,7 +365,8 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
                 <Button Content="⟵ Anterior"
-                        Padding="14,8"
+                        Style="{StaticResource BluePillButton}"
+                        Margin="0,0,10,0"
                         IsEnabled="{Binding CanPrev}"
                         Click="Prev_Click"/>
                 <TextBlock Text="{Binding PageText}"
@@ -265,11 +376,11 @@
                            VerticalAlignment="Center"
                            Margin="0,0,6,0"/>
                 <TextBox x:Name="PageInput"
+                         Style="{StaticResource PageInputStyle}"
                          Width="40"
-                         VerticalContentAlignment="Center"
                          KeyDown="PageInput_KeyDown"/>
                 <Button Content="Siguiente ⟶"
-                        Padding="14,8"
+                        Style="{StaticResource GreenPillButton}"
                         Margin="6,0,0,0"
                         IsEnabled="{Binding CanNext}"
                         Click="Next_Click"/>
@@ -277,7 +388,4 @@
         </Grid>
     </Grid>
 </Window>
-
-
-
 

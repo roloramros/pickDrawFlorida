@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 using FloridaLotteryApp.Data;
 
 namespace FloridaLotteryApp;
@@ -37,8 +39,6 @@ public partial class AnalisisGuardadosWindow : Window
             else
             {
                 ContadorTextBlock.Text = "No hay análisis guardados";
-                AbrirButton.IsEnabled = false;
-                BorrarButton.IsEnabled = false;
             }
         }
         catch (Exception ex)
@@ -56,8 +56,6 @@ public partial class AnalisisGuardadosWindow : Window
         {
             FoldersDataGrid.ItemsSource = null;
             _selectedFolder = null;
-            AbrirButton.IsEnabled = false;
-            BorrarButton.IsEnabled = false;
             ContadorTextBlock.Text = "Seleccione un tipo de análisis";
             return;
         }
@@ -72,8 +70,6 @@ public partial class AnalisisGuardadosWindow : Window
             {
                 FoldersDataGrid.ItemsSource = _foldersActuales;
                 ContadorTextBlock.Text = $"{tipoSeleccionado} - {_foldersActuales.Count} folders";
-                AbrirButton.IsEnabled = true;
-                BorrarButton.IsEnabled = true;
                 
                 // Seleccionar el primer folder por defecto
                 if (FoldersDataGrid.Items.Count > 0)
@@ -86,8 +82,6 @@ public partial class AnalisisGuardadosWindow : Window
             {
                 FoldersDataGrid.ItemsSource = null;
                 ContadorTextBlock.Text = $"{tipoSeleccionado} - No hay folders";
-                AbrirButton.IsEnabled = false;
-                BorrarButton.IsEnabled = false;
                 _selectedFolder = null;
             }
         }
@@ -98,14 +92,28 @@ public partial class AnalisisGuardadosWindow : Window
                           MessageBoxButton.OK, 
                           MessageBoxImage.Error);
             FoldersDataGrid.ItemsSource = null;
-            AbrirButton.IsEnabled = false;
-            BorrarButton.IsEnabled = false;
         }
     }
 
     private void FoldersDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         _selectedFolder = FoldersDataGrid.SelectedItem as FolderInfo;
+    }
+
+    private void FoldersDataGrid_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        DependencyObject? source = e.OriginalSource as DependencyObject;
+        while (source != null && source is not DataGridRow)
+        {
+            source = VisualTreeHelper.GetParent(source);
+        }
+
+        if (source is DataGridRow row)
+        {
+            row.IsSelected = true;
+            FoldersDataGrid.SelectedItem = row.Item;
+            _selectedFolder = row.Item as FolderInfo;
+        }
     }
 
     private void Abrir_Click(object sender, RoutedEventArgs e)
@@ -121,9 +129,22 @@ public partial class AnalisisGuardadosWindow : Window
 
         try
         {
-            // Aquí abres el folder seleccionado
-            DialogResult = true;
-            Close();
+            string tipoActual = AnalisisComboBox.SelectedItem?.ToString() ?? string.Empty;
+
+            if (string.Equals(tipoActual, "Analisis 3 Match", StringComparison.OrdinalIgnoreCase))
+            {
+                var window = new Analisis_3_1_MatchWindow(new ThirdAnalysisCardVM(), Analisis31MatchWindowMode.SavedResults, _selectedFolder.Folder)
+                {
+                    Owner = Owner ?? Application.Current.MainWindow
+                };
+                window.Show();
+                return;
+            }
+
+            MessageBox.Show($"La apertura para '{tipoActual}' aún no está implementada.", 
+                          "Abrir análisis", 
+                          MessageBoxButton.OK, 
+                          MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
@@ -186,8 +207,6 @@ public partial class AnalisisGuardadosWindow : Window
                     else
                     {
                         _selectedFolder = null;
-                        AbrirButton.IsEnabled = false;
-                        BorrarButton.IsEnabled = false;
                     }
                 }
                 else
@@ -195,8 +214,6 @@ public partial class AnalisisGuardadosWindow : Window
                     FoldersDataGrid.ItemsSource = null;
                     ContadorTextBlock.Text = $"{tipoActual} - No hay folders";
                     _selectedFolder = null;
-                    AbrirButton.IsEnabled = false;
-                    BorrarButton.IsEnabled = false;
                 }
                 
                 MessageBox.Show($"Folder '{_selectedFolder?.Folder}' borrado correctamente.", 
@@ -227,3 +244,5 @@ public partial class AnalisisGuardadosWindow : Window
         Close();
     }
 }
+
+

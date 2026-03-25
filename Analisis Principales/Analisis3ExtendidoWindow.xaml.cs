@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -217,7 +217,7 @@ public partial class Analisis3ExtendidoWindow : Window
         if (sender is not Button button) return;
         if (button.DataContext is not ThirdAnalysisCardVM selectedCard) return;
 
-        var window = new Analisis_3_1_MatchWindow(selectedCard)
+        var window = new Analisis_3_1_MatchWindow(selectedCard, Analisis31MatchWindowMode.Analysis)
         {
             
         };
@@ -435,7 +435,7 @@ public partial class Analisis3ExtendidoWindow : Window
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error dibujando lÃ­Â­nea roja: {ex.Message}");
+            Console.WriteLine($"Error dibujando lí­nea roja: {ex.Message}");
         }
     }
 
@@ -565,6 +565,7 @@ public partial class Analisis3ExtendidoWindow : Window
         return null;
     }
 }
+
 
 
 

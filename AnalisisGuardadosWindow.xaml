@@ -29,6 +29,11 @@
             <Setter Property="BorderBrush" Value="#CCCCCC"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
+
+        <ContextMenu x:Key="FolderRowContextMenu">
+            <MenuItem Header="Abrir" Click="Abrir_Click"/>
+            <MenuItem Header="Borrar" Click="Borrar_Click"/>
+        </ContextMenu>
     </Window.Resources>
 
     <Grid Margin="15">
@@ -38,7 +43,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Panel superior con selector y botones -->
+        <!-- Panel superior con selector -->
         <Border Grid.Row="0" 
                 Background="White" 
                 CornerRadius="8" 
@@ -50,7 +55,6 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0" 
@@ -64,19 +68,6 @@
                           x:Name="AnalisisComboBox"
                           Style="{StaticResource StyledComboBox}"
                           SelectionChanged="AnalisisComboBox_SelectionChanged"/>
-
-                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button x:Name="AbrirButton"
-                            Style="{StaticResource ActionButton}"
-                            Content="Abrir"
-                            Click="Abrir_Click"
-                            IsEnabled="False"/>
-                    <Button x:Name="BorrarButton"
-                            Style="{StaticResource ActionButton}"
-                            Content="Borrar"
-                            Click="Borrar_Click"
-                            IsEnabled="False"/>
-                </StackPanel>
             </Grid>
         </Border>
 
@@ -98,9 +89,10 @@
                 AlternatingRowBackground="#F9F9F9"
                 Background="White"
                 HeadersVisibility="Column"
-                SelectionChanged="FoldersDataGrid_SelectionChanged">
-            
-            <DataGrid.Columns>
+                SelectionChanged="FoldersDataGrid_SelectionChanged"
+                PreviewMouseRightButtonDown="FoldersDataGrid_PreviewMouseRightButtonDown">
+             
+             <DataGrid.Columns>
                 <DataGridTextColumn Header="Folder" 
                                     Binding="{Binding Folder}" 
                                     Width="*"/>
@@ -113,6 +105,7 @@
                 <Style TargetType="DataGridRow">
                     <Setter Property="VerticalAlignment" Value="Center"/>
                     <Setter Property="Padding" Value="8,5"/>
+                    <Setter Property="ContextMenu" Value="{StaticResource FolderRowContextMenu}"/>
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.ColumnHeaderStyle>

@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.Sqlite;
+using Microsoft.Data.Sqlite;
 
 namespace FloridaLotteryApp.Data;
 
@@ -48,6 +48,61 @@ public static class PlotOption2SavedRepository
             FROM saved_analisis
             ORDER BY rowid DESC;
             """;
+
+        using var reader = cmd.ExecuteReader();
+        var results = new List<PlotOption2SavedRecord>();
+        while (reader.Read())
+        {
+            results.Add(new PlotOption2SavedRecord
+            {
+                Id = reader.GetInt64(0),
+                Label = reader.IsDBNull(1) ? null : reader.GetString(1),
+                G1Date = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
+                G1Time = reader.IsDBNull(3) ? string.Empty : reader.GetString(3),
+                G2Date = reader.IsDBNull(4) ? string.Empty : reader.GetString(4),
+                G2Time = reader.IsDBNull(5) ? string.Empty : reader.GetString(5),
+                G3Date = reader.IsDBNull(6) ? string.Empty : reader.GetString(6),
+                G3Time = reader.IsDBNull(7) ? string.Empty : reader.GetString(7),
+                G4Date = reader.IsDBNull(8) ? string.Empty : reader.GetString(8),
+                G4Time = reader.IsDBNull(9) ? string.Empty : reader.GetString(9),
+                R1Date = reader.IsDBNull(10) ? string.Empty : reader.GetString(10),
+                R1Time = reader.IsDBNull(11) ? string.Empty : reader.GetString(11),
+                R2Date = reader.IsDBNull(12) ? string.Empty : reader.GetString(12),
+                R2Time = reader.IsDBNull(13) ? string.Empty : reader.GetString(13),
+                R3Date = reader.IsDBNull(14) ? string.Empty : reader.GetString(14),
+                R3Time = reader.IsDBNull(15) ? string.Empty : reader.GetString(15),
+                R4Date = reader.IsDBNull(16) ? string.Empty : reader.GetString(16),
+                R4Time = reader.IsDBNull(17) ? string.Empty : reader.GetString(17)
+            });
+        }
+
+        return results;
+    }
+
+    public static List<PlotOption2SavedRecord> GetByTipoAndFolder(string tipoAnalisis, string folder)
+    {
+        using var conn = Db.Open();
+        using var cmd = conn.CreateCommand();
+        cmd.CommandText = """
+            SELECT
+                rowid,
+                label,
+                g1_date, g1_time,
+                g2_date, g2_time,
+                g3_date, g3_time,
+                g4_date, g4_time,
+                r1_date, r1_time,
+                r2_date, r2_time,
+                r3_date, r3_time,
+                r4_date, r4_time
+            FROM saved_analisis
+            WHERE tipo_analisis = $tipo
+              AND folder = $folder
+            ORDER BY rowid DESC;
+            """;
+
+        cmd.Parameters.AddWithValue("$tipo", tipoAnalisis);
+        cmd.Parameters.AddWithValue("$folder", folder);
 
         using var reader = cmd.ExecuteReader();
         var results = new List<PlotOption2SavedRecord>();
@@ -142,3 +197,4 @@ public static class PlotOption2SavedRepository
         return cmd.ExecuteNonQuery() > 0;
     }
 }
+
