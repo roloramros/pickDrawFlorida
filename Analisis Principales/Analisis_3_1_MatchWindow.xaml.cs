@@ -31,6 +31,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
     private readonly string? _savedFolder;
     private ThirdAnalysisCardVM _guideCard = new();
     private readonly List<ThirdAnalysisCardVM> _savedGuideCards = new();
+    private readonly List<long> _savedRecordIds = new();
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -136,7 +137,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
     {
         IsLoading = true;
         ProgressValue = 0;
-        ProgressMessage = "Iniciando análisis 3 opción 1...";
+        ProgressMessage = "Iniciando anï¿½lisis 3 opciï¿½n 1...";
 
         try
         {
@@ -168,7 +169,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error al cargar resultados del análisis: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Error al cargar resultados del anï¿½lisis: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             _currentIndex = -1;
             CurrentResultCard = BuildEmptyResultCard();
         }
@@ -246,7 +247,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
 
         ReportProgress(progress, 97, $"Aplicando filtros finales sobre {cards.Count} tarjetas...");
         var filteredCards = ApplyRow4NextPick3PositionFilter(ExcludeGuideCard(ApplyCodingRowMatchFilter(ApplyMatchGuideFilter(cards))));
-        ReportProgress(progress, 100, $"Análisis completado. {filteredCards.Count} resultados listos.");
+        ReportProgress(progress, 100, $"Anï¿½lisis completado. {filteredCards.Count} resultados listos.");
         return filteredCards;
     }
 
@@ -383,7 +384,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         IsLoading = true;
         ProgressValue = 0;
         ProgressMessage = string.IsNullOrWhiteSpace(_savedFolder)
-            ? "No se seleccionó un folder."
+            ? "No se seleccionï¿½ un folder."
             : $"Cargando resultados guardados de '{_savedFolder}'...";
 
         try
@@ -391,16 +392,18 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
             if (string.IsNullOrWhiteSpace(_savedFolder))
             {
                 _savedGuideCards.Clear();
+                _savedRecordIds.Clear();
                 GuideCard = new ThirdAnalysisCardVM();
                 ResultCards.Clear();
                 _currentIndex = -1;
-                CurrentResultCard = BuildStatusCard("No se seleccionó un folder.");
+                CurrentResultCard = BuildStatusCard("No se seleccionï¿½ un folder.");
                 return;
             }
 
             var records = await Task.Run(() => PlotOption2SavedRepository.GetByTipoAndFolder("Analisis 3 Match", _savedFolder));
 
             _savedGuideCards.Clear();
+            _savedRecordIds.Clear();
             ResultCards.Clear();
             OnPropertyChanged(nameof(ResultCounterText));
 
@@ -415,6 +418,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
             foreach (var record in records)
             {
                 _savedGuideCards.Add(BuildGuideCardFromSavedRecord(record));
+                _savedRecordIds.Add(record.Id);
                 ResultCards.Add(BuildResultCardFromSavedRecord(record, ResultCards.Count, records.Count));
             }
 
@@ -427,6 +431,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         {
             MessageBox.Show($"Error al cargar resultados guardados: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             _savedGuideCards.Clear();
+            _savedRecordIds.Clear();
             GuideCard = new ThirdAnalysisCardVM();
             _currentIndex = -1;
             CurrentResultCard = BuildStatusCard("No se pudieron cargar los resultados guardados.");
@@ -457,7 +462,7 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
     {
         var card = new ThirdAnalysisCardVM
         {
-            AnalysisSummary = string.IsNullOrWhiteSpace(record.Label) ? "Guía guardada" : record.Label!
+            AnalysisSummary = string.IsNullOrWhiteSpace(record.Label) ? "Guï¿½a guardada" : record.Label!
         };
 
         PopulateSavedRow(card, 1, record.G1Date, record.G1Time);
@@ -574,6 +579,82 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         _currentIndex++;
         SyncGuideCardWithCurrentIndex();
         CurrentResultCard = ResultCards[_currentIndex];
+    }
+
+    private void BorrarAnalisisGuardadoActual()
+    {
+        if (_currentIndex < 0 || _currentIndex >= _savedRecordIds.Count || CurrentResultCard == null)
+        {
+            MessageBox.Show("No hay un resultado guardado v?lido para borrar.",
+                        "Borrar an?lisis",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+            return;
+        }
+
+        string resumen = string.IsNullOrWhiteSpace(CurrentResultCard.AnalysisSummary)
+            ? $"resultado {_currentIndex + 1}"
+            : CurrentResultCard.AnalysisSummary;
+
+        var confirmacion = MessageBox.Show(
+            $"Desea borrar el registro mostrado?\nEsta accion no se puede deshacer.",
+            "Confirmar borrado",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning);
+
+        if (confirmacion != MessageBoxResult.Yes)
+        {
+            return;
+        }
+
+        try
+        {
+            long recordId = _savedRecordIds[_currentIndex];
+            if (!PlotOption2SavedRepository.Delete(recordId))
+            {
+                MessageBox.Show("No se pudo borrar el registro guardado.",
+                            "Borrar an?lisis",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                return;
+            }
+
+            ResultCards.RemoveAt(_currentIndex);
+            _savedGuideCards.RemoveAt(_currentIndex);
+            _savedRecordIds.RemoveAt(_currentIndex);
+
+            if (ResultCards.Count == 0)
+            {
+                _currentIndex = -1;
+                GuideCard = new ThirdAnalysisCardVM();
+                CurrentResultCard = BuildStatusCard("No hay resultados guardados en este folder.");
+                MessageBox.Show("Registro borrado correctamente.",
+                            "Borrado exitoso",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+                return;
+            }
+
+            if (_currentIndex >= ResultCards.Count)
+            {
+                _currentIndex = ResultCards.Count - 1;
+            }
+
+            SyncGuideCardWithCurrentIndex();
+            CurrentResultCard = ResultCards[_currentIndex];
+
+            MessageBox.Show("Registro borrado correctamente.",
+                        "Borrado exitoso",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error al borrar el an?lisis guardado: {ex.Message}",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+        }
     }
 
     private void SyncGuideCardWithCurrentIndex()
@@ -1800,18 +1881,15 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
     {
         if (Mode == Analisis31MatchWindowMode.SavedResults)
         {
-            MessageBox.Show("El borrado de registros guardados aún no está implementado.", 
-                        "Borrar análisis", 
-                        MessageBoxButton.OK, 
-                        MessageBoxImage.Information);
+            BorrarAnalisisGuardadoActual();
             return;
         }
 
         if (CurrentResultCard == null || string.IsNullOrEmpty(CurrentResultCard.Row1DateText) || 
             CurrentResultCard.Row1DateText == "Sin resultados")
         {
-            MessageBox.Show("No hay un resultado válido para guardar.", 
-                        "Guardar análisis", 
+            MessageBox.Show("No hay un resultado valido para guardar.", 
+                        "Guardar analisis", 
                         MessageBoxButton.OK, 
                         MessageBoxImage.Information);
             return;
@@ -1825,14 +1903,14 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
             {
                 GuardarAnalisisActual(saveDialog.TipoAnalisis, saveDialog.SelectedFolder, saveDialog.NoteText);
                 
-                MessageBox.Show("Análisis guardado correctamente.", 
+                MessageBox.Show("Analisis guardado correctamente.", 
                             "Guardado exitoso", 
                             MessageBoxButton.OK, 
                             MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al guardar el análisis: {ex.Message}", 
+                MessageBox.Show($"Error al guardar el analisis: {ex.Message}", 
                             "Error", 
                             MessageBoxButton.OK, 
                             MessageBoxImage.Error);
@@ -1840,14 +1918,13 @@ public partial class Analisis_3_1_MatchWindow : Window, INotifyPropertyChanged
         }
     }
 
-
     private void GuardarAnalisisActual(string tipoAnalisis, string folder, string note)
     {
         var record = new PlotOption2SavedRecord
         {
             Label = string.IsNullOrWhiteSpace(note) ? CurrentResultCard.AnalysisSummary : note,
             
-            // ? CORREGIDO: G = Guía (GuideCard)
+            // ? CORREGIDO: G = Guï¿½a (GuideCard)
             G1Date = GuideCard.Row1DateText,
             G1Time = GetDrawTimeFromIcon(GuideCard.Row1DrawIcon),
             G2Date = GuideCard.Row2DateText,
